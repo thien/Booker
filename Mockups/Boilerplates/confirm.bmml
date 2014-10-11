@@ -11,9 +11,9 @@
         <text>Jon%20Smith%20-%20Logout</text>
       </controlProperties>
     </control>
-    <control controlID="3" controlTypeID="com.balsamiq.mockups::Title" x="409" y="274" w="-1" h="-1" measuredW="467" measuredH="43" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Title" x="419" y="273" w="-1" h="-1" measuredW="446" measuredH="43" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Okay%2C%20It%27s%20been%20confirmed.</text>
+        <text>Okay%2C%20its%20time%20to%20confirm.</text>
       </controlProperties>
     </control>
     <control controlID="6" controlTypeID="com.balsamiq.mockups::SubTitle" x="287" y="145" w="-1" h="-1" measuredW="169" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
@@ -21,18 +21,21 @@
         <text>Business%20Name</text>
       </controlProperties>
     </control>
-    <control controlID="8" controlTypeID="com.balsamiq.mockups::Paragraph" x="490" y="370" w="304" h="145" measuredW="275" measuredH="80" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Paragraph" x="490" y="391" w="304" h="145" measuredW="275" measuredH="80" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <align>center</align>
         <size>18</size>
         <text>%7B%7Bmessage%7D%7D</text>
       </controlProperties>
     </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Arrow" x="710" y="385" w="349" h="10" measuredW="150" measuredH="100" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Arrow" x="641" y="415" w="63" h="129" measuredW="150" measuredH="100" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
-        <leftArrow>true</leftArrow>
-        <rightArrow>false</rightArrow>
-        <text>Result%20is%20outputted%20here.</text>
+        <text>message%20information%20is%20pulled%20from%20previous%20page%20and%20is%20displayed%20here</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Arrow" x="384" y="415" w="242" h="32" measuredW="150" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>email%20function%20is%20computed%20at%20this%20stage</text>
       </controlProperties>
     </control>
   </controls>
