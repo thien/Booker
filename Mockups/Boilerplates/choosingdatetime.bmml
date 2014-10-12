@@ -2,7 +2,7 @@
   <controls>
     <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="210" y="16" w="864" h="1275" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Maths.Woodhouse%0Ahttp%3A//localhost</text>
+        <text>%20%0Ahttp%3A//localhost</text>
       </controlProperties>
     </control>
     <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="287" y="207" w="712" h="511" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
@@ -244,17 +244,17 @@
     </control>
     <control controlID="93" controlTypeID="com.balsamiq.mockups::VRule" x="637" y="774" w="-1" h="424" measuredW="10" measuredH="100" zOrder="14" locked="false" isInGroup="-1"/>
     <control controlID="95" controlTypeID="com.balsamiq.mockups::HRule" x="697" y="970" w="252" h="-1" measuredW="100" measuredH="10" zOrder="15" locked="false" isInGroup="-1"/>
-    <control controlID="96" controlTypeID="com.balsamiq.mockups::TextInput" x="741" y="1066" w="165" h="-1" measuredW="72" measuredH="24" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::TextInput" x="741" y="1048" w="165" h="-1" measuredW="72" measuredH="24" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Username</text>
       </controlProperties>
     </control>
-    <control controlID="97" controlTypeID="com.balsamiq.mockups::TextInput" x="741" y="1096" w="165" h="-1" measuredW="66" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="97" controlTypeID="com.balsamiq.mockups::TextInput" x="741" y="1078" w="165" h="-1" measuredW="66" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Password</text>
       </controlProperties>
     </control>
-    <control controlID="98" controlTypeID="com.balsamiq.mockups::SubTitle" x="788" y="1006" w="-1" h="-1" measuredW="71" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::SubTitle" x="788" y="1012" w="-1" h="-1" measuredW="71" measuredH="27" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Log%20In</text>
       </controlProperties>
@@ -341,6 +341,18 @@
       <controlProperties>
         <direction>right</direction>
         <text>calendar</text>
+      </controlProperties>
+    </control>
+    <control controlID="113" controlTypeID="com.balsamiq.mockups::Link" x="767" y="1116" w="-1" h="-1" measuredW="104" measuredH="19" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Forgot%20Password%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="114" controlTypeID="com.balsamiq.mockups::Arrow" x="335" y="1135" w="417" h="42" measuredW="150" measuredH="100" zOrder="34" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>bottom</direction>
+        <leftArrow>false</leftArrow>
+        <text>Link%20that%20brings%20them%20to%20password%20recovery%20page%20when%20clicked</text>
       </controlProperties>
     </control>
   </controls>
