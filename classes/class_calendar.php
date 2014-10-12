@@ -1,8 +1,6 @@
 <?php
-
 	
 class booking_diary {
-
 
 // Mysqli connection
 function __construct($link) {
@@ -10,36 +8,24 @@ function __construct($link) {
 }
 
 // Settings you can change:
-
-
 // Time Related Variables
 public $booking_start_time          = "09:30";			// The time of the first slot in 24 hour H:M format  
 public $booking_end_time            = "19:00"; 			// The time of the last slot in 24 hour H:M format  
 public $booking_frequency           = 30;   			// The slot frequency per hour, expressed in minutes.  	
-
 // Day Related Variables
-
 public $day_format					= 1;				// Day format of the table header.  Possible values (1, 2, 3)   
 															// 1 = Show First digit, eg: "M"
 															// 2 = Show First 3 letters, eg: "Mon"
 															// 3 = Full Day, eg: "Monday"
-	
 public $day_closed					= array("Monday", "Tuesday"); 	// If you don't want any 'closed' days, remove the day so it becomes: = array();
 public $day_closed_text				= "CLOSED"; 		// If you don't want any any 'closed' remove the text so it becomes: = "";
-
 // Cost Related Variables
 public $cost_per_slot				= 20.50;			// The cost per slot
 public $cost_currency_tag			= "&pound;";		// The currency tag in HTML such as &euro; &pound; &yen;
-
-
 //  DO NOT EDIT BELOW THIS LINE
-
 public $day_order	 				= array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 public $day, $month, $year, $selected_date, $back, $back_month, $back_year, $forward, $forward_month, $forward_year, $bookings, $count, $days, $is_slot_booked_today;
-
-
 /*========================================================================================================================================================*/
-
 
 function make_calendar($selected_date, $back, $forward, $day, $month, $year) {
 
@@ -47,22 +33,19 @@ function make_calendar($selected_date, $back, $forward, $day, $month, $year) {
     $this->day = $day;    
     $this->month = $month;
     $this->year = $year;
-    
 	// $back and $forward are Unix Timestamps of the previous / next month, used to give the back arrow the correct month and year 
     $this->selected_date = $selected_date;       
     $this->back = $back;
     $this->back_month = date("m", $back);
     $this->back_year = date("Y", $back); // Minus one month back arrow
-    
+  
     $this->forward = $forward;
     $this->forward_month = date("m", $forward);
     $this->forward_year = date("Y", $forward); // Add one month forward arrow    
     
     // Make the booking array
-    $this->make_booking_array($year, $month);
-    
+    $this->make_booking_array($year, $month); 
 }
-
 
 function make_booking_array($year, $month, $j = 0) { 
 
@@ -79,7 +62,6 @@ function make_booking_array($year, $month, $j = 0) {
             "date" => $row['date'], 
             "start" => $row['start']        
             ); 
-		
 		
 		// Used by the 'booking_form' function later to check whether there are any booked slots on the selected day  		
 		if($row['date'] == $this->year . '-' . $this->month . '-' . $this->day) {
