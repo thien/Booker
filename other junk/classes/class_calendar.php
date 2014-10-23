@@ -378,12 +378,36 @@ function booking_form() {
 		
 		} // Close if
 		
+
+		//dropdown $slots array
+
+				    // Create array of the booking times
+				    for($i = strtotime($this->booking_start_time); $i<= strtotime($this->booking_end_time); $i = $i + $this->booking_frequency * 60) {
+				        $slots[] = date("H:i:s", $i);  
+				    }
+				   
+				    echo "\r\n\r\n<form method='post' action=''><div id='selected_date'>Selected Date is: " . date("d F Y", mktime(0, 0, 0, $this->month, $this->day)) ."</div>";      
+				    $opt = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
+				        if($this->count >= 1) { 
+				            foreach($this->bookings as $row) {  
+				            // Check for bookings and remove any previously booked slots                 
+				            foreach($slots as $i => $r) { 
+				                    if($row['start'] == $r && $row['date'] == $this->year . '-' . $this->month . '-' . $this->day) {  
+				                    unset($slots[$i]); 
+				                    } 
+				                    } // Close foreach            
+				            } // Close foreach 
+				        } // If count bookings                   
+				        // Make select box from $slots array
+				        foreach($slots as $booking_time) {
+				            $finish_time = strtotime($booking_time)+ $this->booking_frequency * 60; // Calculate finish time
+				            $opt .= "<option value='" . $booking_time . "'>" . $booking_time . " - " . date("H:i:s", $finish_time) . "</option>";
+				        } 
+				        echo $opt. "</select>";      
 				
 		
-		// Loop through the $slots array and create the booking table
-		
+		// Loop through the $slots array and create the booking table		
 		foreach($slots as $i => $start) {			
-
 			// Calculate finish time
 			$finish_time = strtotime($start) + $this->booking_frequency * 60; 
 		
@@ -394,12 +418,8 @@ function booking_form() {
 				<td>" . $this->cost_currency_tag . number_format($this->cost_per_slot, 2) . "</td>\r\n
 				<td width='110'><input data-val='" . $start . " - " . date("H:i:s", $finish_time) . "' class='fields' type='checkbox'></td>
 			</tr>";
-		
 		} // Close foreach			
-	
 		echo "</table></div><!-- Close outer_booking DIV -->";
-		
-
 } // Close function
 
 
