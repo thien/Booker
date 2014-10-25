@@ -1,7 +1,10 @@
 <?php
+ini_set('display_startup_errors',1);
+ini_set('display_errors',1);
+error_reporting(-1);
 
-include('../includes/connect.php'); 
-include('../classes/class_calendar.php');
+include('../includes/connection.php'); 
+include('../classes/calendar.php');
 
 $calendar = new booking_diary($link);
 

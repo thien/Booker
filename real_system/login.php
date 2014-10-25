@@ -1,7 +1,7 @@
 <?php 
 
 session_start();
-include_once('includes/connection.php');
+include_once("includes/common.php");
 if (isset($_SESSION['logged_in'])) {
 	//if true, show admin index
 	header('Location: index.php');	
@@ -19,13 +19,14 @@ if (isset($_SESSION['logged_in'])) {
 		} elseif (empty($password)){
 		$error = 'Please enter a password!';
 		} else {
-			$query = $pdo->prepare("SELECT * FROM client WHERE username = ? AND password = ?");
-			
-			$query->bindValue(1, $username);
-			$query->bindValue(2, $password);
-			
-			$query->execute();
-			$num = $query->rowCount();
+			$query = "SELECT * FROM client WHERE username = :username AND password = :password";
+			$query_params = array(
+          	':username' => $_POST['username'],
+         	':password' => $password
+      		);
+			$db->DoQuery($query, $query_params);
+
+			$num = $db->fetch();
 			if ($num == 1) {
 				//user entered correct details
 				$_SESSION['logged_in'] = true;

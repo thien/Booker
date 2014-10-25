@@ -2,12 +2,6 @@
 
 class booking_diary {
 
-
-// Mysqli connection
-function __construct($link) {
-    $this->link = $link;	
-}
-
 /*
 Settings you can change:
 
@@ -16,6 +10,7 @@ $booking_end_time:                  The time of the last slot
 $booking_frequency:                 The amount of slots per hour, expressed in minutes 
 $booking_slots_per_day:             The total number of slots avaliable in one day
 */
+
 
 public $booking_start_time          = "09:30";  
 public $booking_end_time            = "19:00";   
@@ -51,17 +46,42 @@ function make_calendar($selected_date, $first_day, $back, $forward, $day, $month
     
 }
 
-
 function make_booking_array($year, $month) { 
 
-    $query = "SELECT * FROM booking WHERE date LIKE '$year-$month%'"; 
-    $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link)); 
-	
-    $this->count = mysqli_num_rows($result); 
+
+
+    // global $pdo;
+    //     try {
+    //         $result = $pdo->query('SELECT title FROM site_metadata where id = 1');
+    //     } catch (PDOException $e)
+    //     {
+    //         $error = 'Cant get tings';
+    //         include '/includes/error.php';
+    //         exit();
+    //     }
+    // foreach ($result as $row){
+    //     $authors[] = array('title' => $row['title']);
+    // }
+    // foreach ($authors as $author){
+    //     echo $author['name'];
+    // }
+
+    global $pdo;
+
+    try {
+            $result = $pdo->prepare("SELECT * FROM booking WHERE date LIKE '$year-$month%'");
+        } catch (PDOException $e)
+        {
+            $error = 'Cant get tings';
+            include '/includes/error.php';
+            exit();
+        }
+        $number_of_rows = $result->fetchColumn(); 
+
+    $this->count = $number_of_rows; 
     $this->bookings = '';  
 
-    while ($row = mysqli_fetch_array($result)) {
-
+    foreach ($result as $row){
         $this->bookings[] = array(
             "name" => $row['name'], 
             "date" => $row['date'], 
@@ -74,7 +94,7 @@ function make_booking_array($year, $month) {
             
 } // Close function
 
- 
+
 function make_days_array($year, $month) { 
     
     // Create an array of days in the month                 
@@ -328,7 +348,7 @@ function make_form() {
         <tr>
             <td>&nbsp;</td>
             <td>
-	       <input type='submit' value='' id='book'></td>
+           <input type='submit' value='' id='book'></td>
         </tr>
         </table></form>";
 }
@@ -351,11 +371,20 @@ function after_post($month, $day, $year) {
             $booking_date = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
             $booking_time = $_POST['booking_time'];
             
+            try {
+            $query = $pdo->prepare("INSERT INTO booking (date, start, name, email, phone, comments) VALUES ('$booking_date', '$booking_time',  '$_POST[name]', '$_POST[email]', '$_POST[phone]', '$_POST[comments]')");
+        } catch (PDOException $e)
+        {
+            $error = 'Cant get tings';
+            include '/includes/error.php';
+            exit();
+        }
 
-            $query = "INSERT INTO booking (date, start, name, email, phone, comments) VALUES ('$booking_date', '$booking_time',  '$_POST[name]', '$_POST[email]', '$_POST[phone]', '$_POST[comments]')";
-            $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));      
+            // $query = $pdo->prepare("INSERT INTO booking (date, start, name, email, phone, comments) VALUES ('$booking_date', '$booking_time',  '$_POST[name]', '$_POST[email]', '$_POST[phone]', '$_POST[comments]')");
+            // $query->execute();
+            // $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));      
        
-            $this->confirm();  
+            // $this->confirm();  
                   
         } // Close else
    } // Close function  
@@ -364,7 +393,8 @@ function after_post($month, $day, $year) {
     function confirm() {    
         echo "<div class='success'>Thank you for your booking.</div>";        
     } // Close function  
-                 
-} // Close Class
+
+
+}
 
 ?>
