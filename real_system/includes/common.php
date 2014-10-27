@@ -1,8 +1,10 @@
 <?php
   /**
+
     lib/common.php - common code to be included in every page.
     This library connects to the database and starts the session.
   **/
+  
   // A function to enable HTTPS if it isn't on
   function forceHTTPS()
   {
@@ -28,8 +30,12 @@
   // Make sure the timezone is GMT for the date() function
   date_default_timezone_set("GMT");
 
+  // Include Error Handler
+  include($_SERVER['DOCUMENT_ROOT'] . "/booker/real_system/" . "functions/errors.php");
+
+
   // Create a new DB class and run the init routine
-  include("classes/database.php");
+  include($_SERVER['DOCUMENT_ROOT'] . "/booker/real_system/" . "classes/database.php");
 
   $db = new database;
   $db->initiate();

@@ -51,5 +51,10 @@ class database {
   public function fetchAll() {
     return $this->result->fetchAll();
   }
+
+  // A function to fetch customers from a query
+  public function fetchCustomers() {
+  return $this->result->fetchAll(PDO::FETCH_ASSOC);
+  }
 }
 ?>

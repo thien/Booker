@@ -1,40 +1,40 @@
 <?php 
-session_start();
-include_once('../includes/connection.php');
-if (isset($_SESSION['logged_in'])) {
-	//if true, show admin index	
-?>
-	
-	<html>
-		<head>
-			<title>
-			Appointments
-			</title>
-		<link rel="stylesheet" href="../assets/login.css"/>
-		</head>
-		<body>
-				<div class="login-container">
-				<img src="../assets/images/logosq.png">
-		<div class="login">
-		
 
-			<?php if (isset($error)) { ?>
-			<div class="error"><?php echo $error; ?></div>
-			<?php }?>
-		<form action="login.php" method="post" autocomplete="off">
-			<input type="text" name="username" placeholder="Username" />
-			<input type="password" name="password" placeholder="Password" />
-			<input type="submit" value="Login" id="submit"/>
-		</form>
-		<a href="#" class="login-link">Forgot your password?</a>
-		</div>
-</div>
-		</body>
-	</html>
-	
-<?php	
-} else {
-	header('Location: ../admin/login.php');	
-	$error = 'You need to login!';
-}
+include("../includes/common.php");
+$date = date("Y-m-d");
+$query = "SELECT start, name, email, phone, comments FROM booking WHERE date >= :date";
+$query_params = array(
+    ':date' => $date
+);
+$db->DoQuery($query, $query_params);
+$num = $db->fetchCustomers();
+
+// echo '<pre>'; print_r($num); echo '</pre>';
+include("../includes/header.php");
 ?>
+
+
+
+<?php if (count($num) > 0): ?>
+<table id="checkins_table">
+  <thead>
+    <tr>
+      <th><?php echo implode('</th><th>', array_keys(current($num))); ?></th>
+      <th>Alien</th>
+    </tr>
+  </thead>
+  <tbody>
+<?php foreach ($num as $row): array_map('htmlentities', $row); ?>
+    <tr>
+      <td><?php echo implode('</td><td>', $row); ?></td>
+      <td><input type="checkbox" name="confirm" value="value1"><br></td>
+    </tr>
+<?php endforeach; ?>
+  </tbody>
+</table>
+<?php endif; ?>
+
+</div>
+
+<!-- 
+ <?php echo '<pre>'; print_r($row); echo '</pre>'; ?> -->

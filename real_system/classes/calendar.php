@@ -48,35 +48,12 @@ function make_calendar($selected_date, $first_day, $back, $forward, $day, $month
 
 function make_booking_array($year, $month) { 
 
-
-
-    // global $pdo;
-    //     try {
-    //         $result = $pdo->query('SELECT title FROM site_metadata where id = 1');
-    //     } catch (PDOException $e)
-    //     {
-    //         $error = 'Cant get tings';
-    //         include '/includes/error.php';
-    //         exit();
-    //     }
-    // foreach ($result as $row){
-    //     $authors[] = array('title' => $row['title']);
-    // }
-    // foreach ($authors as $author){
-    //     echo $author['name'];
-    // }
-
-    global $pdo;
-
-    try {
-            $result = $pdo->prepare("SELECT * FROM booking WHERE date LIKE '$year-$month%'");
-        } catch (PDOException $e)
-        {
-            $error = 'Cant get tings';
-            include '/includes/error.php';
-            exit();
-        }
-        $number_of_rows = $result->fetchColumn(); 
+    $query = "SELECT * FROM booking WHERE date LIKE :period";
+    $query_params = array(
+    ':period' => '$year-$month%'
+    );
+    $db->DoQuery($query, $query_params);
+    $number_of_rows = $result->fetchAll(); 
 
     $this->count = $number_of_rows; 
     $this->bookings = '';  
@@ -87,8 +64,8 @@ function make_booking_array($year, $month) {
             "date" => $row['date'], 
             "start" => $row['start'],
             "comments" => $row['comments']
-            ); 
-        }
+        ); 
+    }
 
     $this->make_days_array($year, $month);    
             
@@ -348,7 +325,7 @@ function make_form() {
         <tr>
             <td>&nbsp;</td>
             <td>
-           <input type='submit' value='' id='book'></td>
+           <button type='submit'><input type='submit' value='' id='book'/></button></td>
         </tr>
         </table></form>";
 }

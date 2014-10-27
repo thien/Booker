@@ -3,8 +3,8 @@ ini_set('display_startup_errors',1);
 ini_set('display_errors',1);
 error_reporting(-1);
 
-include('../includes/connection.php'); 
-include('../classes/calendar.php');
+include_once('includes/common.php'); 
+include('classes/calendar.php');
 
 $calendar = new booking_diary($link);
 
@@ -16,25 +16,11 @@ $selected_date = mktime(0, 0, 0, $month, 01, $year); // Make a timestamp based o
 $first_day = date("N", $selected_date) - 1; // Gives numeric representation of the day of the week 1 (for Monday) through 7 (for Sunday)
 $back = strtotime("-1 month", $selected_date);
 $forward = strtotime("+1 month", $selected_date);
+include('includes/header.php');
 
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Calendar</title>
-<link href="../assets/style.css" rel="stylesheet" type="text/css">
-
-<script language="javascript" type="text/javascript">
-/* Preload book now image */
-sub_button = new Image(); 
-sub_button.src = "images/book_mo.png";
-</script>
-
-</head>
-<body>
 
 <?php     
         
