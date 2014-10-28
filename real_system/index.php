@@ -1,8 +1,18 @@
 <?php 
-
+			if (!$_COOKIE['userdata']['loggedin'] == 1) {
+				header('Location: login.php');	
+			};
 include 'includes/header.php';
 
-?>
-<h2> Hello, <?php echo $user_data['first_name']; ?>!</h2>
 
-Hello
+
+?>
+
+
+
+
+<a href="calendar.php">Book an Appointment</a>
+<a href="manage_appointments.php">Manage Appointments</a>
+<?php 
+include 'includes/footer.php';
+?>

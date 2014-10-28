@@ -28,14 +28,11 @@ else {
 	echo "This username isn't available.";
 else if ($rows == 0)
 	if (preg_match($pattern, $value, $matches, PREG_OFFSET_CAPTURE, 3) !== NULL) {
-		$check = 10;
+		$username_available == TRUE;
 		echo "This username is available!";
 	}
 	else 
 		echo "This username is invalid.";
-
-
-
 }
 ?>
 <!-- 

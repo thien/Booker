@@ -1,10 +1,19 @@
 <?php
+
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
+
+
   /**
 
     lib/common.php - common code to be included in every page.
     This library connects to the database and starts the session.
   **/
-  
+
+// Expiry Time for Cookies.
+  $expiry = time() + (60*60*24);
+
   // A function to enable HTTPS if it isn't on
   function forceHTTPS()
   {

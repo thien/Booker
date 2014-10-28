@@ -1,24 +1,50 @@
 <?php 
-session_start();
 include_once("includes/common.php");
+include("functions/encryption.php");
 if (isset($_SESSION['logged_in'])) {
-	//if true, show admin index
-	header('Location: index.php');	
+	header('Location: index.php');
 } else {
+
+		$username = trim($_POST['username']);
+		$password = encrypt(trim($_POST['password']));
+
 	//show login
-	if (isset($_POST['username'], $_POST['password'])){
+	if (isset($username, $_POST['password'])){
 		$query = "SELECT * FROM client WHERE username = :username AND password = :password";
 		$query_params = array(
-         ':username' => $_POST['username'],
-         ':password' => $_POST['password']
+         ':username' => $username,
+         ':password' => $password
       	);
 		$db->DoQuery($query, $query_params);
 		$num = $db->fetchAll();
 		if ($num) {
-			//user entered correct details
-			$_SESSION['logged_in'] = true;
+			$query = "SELECT * FROM client WHERE username = :username AND activated = :activated";
+			$query_params = array(
+     	    ':username' => $username,
+      	    ':activated' => '1'
+     	 	);
+			$db->DoQuery($query, $query_params);
+			$num2 = $db->fetch();
+			if ($num2) {
+				$query = "SELECT forename, surname FROM client WHERE username = :username";
+				$query_params = array(
+				':username' => $username
+				);
+				$db->DoQuery($query, $query_params);
+				$num2 = $db->fetch();
+				$forename = $num2[0];
+				$surname = $num2[1];
+			// //user entered correct details
+			setcookie('userdata[loggedin]', TRUE, $expiry, '', '', '', TRUE);
+			setcookie('userdata[username]', $username, $expiry, '', '', '', TRUE);
+			setcookie('userdata[forename]', $forename, $expiry, '', '', '', TRUE);
+			setcookie('userdata[surname]', $surname, $expiry, '', '', '', TRUE);
 			header('Location: index.php');
 			exit();
+			}
+			else {
+				$error = "You didn't activate your account!";
+			}
 		} else {
 			//user entered incorrect details
 			$error = 'Details were incorrect, try again!';
@@ -34,7 +60,7 @@ include('includes/header.php');
 	<p>You'll need an account to book an appointment. Registration will open in a new window. You can come when you have registered!</p>
 	<a href="register.php"><button type="register">Register</button></a>
 </div>
-	<div class="verticalLine"></div>
+	
 <div id="right">
 	<h1>Have an account?</h1>
 	
@@ -45,7 +71,7 @@ include('includes/header.php');
 		<input type="text" name="username" placeholder="Username" /><br>
 		<input type="password" name="password" placeholder="Password" /><br>
 		<input type="submit" value="Login" id="submit"/>
-		<a href="#" class="login-link">Forgot your password?</a>
+		<a href="forgot.php" class="login-link">Forgot your password?</a>
 	</form>
 </div>
 
