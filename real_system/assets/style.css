@@ -9,6 +9,54 @@
 		background-color: #fbfbfb;
 		
 	}
+	
+	/* @group nav */
+	
+	header {
+
+		background: #fefffe;
+
+			font-family: 'Open Sans';
+				}
+	
+	
+	header ul {
+		list-style: none;
+		margin: 0 auto;
+		padding-right: 0;
+		padding-bottom: 0;
+		padding-left: 0;
+		overflow: hidden;
+		text-align: center;
+	}
+	
+	header ul li {
+		display: inline-block;
+		margin-right: 10px;
+	}
+	
+	header ul a {
+		text-transform: uppercase;
+		color: #000;
+		font-size: 14px;
+		padding: 10px 15px;
+		line-height: 18px;
+		text-decoration: none;
+		border-radius: 5px;
+		display: block;
+	}
+	
+	header ul a:hover {
+		background: gray;
+		color: #fff;
+	}
+	header ul a:active, ul a.active {
+		color: #fff;
+		background-color: #434443;
+	}
+	
+	/* @end */
+	
 	#heading, #footer {
 width: 90%;
 	max-width: 800px;
@@ -286,7 +334,12 @@ width: 90%;
 	#calendar #week a {font-size:34px; text-decoration:none; color:#000000; padding:0 14px 0 14px}
 	#calendar #center_date {margin:0 auto; text-align:center; font-size:16px; font-weight:bold}
 	
-	.days {text-decoration:none; color:#FFFFFF; margin:0; padding:0px 1px 1px 0; font-size:0}
+	.days {text-decoration:none; color:#FFFFFF; margin:0; padding:0px 1px 1px 0; font-size:0;
+		height: 30px;
+	}
+	tr {
+
+	}
 	.days span {position:relative; margin:-32px 0 0 26px; height:32px; width:15px; display:block; font-family:arial; font-size:12px}
 	
 	#slots {background-color:#ffffff;  border:#CCCCCC 1px solid; color:#333333; margin:0 0 10px 0; font-family:arial; font-size:12px}
@@ -296,11 +349,11 @@ width: 90%;
 	
 	#key {margin-top:25px; width:275px; height:60px; border:#CCCCCC 1px solid; font-family:arial; color:#666666; font-size:11px}
 	#key td {text-align:center; width:45px}
-	#key_1 {background-color:#d80000}
-	#key_2 {background-color:#a295dd}
-	#key_3 {background-color:#d18800}
-	#key_4 {background-color:#019500}
-	#key_5 {background-color:#948e8e}
+	#key_fullybooked {background-color:#d80000}
+	#key_sunday {background-color:#a295dd}
+	#key_partbooked {background-color:#d18800}
+	#key_available {background-color:#019500}
+	#key_pastdate {background-color:#948e8e}
 	
 	.left {float:left}
 	.input {width:220px}

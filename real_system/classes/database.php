@@ -46,10 +46,18 @@ class database {
   public function fetch() {
     return $this->result->fetch();
   }
+  public function fetchAssoc() {
+    return $this->result->fetch(PDO::FETCH_ASSOC);
+  }
 
   // A function to fetch multiple rows from the query
   public function fetchAll() {
     return $this->result->fetchAll();
+  }
+
+    // A function to fetch number of rows from the query
+  public function RowCount() {
+    return $this->result->RowCount();
   }
 
   // A function to fetch customers from a query

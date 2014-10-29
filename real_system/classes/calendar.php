@@ -1,7 +1,6 @@
 <?php
 
 class booking_diary {
-
 /*
 Settings you can change:
 
@@ -48,24 +47,45 @@ function make_calendar($selected_date, $first_day, $back, $forward, $day, $month
 
 function make_booking_array($year, $month) { 
 
+    $period = $year . '-'. $month .'%';
+    $this->db = new database();
+    $this->db->initiate();
+
     $query = "SELECT * FROM booking WHERE date LIKE :period";
-    $query_params = array(
-    ':period' => '$year-$month%'
-    );
-    $db->DoQuery($query, $query_params);
-    $number_of_rows = $result->fetchAll(); 
+    $query_params = array(':period' => $period);
+    $this->db->DoQuery($query, $query_params);
 
-    $this->count = $number_of_rows; 
-    $this->bookings = '';  
+    $number_of_rows = $this->db->RowCount(); 
+     $this->count = $this->db->RowCount(); 
+    // print_r($number_of_rows);
 
-    foreach ($result as $row){
+
+    $fetch_array = $this->db->fetch();
+
+
+ 
+//     echo '<br><br>';
+
+
+
+//     // foreach($number_of_rows as $key => $item){
+//     //     echo "[" . $key . "] => " . $value . "<br />"; 
+//     // }
+// echo '<pre>';
+//    print_r($this->db->fetchAssoc());
+// echo '</pre>';
+
+//-------------------------------
+
+    while ($rows = $this->db->fetch(PDO::FETCH_ASSOC)) {
+
         $this->bookings[] = array(
-            "name" => $row['name'], 
-            "date" => $row['date'], 
-            "start" => $row['start'],
-            "comments" => $row['comments']
-        ); 
-    }
+            "name" => $rows['name'], 
+            "date" => $rows['date'], 
+            "start" => $rows['start'],
+            "comments" => $rows['comments']
+            ); 
+        }
 
     $this->make_days_array($year, $month);    
             
@@ -162,9 +182,7 @@ function make_day_boxes() {
                 if ($day_count >0 && $tag == '')         
                     $tag = 1;           
                                              
-                echo $this->day_switch($tag, $row['daynumber']) . 
-
-                "<span>" . str_replace('|', '&nbsp;', $row['daynumber']) . "</span></td>";
+                echo $this->day_switch($tag, $row['daynumber']) . "<span>" . str_replace('|', '&nbsp;', $row['daynumber']) . "</span></td>";
 
             } else {
                 echo "<td width='21' valign='top' class='days'><img src='images/block_null.gif' title='This day is unavailable' alt=''></td>";
@@ -223,11 +241,11 @@ function make_key() {
         echo "</tr></table>
         <table border='0' id='key' cellpadding='2' cellspacing='6'>
             <tr>
-                <td id='key_1'>&nbsp;</td>
-                <td id='key_2'>&nbsp;</td>
-                <td id='key_3'>&nbsp;</td>
-                <td id='key_4'>&nbsp;</td>
-                <td id='key_5'>&nbsp;</td>
+                <td id='key_fullybooked'>&nbsp;</td>
+                <td id='key_sunday'>&nbsp;</td>
+                <td id='key_partbooked'>&nbsp;</td>
+                <td id='key_available'>&nbsp;</td>
+                <td id='key_pastdate'>&nbsp;</td>
             </tr>
             <tr>
                 <td>Fully Booked</td>
@@ -344,24 +362,25 @@ function after_post($month, $day, $year) {
     echo "<div class='error'>" . $alert . "</div>";    
     
     } elseif($msg == 0) {
+        $confirmed = false;
+        $this->db = new database();
+        $this->db->initiate();
 
-            $booking_date = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
-            $booking_time = $_POST['booking_time'];
-            
-            try {
-            $query = $pdo->prepare("INSERT INTO booking (date, start, name, email, phone, comments) VALUES ('$booking_date', '$booking_time',  '$_POST[name]', '$_POST[email]', '$_POST[phone]', '$_POST[comments]')");
-        } catch (PDOException $e)
-        {
-            $error = 'Cant get tings';
-            include '/includes/error.php';
-            exit();
-        }
+        $booking_date = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
+        $booking_time = $_POST['booking_time'];
 
-            // $query = $pdo->prepare("INSERT INTO booking (date, start, name, email, phone, comments) VALUES ('$booking_date', '$booking_time',  '$_POST[name]', '$_POST[email]', '$_POST[phone]', '$_POST[comments]')");
-            // $query->execute();
-            // $result = mysqli_query($this->link, $query) or die(mysqli_error($this->link));      
-       
-            // $this->confirm();  
+        $query = "INSERT INTO booking (date, start, name, email, phone, comments, confirmedbystaff) VALUES (:booking_date, :booking_time,  :name, :email, :phone, :comments, :confirmed)";
+        $query_params = array(
+            ':booking_date' => $booking_date,
+            ':booking_time' => $booking_time,  
+            ':name' => $_POST[name], 
+            ':email' => $_POST[email], 
+            ':phone' => $_POST[phone], 
+            ':comments' => $_POST[comments],
+            ':confirmed' => $confirmed
+        );
+        $this->db->DoQuery($query, $query_params);
+        $this->confirm();    
                   
         } // Close else
    } // Close function  

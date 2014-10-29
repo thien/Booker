@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include_once("includes/common.php");
+include_once("includes/core.php");
 
 	//show login
 	if (isset($_POST['email'])){

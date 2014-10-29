@@ -1,5 +1,5 @@
 <?php 
-include_once("includes/common.php");
+include_once("includes/core.php");
 include("functions/encryption.php");
 if (isset($_SESSION['logged_in'])) {
 	header('Location: index.php');
