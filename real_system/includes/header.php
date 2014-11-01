@@ -26,3 +26,19 @@
 		</div>
 	</div>
 <div id="container">
+
+<?php
+if (isset($menutype)) {
+if ($menutype == "user_dashboard") { ?>
+
+<header>
+  <ul>
+    <li><a href="calendar.php">Make New Appointment</a></li>
+    <li><a href="manage_appointments.php" class="active">Manage</a></li>
+    <li><a href="manage_user.php">Settings</a></li>
+  </ul>
+</header>
+
+
+
+<?php };}; ?>

@@ -1,4 +1,5 @@
 <?php 
+$menutype = "user_dashboard";
 include_once("includes/core.php");
 include("functions/encryption.php");
 require_once('assets/recaptcha.php');
@@ -175,13 +176,6 @@ $(function() {
 
 <script type="text/javascript" src="assets/password_meter.js"></script>
 
-
-<header>
-	<ul>
-		<li><a href="manage_appointments.php">Appointments</a></li>
-		<li><a href="manage_user.php" class="active">Settings</a></li>
-	</ul>
-</header>
 
 <h1>Manage User Settings</h1><form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
   <div class="group">

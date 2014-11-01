@@ -94,6 +94,7 @@ include('includes/header.php');
 <script type="text/javascript" src="assets/jquery.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
 <script type="text/javascript">
+
 $(document).ready(function() {
 $('#username_availability').load('functions/check_username.php').show();
 $('#username_').keyup(function() {
@@ -227,6 +228,7 @@ $(function() {
 <hr>
 <label>Captcha</label>
 <div class="captcha">
+
 <?php echo recaptcha_get_html($publickey, $error); 
 ?>
 </div>

@@ -1,14 +1,13 @@
 <?php 
-include_once("includes/common.php");
-
-$query = "SELECT forename, surname FROM client WHERE username = :username";
-$query_params = array(
-':username' => 'potato123'
-);
-$db->DoQuery($query, $query_params);
-$num2 = $db->fetch();
-print_r($num2);
-echo '<br><br><br><br><br>';
-echo $num2[0];
-echo $num2[1];
+echo $_SERVER['PHP_SELF'];
+$mystring = $_SERVER['PHP_SELF'];
+$findme = 'admin';
+$pos = strpos($mystring, $findme);
+if ($pos === false) {
+    echo "The string '$findme' was not found in the string '$mystring'";
+} else {
+    echo "The string '$findme' was found in the string '$mystring'";
+    echo " and exists at position $pos";
+}
+//		echo strpos($_SERVER['PHP SELF'],'admin');
 ?>

@@ -82,7 +82,7 @@ width: 90%;
 		white-space: nowrap;
 	}
 	h1, h2, h3, h4, h5, h6 {
-		font-family: Montserrat;
+		font-family: Montserrat, Helvetica, Arial, sans-serif;
 	}
 	#container {
 		width: 90%;

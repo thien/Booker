@@ -1,12 +1,21 @@
 <?php
 class database {
-  // A function which creates a connection to the databse
   public function initiate() {
-    $user             = "thien";
-    $password         = "JmuVnBrLxqAFTEhA";
-    $hostname         = "localhost";
-    $dbn              = "booking";
-  
+  if ($_SERVER['HTTP_HOST'] != "localhost") {
+	$user             = "sql346641";
+	$password         = "dY7%lG1%";
+	$hostname         = "sql3.freemysqlhosting.net";
+	$dbn              = "sql346641";
+//	$user             = "thien_db";
+//	$password         = "1a4face37a";
+//	$hostname         = "projects.tnguyen.ch";
+//	$dbn              = "thien_projects";
+  } else {
+	$user             = "thien";
+	$password         = "JmuVnBrLxqAFTEhA";
+	$hostname         = "localhost";
+	$dbn              = "booking";
+  }
     try
     {
       $this->database = new PDO("mysql:host={$hostname};dbname={$dbn}", $user, $password);
@@ -20,9 +29,6 @@ class database {
     $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
-  // A function which runs a query passed as parameters,
-  // if it fails, email the webmaster and redirect the
-  // user to the oops page
   public function DoQuery($query, $query_params) {
     try
     {
@@ -49,7 +55,6 @@ class database {
   public function fetchAssoc() {
     return $this->result->fetch(PDO::FETCH_ASSOC);
   }
-
   // A function to fetch multiple rows from the query
   public function fetchAll() {
     return $this->result->fetchAll();

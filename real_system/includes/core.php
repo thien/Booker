@@ -4,6 +4,11 @@
     This library connects to the database and starts the session.
   **/
 
+if ($require_user == true) {
+	if (!$_COOKIE['userdata']['loggedin'] == 1) {
+		header('Location: login.php');
+	};
+};
 
 //Display PHP Errors (Used for Debugging and Development)
   ini_set('display_errors',1);
@@ -11,15 +16,29 @@
   error_reporting(-1);
 
 //Directory Variable used to handle difficulty in directory linking on localhost
-  $directory = $_SERVER['DOCUMENT_ROOT'] . "/booker/real_system/"; 
+//if ($_SERVER['HTTP_HOST'] = "localhost") {
+//	if strpos(($_SERVER['PHP SELF'],'admin') !== false) {
+//		$directory = "../"; 
+//		} else {
+//		$directory = ""; 
+//		}
+//} else {
+	$directory = "../comp4/"; 
+//}
 
+// echo $_SERVER['HTTP_REFERER'];
 
 // Expiry Time for Cookies.
   $expiry = time() + (60*60*24);
 
 // ReCaptcha Properties
-  $publickey = "6Lf_ufwSAAAAAHI2NOzKjIBZsEiMhIhG4q6B-_Re";
+  if ($_SERVER['HTTP_HOST'] != "localhost") {
+      $publickey = "6LcquPwSAAAAAHDtQdsJgDyjVAo_eNkNHO0R1UvV";
+  $privatekey = "6LcquPwSAAAAAFW168bbf835aADGzK_If5wctI-y";
+  } else {
+    $publickey = "6Lf_ufwSAAAAAHI2NOzKjIBZsEiMhIhG4q6B-_Re";
   $privatekey = "6Lf_ufwSAAAAALj2xh6s2SxMFu_16xG1MEkojGLL";
+  }
   # the response from reCAPTCHA
   $resp = null;
   # the error code from reCAPTCHA, if any

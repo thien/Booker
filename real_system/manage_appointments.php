@@ -1,4 +1,5 @@
 <?php 
+$menutype = "user_dashboard";
 include_once("includes/core.php");
 include("functions/encryption.php");
 
@@ -13,15 +14,8 @@ $num = $db->fetchCustomers();
 
 
 include 'includes/header.php';
-?>
 
-<header>
-	<ul>
-    <li><a href="manage_appointments.php">Make New Appointment</a></li>
-		<li><a href="manage_appointments.php" class="active">Manage</a></li>
-		<li><a href="manage_user.php">Settings</a></li>
-	</ul>
-</header>
+?>
 
 
 <h1>Manage Appointments</h1>

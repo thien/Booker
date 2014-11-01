@@ -1,6 +1,5 @@
 <?php
-
-require($_SERVER['DOCUMENT_ROOT'] . "/booker/real_system/" . "classes/database.php");
+require( "../classes/database.php");
 $db = new database();
 $db->initiate();
 

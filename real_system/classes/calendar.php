@@ -318,7 +318,7 @@ function make_form() {
         } 
     
         echo $opt. "</select>";          
-
+        echo $_COOKIE['userdata']['username'];
         
         echo "
         <table width='300' border='0' id='booking'>
@@ -369,7 +369,7 @@ function after_post($month, $day, $year) {
         $booking_date = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
         $booking_time = $_POST['booking_time'];
 
-        $query = "INSERT INTO booking (date, start, name, email, phone, comments, confirmedbystaff) VALUES (:booking_date, :booking_time,  :name, :email, :phone, :comments, :confirmed)";
+        $query = "INSERT INTO booking (date, time, name, email, phone, comments, confirmedbystaff) VALUES (:booking_date, :booking_time,  :name, :email, :phone, :comments, :confirmed)";
         $query_params = array(
             ':booking_date' => $booking_date,
             ':booking_time' => $booking_time,  
