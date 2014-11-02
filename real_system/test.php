@@ -1,13 +1,10 @@
-<?php 
-echo $_SERVER['PHP_SELF'];
-$mystring = $_SERVER['PHP_SELF'];
-$findme = 'admin';
-$pos = strpos($mystring, $findme);
-if ($pos === false) {
-    echo "The string '$findme' was not found in the string '$mystring'";
-} else {
-    echo "The string '$findme' was found in the string '$mystring'";
-    echo " and exists at position $pos";
-}
-//		echo strpos($_SERVER['PHP SELF'],'admin');
+<?php
+// The message
+$message = "Line 1\r\nLine 2\r\nLine 3";
+
+// In case any of our lines are larger than 70 characters, we should use wordwrap()
+$message = wordwrap($message, 70, "\r\n");
+
+// Send
+mail('isthisthien@gmail.com', 'My Subject', $message);
 ?>

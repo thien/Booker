@@ -1,6 +1,7 @@
 <?php
 include_once("includes/core.php");
-include("functions/encryption.php");
+include_once("functions/encryption.php");
+include_once("functions/email.php");
 require_once('assets/recaptcha.php');
 
 if($_POST) {
@@ -64,7 +65,7 @@ if ($_POST["recaptcha_response_field"]) {
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = " INSERT INTO client (username, password, forename, surname, email, phoneno, activated) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated)";
+  $query = " INSERT INTO client (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
   $query_params = array(
   ':username' => $username,
   ':password' => $password,
@@ -72,10 +73,12 @@ if ($_POST["recaptcha_response_field"]) {
   ':surname' => $surname,
   ':email' => $email,
   ':phoneno' => $phoneno,
-  ':activated' => '0'
+  ':activated' => '0',
+  ':activation_code' => encrypt($username + microtime())
   );
   $db->DoQuery($query, $query_params);
-  header("Location: register/confirmation.php");        
+  email($email, $username, $forename, "confirm_registration");
+  header("Location: confirmation.php");        
   }
 
 // isset($username, $password, $forename, $surname, $email, $phoneno)
