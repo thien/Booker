@@ -11,8 +11,8 @@ class database {
 //	$hostname         = "projects.tnguyen.ch";
 //	$dbn              = "thien_projects";
   } else {
-	$user             = "thien";
-	$password         = "JmuVnBrLxqAFTEhA";
+	$user             = "root";
+	$password         = "root";
 	$hostname         = "localhost";
 	$dbn              = "booking";
   }

@@ -15,13 +15,13 @@ if ($require_user == true) {
   ini_set('display_startup_errors',1);
   error_reporting(-1);
 
-Directory Variable used to handle difficulty in directory linking on localhost
+//Directory Variable used to handle difficulty in directory linking on localhost
 if ($_SERVER['HTTP_HOST'] = "localhost") {
-	if strpos(($_SERVER['PHP SELF'],'admin') !== false) {
-		$directory = "../"; 
-		} else {
+//	if strpos(($_SERVER['PHP SELF'],'admin') !== false) {
 		$directory = ""; 
-		}
+//		} else {
+//		$directory = ""; 
+//		}
 } else {
 	$directory = "../comp4/"; 
 }

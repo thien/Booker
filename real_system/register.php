@@ -5,59 +5,59 @@ include_once("functions/email.php");
 require_once('assets/recaptcha.php');
 
 if($_POST) {
-$username = trim($_POST['username']);
+
+//sanitize variables
+$username = strtolower(trim($_POST["username"]));
+$username = filter_var($username, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_HIGH);
 $password = trim($_POST['password']);
 $password_confirm = trim($_POST['password_confirm']);
 $forename = trim(ucfirst($_POST['forename']));
 $surname = trim(ucfirst($_POST['surname']));
-$email = trim($_POST['email']);
-$email_confirm = trim($_POST['email_confirm']);
+$email = strtolower(trim($_POST['email']));
+$email_confirm = strtolower(trim($_POST['email_confirm']));
 $phoneno = trim($_POST['phoneno']);
-
 $errors = array();
-
 
 // check if username is available
 $query = ("SELECT username FROM client WHERE username = :username");
-$query_params = array(
-  ':username' => $username
-  );
+$query_params = array(':username' => $username);
 $db->DoQuery($query, $query_params);
 $rows = $db->fetch();
 if ($rows) {
    array_push($errors, "This username is already chosen. Please choose another username.");
 }
-  // Validate the input
-  // if (strlen($name) == 0)
-  //   array_push($errors, "Please enter your name");
+// Validate the input
+// if (strlen($name) == 0)
+//   array_push($errors, "Please enter your name");
 
-  // if (!(strcmp($gender, "Male") || strcmp($gender, "Female") || strcmp($gender, "Other"))) 
-  //   array_push($errors, "Please specify your gender");
-  
-  // if (strlen($address) == 0) 
-  //   array_push($errors, "Please specify your address");
-    
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-    array_push($errors, "Please specify a valid email address");
+// if (!(strcmp($gender, "Male") || strcmp($gender, "Female") || strcmp($gender, "Other"))) 
+//   array_push($errors, "Please specify your gender");
 
-  if (filter_var($email, FILTER_VALIDATE_EMAIL) !== filter_var($email, FILTER_VALIDATE_EMAIL))
-    array_push($errors, "The email addresses do not match");
+// if (strlen($address) == 0) 
+//   array_push($errors, "Please specify your address");
 
-  if (strlen($username) == 0)
-    array_push($errors, "Please enter a valid username");
-  // if (!$username_available == TRUE)
-  //   array_push($errors, "This username is already chosen. Please choose another username.");
-    
-  if (strlen($password) < 5)
-    array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
-    
+// if (!$username_available == TRUE)
+//   array_push($errors, "This username is already chosen. Please choose another username.");
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+array_push($errors, "Please specify a valid email address");
+
+if (filter_var($email, FILTER_VALIDATE_EMAIL) !== filter_var($email, FILTER_VALIDATE_EMAIL))
+array_push($errors, "The email addresses do not match");
+
+if (strlen($username) == 0)
+array_push($errors, "Please enter a valid username");
+
+if (strlen($password) < 5)
+array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
+
 if ($_POST["recaptcha_response_field"]) {
-    $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-    if (!$resp->is_valid) {
-    # set the error code so that we can display it
-    // $error = $resp->error;
-     array_push($errors, "The captcha is incorrect.");
-  }
+	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+	if (!$resp->is_valid) {
+		# set the error code so that we can display it
+		// $error = $resp->error;
+		 array_push($errors, "The captcha is incorrect.");
+	}
 }
 
 
