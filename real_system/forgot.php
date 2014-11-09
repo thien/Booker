@@ -1,10 +1,11 @@
 <?php 
+$title = 'Forgot Password?';
 session_start();
 include_once("includes/core.php");
 
 	//show login
 	if (isset($_POST['email'])){
-		$query = "SELECT * FROM client WHERE username = :username AND password = :password";
+		$query = "SELECT * FROM users WHERE username = :username AND password = :password";
 		$query_params = array(
          ':username' => $_POST['username'],
          ':password' => $_POST['password']
@@ -32,7 +33,7 @@ include('includes/header.php');
 		<?php if (isset($error)) { ?>
 		<div class="error"><?php echo $error; ?></div>
 		<?php }?>
-	<form action="login.php" method="post" autocomplete="off">
+	<form action="confirmation.php" method="post" autocomplete="off">
 		<input type="text" name="email" placeholder="email" /><br>
 		<input type="submit" value="Next" id="submit"/>
 	</form>

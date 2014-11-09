@@ -1,4 +1,5 @@
 <?php 
+$title = 'Manage User';
 $menutype = "user_dashboard";
 include_once("includes/core.php");
 include("functions/encryption.php");
@@ -19,7 +20,7 @@ $errors = array();
 
 
 // check if username is available
-$query = ("SELECT username FROM client WHERE username = :username");
+$query = ("SELECT username FROM users WHERE username = :username");
 $query_params = array(
   ':username' => $username
   );
@@ -66,7 +67,7 @@ if ($_POST["recaptcha_response_field"]) {
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = " INSERT INTO client (username, password, forename, surname, email, phoneno, activated) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated)";
+  $query = " INSERT INTO users (username, password, forename, surname, email, phoneno, activated) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated)";
   $query_params = array(
   ':username' => $username,
   ':password' => $password,
@@ -177,7 +178,7 @@ $(function() {
 <script type="text/javascript" src="assets/password_meter.js"></script>
 
 
-<h1>Manage User Settings</h1><form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
+<h1>Your Details.</h1><form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
   <div class="group">
   <div class="left">
     <label>Forename:</label><br>

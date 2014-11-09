@@ -1,4 +1,5 @@
 <?php 
+$title = 'Login';
 $menutype = NULL;
 include_once("includes/core.php");
 include("functions/encryption.php");
@@ -11,7 +12,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 }
 	//show login
 	if (isset($username, $password)){
-		$query = "SELECT * FROM client WHERE username = :username AND password = :password";
+		$query = "SELECT * FROM users WHERE username = :username AND password = :password";
 		$query_params = array(
          ':username' => $username,
          ':password' => $password
@@ -19,7 +20,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 		$db->DoQuery($query, $query_params);
 		$num = $db->fetchAll();
 		if ($num) {
-			$query = "SELECT * FROM client WHERE username = :username AND activated = :activated";
+			$query = "SELECT * FROM users WHERE username = :username AND activated = :activated";
 			$query_params = array(
      	    ':username' => $username,
       	    ':activated' => '1'
@@ -27,7 +28,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 			$db->DoQuery($query, $query_params);
 			$num2 = $db->fetch();
 			if ($num2) {
-				$query = "SELECT forename, surname FROM client WHERE username = :username";
+				$query = "SELECT forename, surname FROM users WHERE username = :username";
 				$query_params = array(
 				':username' => $username
 				);

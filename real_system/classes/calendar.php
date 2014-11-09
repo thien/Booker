@@ -41,11 +41,11 @@ function make_calendar($selected_date, $first_day, $back, $forward, $day, $month
     $this->forward_year = date("Y", $forward); // Add one month forward arrow    
     
     // Make the booking array
-    $this->make_booking_array($year, $month);
+    $this->create_booking($year, $month);
     
 }
 
-function make_booking_array($year, $month) { 
+function create_booking($year, $month) { 
 
     $period = $year . '-'. $month .'%';
     $this->db = new database();
@@ -56,33 +56,14 @@ function make_booking_array($year, $month) {
     $this->db->DoQuery($query, $query_params);
 
     $number_of_rows = $this->db->RowCount(); 
-     $this->count = $this->db->RowCount(); 
-    // print_r($number_of_rows);
-
-
+    $this->count = $this->db->RowCount(); 
     $fetch_array = $this->db->fetch();
-
-
- 
-//     echo '<br><br>';
-
-
-
-//     // foreach($number_of_rows as $key => $item){
-//     //     echo "[" . $key . "] => " . $value . "<br />"; 
-//     // }
-// echo '<pre>';
-//    print_r($this->db->fetchAssoc());
-// echo '</pre>';
-
-//-------------------------------
-
     while ($rows = $this->db->fetch(PDO::FETCH_ASSOC)) {
 
         $this->bookings[] = array(
-            "name" => $rows['name'], 
+            "name" => $rows['username'], 
             "date" => $rows['date'], 
-            "start" => $rows['start'],
+            "start" => $rows['time'],
             "comments" => $rows['comments']
             ); 
         }
@@ -185,7 +166,7 @@ function make_day_boxes() {
                 echo $this->day_switch($tag, $row['daynumber']) . "<span>" . str_replace('|', '&nbsp;', $row['daynumber']) . "</span></td>";
 
             } else {
-                echo "<td width='21' valign='top' class='days'><img src='images/block_null.gif' title='This day is unavailable' alt=''></td>";
+                echo "<td width='21' valign='top' class='days'><div class='box' id='key_null'></div></td>";
             }
             
             $i++;
@@ -202,29 +183,27 @@ function day_switch($tag, $daynumber) {
         switch ($tag) {
         
         case (1): // Part booked day
-            $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" .  $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'>
-                    <img src='images/block_part.gif' title='This day is part booked' border='0' alt=''></a>\r\n";
+            $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" .  $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'><div class='box' id='key_partbooked'></div></a>\r\n";
             break;
 
         case (2): // Sunday
-            $txt = "<img src='images/block_sunday.gif' title='This day is not available' border='0' alt=''>\r\n";
+            $txt = "<div class='box' id='key_sunday'></div>\r\n";
             break;
 
         case (3): // Fully booked day
-            $txt= "<img src='images/block_fully_booked.gif' title='This day is fully booked' border='0' alt=''>\r\n";
+            $txt= "<div class='box' id='key_fullybooked'></div>\r\n";
             break;
 
         case (4): // Past day
-            $txt = "<img src='images/block_past.gif' title='This day is not available' border='0' alt=''></a>\r\n";
+            $txt = "<div class='box' id='key_pastdate'></div></a>\r\n";
             break;
 
         case (5): // Block booked out day
-            $txt= "<img src='images/block_fully_booked.gif' title='This day is not available' border='0' alt=''>\r\n";
+            $txt= "<div class='box' id='key_fullybooked'></div>\r\n";
             break;
             
         default: // FREE
-            $txt = "<a href='calendar.php?month=" .  $this->month . "&amp;year=" .  $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'>
-                    <img src='images/block_free.gif' title='This day is free' border='0' alt=''></a>\r\n";
+            $txt = "<a href='calendar.php?month=" .  $this->month . "&amp;year=" .  $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'><div class='box' id='key_available'></div>\r\n";
             break;
     
         }
@@ -317,67 +296,34 @@ function make_form() {
             $opt .= "<option value='" . $booking_time . "'>" . $booking_time . " - " . date("H:i:s", $finish_time) . "</option>";
         } 
     
-        echo $opt. "</select>";          
-        echo $_COOKIE['userdata']['username'];
-        
-        echo "
-        <table width='300' border='0' id='booking'>
-        <tr>
-            <td class='details'>Name</td>
-            <td><input class='input' type='text' name='name' size='32'"; if(isset($_POST['name'])) echo " value='" . $_POST['name'] . "'"; echo "></td>
-        </tr>
-        <tr>
-            <td class='details'>Email</td>
-            <td><input class='input' type='text' name='email' size='32'"; if(isset($_POST['email'])) echo " value='" . $_POST['email'] . "'"; echo "></td>
-        </tr>
-        <tr>
-            <td class='details'>Telephone</td>
-            <td><input class='input' type='text' name='phone' size='32'"; if(isset($_POST['phone'])) echo " value='" . $_POST['phone'] . "'"; echo "></td>
-        </tr>
-        <tr>
-            <td class='details'>Comments</td>
-            <td><textarea rows='3' cols='30' name='comments' onclick='make_blank();'>";
-        if(isset($_POST['comments'])) echo $_POST['comments'];
-        echo "</textarea></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-           <button type='submit'><input type='submit' value='' id='book'/></button></td>
-        </tr>
-        </table></form>";
+        echo $opt. "</select><br>";
+        echo "<table id='booking'><textarea rows='3' cols='30' name='comments' placeholder='Any comments?'>";
+		if(isset($_POST['comments'])) echo $_POST['comments'];
+		echo "</textarea><br><button type='submit'>Submit</button></table></form>";
 }
 
 
 function after_post($month, $day, $year) {
-
     $alert=''; $msg=0;
-    
-    if(isset($_POST['name']) && empty($_POST['name'])) { $msg = 1; $alert .= "Please fill in the name box<br>"; } 
-    if(isset($_POST['email']) && empty($_POST['email'])) { $msg = 1; $alert .= "Please fill in the email box<br>"; }    
-    if(isset($_POST['phone']) && empty($_POST['phone'])) { $msg = 1; $alert .= "Please add a contact number<br>"; }     
     if(isset($_POST['booking_time']) && $_POST['booking_time'] == 'selectvalue') { $msg = 1; $alert .= "Please select a booking time"; }
     
     if($msg == 1) {
     echo "<div class='error'>" . $alert . "</div>";    
     
     } elseif($msg == 0) {
-        $confirmed = false;
         $this->db = new database();
         $this->db->initiate();
 
         $booking_date = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
         $booking_time = $_POST['booking_time'];
 
-        $query = "INSERT INTO booking (date, time, name, email, phone, comments, confirmedbystaff) VALUES (:booking_date, :booking_time,  :name, :email, :phone, :comments, :confirmed)";
+        $query = "INSERT INTO booking (date, time, username, comments, confirmedbystaff) VALUES (:booking_date, :booking_time, :username, :comments, :confirmed)";
         $query_params = array(
             ':booking_date' => $booking_date,
             ':booking_time' => $booking_time,  
-            ':name' => $_POST[name], 
-            ':email' => $_POST[email], 
-            ':phone' => $_POST[phone], 
-            ':comments' => $_POST[comments],
-            ':confirmed' => $confirmed
+            ':username' => $_COOKIE['userdata']['username'], 
+            ':comments' => $_POST['comments'],
+            ':confirmed' => 0
         );
         $this->db->DoQuery($query, $query_params);
         $this->confirm();    

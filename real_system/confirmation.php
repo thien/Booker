@@ -1,5 +1,6 @@
 
 <?php
+$title = 'Confirmation';
 include('includes/header.php');
 
 if ($type == "registration_confirm") {

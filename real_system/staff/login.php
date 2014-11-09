@@ -56,6 +56,7 @@ if (isset($_SESSION['logged_in'])) {
 			<?php if (isset($error)) { ?>
 			<div class="error"><?php echo $error; ?></div>
 			<?php }?>
+			<h1>Enter PIN</h1>
 		<form action="login.php" method="post" autocomplete="off">
 			<input type="text" name="username" placeholder="Username" />
 			<input type="password" name="password" placeholder="Password" />
@@ -70,17 +71,3 @@ if (isset($_SESSION['logged_in'])) {
 <?php
 }
 ?>
-
-
-
-<!-- 
-function generateHash($password) {
-    if (defined("CRYPT_BLOWFISH") && CRYPT_BLOWFISH) {
-        $salt = '$2y$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
-        return crypt($password, $salt);
-    }
-}http://www.sitepoint.com/password-hashing-in-php/
-
-function verify($password, $hashedPassword) {
-    return crypt($password, $hashedPassword) == $hashedPassword;
-} -->

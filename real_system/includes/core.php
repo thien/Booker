@@ -11,17 +11,17 @@ if ($require_user == true) {
 };
 
 //Display PHP Errors (Used for Debugging and Development)
-  ini_set('display_errors',1);
-  ini_set('display_startup_errors',1);
-  error_reporting(-1);
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
 
 //Directory Variable used to handle difficulty in directory linking on localhost
 if ($_SERVER['HTTP_HOST'] = "localhost") {
-//	if strpos(($_SERVER['PHP SELF'],'admin') !== false) {
+	if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false) {
+		$directory = "../"; 
+		} else {
 		$directory = ""; 
-//		} else {
-//		$directory = ""; 
-//		}
+		}
 } else {
 	$directory = "../comp4/"; 
 }
@@ -32,14 +32,14 @@ if ($_SERVER['HTTP_HOST'] = "localhost") {
   $expiry = time() + (60*60*24);
 
 // ReCaptcha Properties
-  if ($_SERVER['HTTP_HOST'] != "localhost") {
-      $publickey = "6LcquPwSAAAAAHDtQdsJgDyjVAo_eNkNHO0R1UvV";
+//  if ($_SERVER['HTTP_HOST'] != "localhost") {
+  $publickey = "6LcquPwSAAAAAHDtQdsJgDyjVAo_eNkNHO0R1UvV";
   $privatekey = "6LcquPwSAAAAAFW168bbf835aADGzK_If5wctI-y";
-  } else {
-    $publickey = "6Lf_ufwSAAAAAHI2NOzKjIBZsEiMhIhG4q6B-_Re";
-  $privatekey = "6Lf_ufwSAAAAALj2xh6s2SxMFu_16xG1MEkojGLL";
-  }
-  # the response from reCAPTCHA
+//  } else {
+//  $publickey = "6Lf_ufwSAAAAAHI2NOzKjIBZsEiMhIhG4q6B-_Re";
+//  $privatekey = "6Lf_ufwSAAAAALj2xh6s2SxMFu_16xG1MEkojGLL";
+//  }
+//  # the response from reCAPTCHA
   $resp = null;
   # the error code from reCAPTCHA, if any
   $error = null;

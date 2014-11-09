@@ -1,4 +1,5 @@
 <?php
+$title = 'Register';
 include_once("includes/core.php");
 include_once("functions/encryption.php");
 include_once("functions/email.php");
@@ -19,7 +20,7 @@ $phoneno = trim($_POST['phoneno']);
 $errors = array();
 
 // check if username is available
-$query = ("SELECT username FROM client WHERE username = :username");
+$query = ("SELECT username FROM users WHERE username = :username");
 $query_params = array(':username' => $username);
 $db->DoQuery($query, $query_params);
 $rows = $db->fetch();
@@ -65,7 +66,7 @@ if ($_POST["recaptcha_response_field"]) {
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = " INSERT INTO client (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
+  $query = " INSERT INTO users (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
   $query_params = array(
   ':username' => $username,
   ':password' => $password,
@@ -95,7 +96,8 @@ if ($_POST["recaptcha_response_field"]) {
 include('includes/header.php');
 ?>
 <script type="text/javascript" src="assets/jquery.js"></script>
-<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+<script type="text/javascript" src="assets/jquery.validate.min.js"></script>
+<script type="text/javascript" src="assets/password_meter.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -170,8 +172,6 @@ $(function() {
   
 
 </script>
-
-<script type="text/javascript" src="assets/password_meter.js"></script>
 
 
  <h1>Register</h1> 
@@ -251,5 +251,4 @@ $(function() {
 
 </div>
 
-<?php include 'includes/footer.php';
-?>
+<?php include 'includes/footer.php';?>

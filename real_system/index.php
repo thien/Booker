@@ -1,4 +1,5 @@
 <?php 
+$title = 'Home';
 $require_user = true;
 include_once('includes/core.php'); 
 include 'includes/header.php';

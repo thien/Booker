@@ -1,6 +1,7 @@
 <?php
-$require_user = true;
+$title = 'Book Appointment';
 $menutype = "user_dashboard";
+$require_user = true;
 include_once('includes/core.php'); 
 include('classes/calendar.php');
 $calendar = new booking_diary($link);
