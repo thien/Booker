@@ -9,7 +9,7 @@
 <body>
 	<div id="heading">
 		<div id="branding">
-		<a href="../index.php">Concierge</a>
+		<a href="index.php">Concierge</a>
 		</div>
 		<div id="headingright">
 		<?php

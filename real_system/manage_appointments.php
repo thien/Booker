@@ -1,3 +1,4 @@
+
 <?php 
 $title = 'Manage Appointments';
 $menutype = "user_dashboard";

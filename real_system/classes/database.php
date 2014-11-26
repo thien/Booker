@@ -2,10 +2,10 @@
 class database {
   public function initiate() {
   if ($_SERVER['HTTP_HOST'] = "localhost") {
-	$user             = "root";
-	$password         = "root";
+	$user             = "thien_db";
+	$password         = "1a4face37a";
 	$hostname         = "localhost";
-	$dbn              = "booking";
+	$dbn              = "thien_projects";
 //	$user             = "thien_db";
 //	$password         = "1a4face37a";
 //	$hostname         = "projects.tnguyen.ch";
