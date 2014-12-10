@@ -75,7 +75,7 @@ if ($_POST["recaptcha_response_field"]) {
   ':email' => $email,
   ':phoneno' => $phoneno,
   ':activated' => '0',
-  ':activation_code' => encrypt($username + microtime())
+  ':activation_code' => md5($salt . $username)
   );
   $db->DoQuery($query, $query_params);
   email($email, $username, $forename, "confirm_registration");

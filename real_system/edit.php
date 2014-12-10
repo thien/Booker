@@ -2,91 +2,65 @@
 $title = 'Edit';
 include_once("includes/core.php");
 include("functions/encryption.php");
-require_once('assets/recaptcha.php');
 
+$query = "SELECT * FROM users WHERE username = :username";
+$query_params = array(
+    ':username' => $_COOKIE['userdata']['username']
+);
+$db->DoQuery($query, $query_params);
+$prevalue = $db->fetch();
 
 if($_POST) {
-$username = trim($_POST['username']);
-$password = trim($_POST['password']);
-$password_confirm = trim($_POST['password_confirm']);
+$username = $_COOKIE['userdata']['username'];
+$password = trim($_POST['new_password']);
+$current_password = encrypt(trim($_POST['current_password']));
+$password_confirm = trim($_POST['new_password_confirm']);
 $forename = trim(ucfirst($_POST['forename']));
 $surname = trim(ucfirst($_POST['surname']));
 $email = trim($_POST['email']);
-$email_confirm = trim($_POST['email_confirm']);
 $phoneno = trim($_POST['phoneno']);
-
 $errors = array();
 
 
 // check if username is available
-$query = ("SELECT username FROM users WHERE username = :username");
+$query = ("SELECT username FROM users WHERE password = :currentpassword");
 $query_params = array(
-  ':username' => $username
+  ':currentpassword' => $current_password
   );
 $db->DoQuery($query, $query_params);
 $rows = $db->fetch();
-if ($rows) {
-   array_push($errors, "This username is already chosen. Please choose another username.");
+if ($rows[0] !== $_COOKIE['userdata']['username']) {
+   array_push($errors, "Your current password is incorrect, Please try again.");
 }
   // Validate the input
-  // if (strlen($name) == 0)
-  //   array_push($errors, "Please enter your name");
-
-  // if (!(strcmp($gender, "Male") || strcmp($gender, "Female") || strcmp($gender, "Other"))) 
-  //   array_push($errors, "Please specify your gender");
-  
-  // if (strlen($address) == 0) 
-  //   array_push($errors, "Please specify your address");
-    
   if (!filter_var($email, FILTER_VALIDATE_EMAIL))
     array_push($errors, "Please specify a valid email address");
 
-  if (filter_var($email, FILTER_VALIDATE_EMAIL) !== filter_var($email, FILTER_VALIDATE_EMAIL))
-    array_push($errors, "The email addresses do not match");
-
-  if (strlen($username) == 0)
-    array_push($errors, "Please enter a valid username");
-  // if (!$username_available == TRUE)
-  //   array_push($errors, "This username is already chosen. Please choose another username.");
-    
+if (isset($password) & $password !== ""){
   if (strlen($password) < 5)
     array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
-    
-if ($_POST["recaptcha_response_field"]) {
-    $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-    if (!$resp->is_valid) {
-    # set the error code so that we can display it
-    // $error = $resp->error;
-     array_push($errors, "The captcha is incorrect.");
-  }
 }
-
-
-
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = " INSERT INTO users (username, password, forename, surname, email, phoneno, activated) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated)";
+  $query = "UPDATE users SET (password, forename, surname, email, phoneno) VALUES (:password, :forename, :surname, :email, :phoneno) WHERE username = :username";
   $query_params = array(
-  ':username' => $username,
+  ':username' => $_COOKIE['userdata']['username'],
   ':password' => $password,
   ':forename' => $forename,
   ':surname' => $surname,
   ':email' => $email,
-  ':phoneno' => $phoneno,
-  ':activated' => '0'
+  ':phoneno' => $phoneno
   );
   $db->DoQuery($query, $query_params);
   header("Location: register/confirmation.php");        
-  }
-
-// isset($username, $password, $forename, $surname, $email, $phoneno)
-
-
-  //Prepare errors for output
-  $output = '';
-  foreach($errors as $val) {
-    $output .= "<p class='output'>$val</p>";
+  } else {
+//	  $output = '';
+//	  foreach($errors as $val) {
+//	    $output .= "<p class='output'>$val</p>";
+	 	foreach($errors as $val) {
+	      echo "<p class='output'>".$val."</p>";
+	  }
   }
   
 }
@@ -132,8 +106,8 @@ $(function() {
                 email: true
             },
             username: "required",
+            current_password: "required",
             password: {
-                required: true,
                 minlength: 6
             },
             email_confirm: {
@@ -142,7 +116,6 @@ $(function() {
                 equalTo: "#email"
             },
             password_confirm: {
-                required: true,
                 equalTo: "#password"
             }
         },
@@ -153,9 +126,11 @@ $(function() {
             surname: "Please enter your surname.",
             email: "Please enter a valid email address.",
             username: "Please enter a valid username.",
-            password: {
-                required: "Please provide a password.",
-                minlength: "Your password must be at least six characters long."
+            current_password: {
+                required: "Please provide a password."
+                },
+        password_confirm: {
+            equalTo: "Please provide a password."
             },
             phoneno: {
                 required: "Please provide a phone number.",
@@ -181,33 +156,22 @@ $(function() {
   <div class="group">
   <div class="left">
     <label>Forename:</label><br>
-      <input name="forename" required="required" type="text" placeholder="First" />
+      <input name="forename" required="required" type="text" placeholder="First" value="<?php echo $prevalue['forename'];?>"/>
     </div>
+
   <div class="right">
       <label>Surname:</label><br>
-      <input name="surname" required="required" type="text" placeholder="Last" />
+      <input name="surname" required="required" type="text" placeholder="Last" value="<?php echo $prevalue['surname'];?>" />
 </div>
 </div>
 <hr>
-<div class="group">
-<div class="left">
-  <label>Username:</label><br>
-  <input id="username_" name="username" required="required" type="text" placeholder="Username"/>
-</div>
-<div class="right">
-
-<div id="username_availability"></div>
-
-</div>
-</div>
-     <div id="hr_invisible"></div>
    
 <div class="group">
   <div class="left">
     <label>Password:</label><br>
-    <input name="password" required="required" type="password" id="password" placeholder="Password"/><br>
+    <input name="new_password" type="password" id="password" placeholder="Password"/><br>
     <label>Confirm Password:</label><br>
-    <input name="password_confirm" required="required" type="password" placeholder="Password"/>
+    <input name="new_password_confirm" type="password" placeholder="Password"/>
 </div>
   <div class="right">
    <label>Password Strength:</label><br>
@@ -220,17 +184,24 @@ $(function() {
 <div class="group">
   <div class="left">
     <label>Email:</label><br>
-    <input name="email" required="required" type="email" id="email" placeholder="example@domain.com"/><br>
+    <input name="email" required="required" type="email" id="email" placeholder="example@domain.com" value="<?php echo $prevalue['email'];?>"/><br>
     <label for="phoneno" class="phone" data-icon="n" >Phone Number:</label><br>
-    <input name="phoneno" required="required" maxlength="10" type="number" placeholder=""/> 
+    <input name="phoneno" required="required" maxlength="10" type="number" value="<?php echo $prevalue['phoneno'];?>" placeholder=""/> 
   </div>
   <div class="right">
   </div>
 </div>
 <div>
 <hr>
+<div class="group">
+  <div class="left">
+    <label>Enter your current password to confirm changes:</label><br>
+    <input name="current_password" required="required" type="password" id="current_password" placeholder="Password"/>
+  </div>
+  </div>
+  <hr>
 <p class="signin button"> 
-<input type="submit" id="next" value="Next"/> 
+<input type="submit" id="next" value="Update"/> 
 </p>
 </form>
 

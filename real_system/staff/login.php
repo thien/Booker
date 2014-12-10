@@ -1,34 +1,32 @@
 <?php 
+  include("../classes/database.php");
 
-session_start();
-include_once('includes/connection.php');
+  $db = new database;
+  $db->initiate();
 if (isset($_SESSION['logged_in'])) {
 	//if true, show admin index
 	header('Location: index.php');	
 	
 } else {
 	//show login
-	if (isset($_POST['username'], $_POST['password'])){
-		$salt = '$+;$]d>;3)#77.';
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		if (empty($username) or empty($password)){
-			$error = 'All fields are required!';
-		} elseif (empty($username)){
-		$error = 'Please enter a username!';
-		} elseif (empty($password)){
-		$error = 'Please enter a password!';
+	if (isset($_POST['pin'])){
+		$pin = $_POST['pin'];
+		if (empty($pin)){
+			$error = 'You need to type in your PIN!';
 		} else {
-			$query = $pdo->prepare("SELECT * FROM client WHERE username = ? AND password = ?");
-			
-			$query->bindValue(1, $username);
-			$query->bindValue(2, $password);
-			
-			$query->execute();
-			$num = $query->rowCount();
-			if ($num == 1) {
+			$query = "SELECT * FROM staff WHERE pin = :pin";
+			$query_params = array(
+			 ':pin' => $pin
+				);
+				$db->DoQuery($query, $query_params);
+				$num = $db->fetchAll();
+			if ($num) {
 				//user entered correct details
-				$_SESSION['logged_in'] = true;
+					$forename = $num['forename'];
+					$surname = $num2['surname'];
+				setcookie('staff[loggedin]', TRUE, $expiry, '', '', '', TRUE);
+				setcookie('staff[forename]', $forename, $expiry, '', '', '', TRUE);
+				setcookie('staff[surname]', $surname, $expiry, '', '', '', TRUE);
 				header('Location: index.php');
 				exit();
 			} else {
@@ -49,20 +47,16 @@ if (isset($_SESSION['logged_in'])) {
 		</head>
 		<body>
 				<div class="login-container">
-				<img src="../assets/images/logosq.png">
 		<div class="login">
 		
 
 			<?php if (isset($error)) { ?>
 			<div class="error"><?php echo $error; ?></div>
 			<?php }?>
-			<h1>Enter PIN</h1>
+			<h1>Enter Your Pin</h1>
 		<form action="login.php" method="post" autocomplete="off">
-			<input type="text" name="username" placeholder="Username" />
-			<input type="password" name="password" placeholder="Password" />
-			<input type="submit" value="Login" id="submit"/>
+			<input type="pin" name="pin" placeholder="pin" />
 		</form>
-		<a href="#" class="login-link">Forgot your password?</a>
 		</div>
 </div>
 		</body>

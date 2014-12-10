@@ -15,16 +15,13 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
 
-//Directory Variable used to handle difficulty in directory linking on localhost
-if ($_SERVER['HTTP_HOST'] = "localhost") {
-	if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false) {
+//Directory Variable used to handle difficulty in directory linking
+	if ((strpos($_SERVER['SCRIPT_NAME'],'admin') !== false) OR strpos($_SERVER['SCRIPT_NAME'],'staff') !== false) {
 		$directory = "../"; 
 		} else {
 		$directory = ""; 
 		}
-} else {
-	$directory = "../comp4/"; 
-}
+
 
 // echo $_SERVER['HTTP_REFERER'];
 
@@ -65,6 +62,9 @@ if ($_SERVER['HTTP_HOST'] = "localhost") {
       die();
     }
   }
+
+  // Sets PHP to force use UTF8
+  mb_internal_encoding("UTF-8");
 
   // Make sure the timezone is GMT for the date() function
   date_default_timezone_set("GMT");

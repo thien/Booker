@@ -1,21 +1,18 @@
 <?php
 class database {
   public function initiate() {
-  if ($_SERVER['HTTP_HOST'] = "localhost") {
-	$user             = "thien_db";
-	$password         = "1a4face37a";
-	$hostname         = "localhost";
-	$dbn              = "thien_projects";
-//	$user             = "thien_db";
-//	$password         = "1a4face37a";
-//	$hostname         = "projects.tnguyen.ch";
-//	$dbn              = "thien_projects";
-  } else {
-  	$user             = "sql346641";
-	$password         = "dY7%lG1%";
-	$hostname         = "sql3.freemysqlhosting.net";
-	$dbn              = "sql346641";
-  }
+
+	 $user             = "thien_db";
+	 $password         = "1a4face37a";
+	 $hostname         = "localhost";
+	 $dbn              = "thien_projects";
+
+
+//    $user           = "root";
+//  $password         = "root";
+//  $hostname         = "localhost";
+//  $dbn              = "thien_projects";
+  
     try
     {
       $this->database = new PDO("mysql:host={$hostname};dbname={$dbn}", $user, $password);
@@ -30,6 +27,17 @@ class database {
   }
 
 public function DoQuery($query, $query_params = array()) {
+    try
+    {
+      $this->result = $this->database->prepare($query);
+      $this->result->execute($query_params);
+    }
+    catch(PDOException $e)
+    {
+      die();
+    }
+}
+public function DoQueryz($query, $query_params = array()) {
     try
     {
       $this->result = $this->database->prepare($query);

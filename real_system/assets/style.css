@@ -1,6 +1,7 @@
 /* @override 
 	http://localhost/Applications/MAMP/htdocs/booker/real_system/assets/style.css
-	http://localhost/assets/style.css */
+	http://localhost/assets/style.css
+	http://projects.tnguyen.ch/comp4/assets/style.css */
 	@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400italic,400,600);
 	
 	
@@ -21,7 +22,6 @@
 	vertical-align: baseline;
 }
 	#container {
-	
 		max-width: 800px;
 		margin-right: auto;
 		margin-left: auto;
@@ -175,7 +175,71 @@ width: 90%;
 	label {
 		display: block;
 	}
-
+	
+	/* @group Accordion */
+	
+	#accordion {
+		list-style:none;
+		width: 100%;
+	}
+	#accordion .pinToggles {
+		float: right;
+	}
+	
+	#accordion #topbox {
+		margin:1px;
+		cursor:pointer;
+	
+	}
+#accordion .base{
+	background-color: #424342;
+	height: 50px;
+}
+#accordion .base p{
+	padding-top: 1em;
+	padding-bottom: 1em;
+	margin-top: 0.2em;
+	padding-left: 35px;
+	color: #ffffff;
+	font-weight: bold;
+}
+#accordion #indicator {
+	width: 20px;
+	height: 50px;
+	float: left;
+	display: inline-block;
+}
+	#accordion #indicator.checkedin{
+		background-color: #b6efa7;
+		display: inline-block;
+	}
+	#accordion #indicator.notcheckedin{
+		background-color: #424342;
+		display: inline-block;
+	}
+	#accordion #indicator.missing{
+		background-color: #db8a8a;
+		display: inline-block;
+	}
+	#accordion :focus, #accordion :focus p{
+		background-color: #fdefb0;
+		color: #393939;
+	}
+	#accordion ul{
+		
+	}
+	
+	#accordion ul li{
+		font-weight:normal;
+		cursor:auto;
+		background-color:#f3f3f3;
+		padding:0 0 0 7px;
+		display:table-cell;
+	}
+	
+	
+	/* @end */
+	
 	/* @group Login */
 	
 	.error, .credentials, textarea {
@@ -226,7 +290,7 @@ width: 90%;
 	}
 	
 	#forms {
-		width: 100%;
+		min-width: 100%;
 	}
 	#forms input, textarea {
 	border: 1px solid rgba(0, 0, 0, 0.09);
@@ -267,8 +331,8 @@ width: 90%;
 	    width: 50%;
 	}
 	@media screen and (max-width: 480px) {
-	   #forms .left, 
-	   #forms .right {
+	   #forms .left, #left,  
+	   #forms .right, #right {
 	        float: none;
 	        width: auto;
 	    }
@@ -345,14 +409,56 @@ width: 90%;
 	
 	/* @group Checkin */
 	
-	table#checkins_table {
+	#checkin_topbar {
+		width: 100%;
+		height: 130px;
+		position: fixed;
+		top: 0;
+		right: 0;
+		background-color: #d99494;
+		display: inline-block;
+	}
+	#checkin_topbar .group {
+		margin-right: auto;
+		margin-left: auto;
+		width: 90%;
+		display: block;
+		height: 5em;
+	}
+	#checkin_topbar .group .left {
+		float: left;
+		display: inline-block;
+	}
+	#checkin_topbar .group .right{
+		float: right;
+		display: inline-block;
+	}
+	.blank {
+		height: 130px;
 		width: 100%;
 	}
-	table#checkins_table td {
-		background-color: #ded8d8;
-		height: 50px;
+	#details {
+	background-color: #c3a7a7;
+		display: inline-block;
+		width: 100%;
 	}
-	
+	#details .left {
+		float: left;
+		width: 45%;
+
+	}
+	#details .right{
+		width: 45%;
+		text-align: right;
+		float: right;
+	}
+	#checkin_comments {
+		background-color: #c9c9c9;
+		padding: 10px;
+	}
+	#accordion button {
+		background-color: #d5d5d5;
+	}
 	/* @end */
 	
 	/* @group Calendar */
