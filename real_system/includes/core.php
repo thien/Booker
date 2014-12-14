@@ -1,6 +1,6 @@
 <?php
   /**
-    lib/core.php - common code to be included in every page.
+    includes/core.php - common code to be included in every page.
     This library connects to the database and starts the session.
   **/
 
@@ -28,18 +28,7 @@ error_reporting(-1);
 // Expiry Time for Cookies.
   $expiry = time() + (60*60*24);
 
-// ReCaptcha Properties
-//  if ($_SERVER['HTTP_HOST'] != "localhost") {
-  $publickey = "6LcquPwSAAAAAHDtQdsJgDyjVAo_eNkNHO0R1UvV";
-  $privatekey = "6LcquPwSAAAAAFW168bbf835aADGzK_If5wctI-y";
-//  } else {
-//  $publickey = "6Lf_ufwSAAAAAHI2NOzKjIBZsEiMhIhG4q6B-_Re";
-//  $privatekey = "6Lf_ufwSAAAAALj2xh6s2SxMFu_16xG1MEkojGLL";
-//  }
-//  # the response from reCAPTCHA
-  $resp = null;
-  # the error code from reCAPTCHA, if any
-  $error = null;
+include_once($directory . 'assets/recaptcha_values.php');
 
   // A function to enable HTTPS if it isn't on
   function forceHTTPS()
@@ -72,7 +61,9 @@ error_reporting(-1);
   // Include Error Handler
   include($directory . "functions/errors.php");
 
-
+  //Salt
+  // $salt = "b18237y419v2by4190vb";	
+	
   // Create a new DB class and run the init routine
   include($directory . "classes/database.php");
 

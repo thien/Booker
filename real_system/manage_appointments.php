@@ -8,6 +8,11 @@ $query = "SELECT booking.id, booking.date, booking.time, booking.comments, servi
 $query_params = array(
     ':username' => $_COOKIE['userdata']['username']
 );
+if (isset($_GET['option'])){
+$option = $_GET['option'];
+} else {
+$option = 'upcoming';
+}
 $db->DoQuery($query, $query_params);
 $num = $db->fetchAll();
 if (isset($_POST['id_delete'])) 
@@ -23,176 +28,102 @@ if (isset($_POST['id_delete']))
 }
 include 'includes/header.php';
 ?>
-<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script><ul id="accordion">
-    <li><div>
-    		Attractions<input type="checkbox" id="greenCheck" name="pinSet" value="Green"  class="pinToggles">
-        </div>
-        <ul>
-            <li><a href="#">Outdoor Waterparks</a></li>
-            <li><a href="#">Indoor Waterparks</a></li>
-            <li><a href="#">Go-kart Track</a></li>
-        </ul>
-    </li>
-    <li><div>
-    		<input type="checkbox" id="redCheck" name="pinSet" value="Red" class="pinToggles" onclick="pinSetCheck(redSet)">Dining & Shopping
-        </div>
-        <ul>
-            <li><a href="#">Restaurant 1</a></li>
-            <li><a href="#">Restaurant 2</a></li>
-            <li><a href="#">Restaurant 3</a></li>
-        </ul>
-    </li>
-</ul> 
-<script>
-$( "#accordion" ).accordion();
-//$("#accordion li div").click(function(){
-//    $(this).next().slideToggle(300);
-//});
-$(".pinToggles").click(function(event){
-    event.stopPropagation();
-});
-</script>-->
 
 
-
-
-
-
-
-
-<h1>Recent Appointments.</h1>
-
-
-<ul id="accordion">
-    
-<?php 
-foreach ($num as $row) {
-$dtA = strtotime($row['date'] ." ". $row['time']);
-if ($dtA<time()) {
-	echo '<li><div>';
-	echo $row['date'].$row['time'].$row['type'];
-
-  	echo '</div> <ul>';
-    
-    echo $row['date'];
-    echo $row['time'];
-    echo $row['type'];
-    echo $row['comments'];
-    echo '&pound;'.$row['price'];
-    
-    
-		echo '</ul></li>';
-
-}}
-echo "</ul>";
-
-?>
-
-<h1>Your Upcoming Appointments.</h1>
-
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-
-<!--
-
-<ul id="accordion">
-    <li><div>
-    		Attractions<input type="checkbox" id="greenCheck" name="pinSet" value="Green"  class="pinToggles">
-        </div>
-        <ul>
-            <li><a href="#">Outdoor Waterparks</a></li>
-            <li><a href="#">Indoor Waterparks</a></li>
-            <li><a href="#">Go-kart Track</a></li>
-        </ul>
-    </li>
-    <li><div>
-    		<input type="checkbox" id="redCheck" name="pinSet" value="Red" class="pinToggles" onclick="pinSetCheck(redSet)">Dining & Shopping
-        </div>
-        <ul>
-            <li><a href="#">Restaurant 1</a></li>
-            <li><a href="#">Restaurant 2</a></li>
-            <li><a href="#">Restaurant 3</a></li>
-        </ul>
-    </li>
-</ul> 
-
--->
-
-<?php if(!empty($num)) { ?>
+<a href="?option=past">Past</a><a href="?option=upcoming">Upcoming</a>
+<a href="?option=all">all</a>
+<?php
+if (isset($option)){
+if ($option == "past"){
+echo '<h1>Past Appointments.</h1>';
+} elseif ($option == "upcoming"){
+echo '<h1>Upcoming Appointments.</h1>';
+} elseif ($option == "all"){
+echo '<h1>All Appointments</h1>';
+}}?>
 <form method='post' action='manage_appointments.php'>
-
-
-<table style='width:100%'>
-<tr>
-	<td>Date</td>
-	<td>Time</td>
-    <td>Service</td>
-	<td>Comments</td>
-    <td>Price</td>
-</tr>
-
-<?php foreach ($num as $row) {
-$dtA = strtotime($row['date'] ." ". $row['time']);
-if ($dtA>time()) {
-	echo '<tr>';
-    echo '<td>'.$row['date'].'</td>';
-    echo '<td>'.$row['time'].'</td>';
-    echo '<td>'.$row['type'].'</td>';
-    echo '<td>'.$row['comments'].'</td>';
-    echo '<td>&pound;'.$row['price'].'</td>';
-	echo '</tr>'; 
+<div class="appointments">
+<?php 
+if (isset($option)){
+if ($option == "past"){
+	foreach ($num as $row) {
+		$dtA = strtotime($row['date'] ." ". $row['time']);
+		if ($dtA<time()) {
+			echo "<div id='group'>";
+				echo "<div class='left'>";
+		    		echo '<b>'.date("D, d M Y", strtotime($row['date'])).'</b><br>';
+		    		echo date("g:i A", strtotime($row['time'])).'<br>';
+		    		echo $row['type']."<br><br>";
+		    		echo $row['comments']."<br>";
+		  		echo "</div><div class='right'>";
+		  	  		echo '&pound;'.$row['price'].'<br>';
+		  	echo '</div></div>';
+		}
 	}
 }
-echo "</table>";
-?>
-
-<ul id="accordion">
-    
-<?php 
-foreach ($num as $row) {
-$dtA = strtotime($row['date'] ." ". $row['time']);
-if ($dtA>time()) {
-	++$morethantoday;
-	echo '<li><div>';
-	echo $row['date'].$row['time'].$row['type'];
-	echo '<input class="pinToggles" type="checkbox" name="id_delete[]" value="'.$row['id'].'">';
-  	echo '</div> <ul>';
-    
-    echo $row['date'];
-    echo $row['time'];
-    echo $row['type'];
-    echo $row['comments'];
-    echo '&pound;'.$row['price'];
-    
-    
-		echo '</ul></li>';
-
-}}
-echo "</ul>";
-
-?><br>
-<input type='submit' class='buttons' value="Delete Selected"> </form>
-<a href="calendar.php"><button class="buttons" value="Make New Reservation">Make New Reservation</button></a>
-<?php }
-
-if ($morethantoday == 1) {
-  echo 'nigger';
-      echo $morethantoday;
+elseif($option == "upcoming"){
+	foreach ($num as $row) {
+		$dtA = strtotime($row['date'] ." ". $row['time']);
+		if ($dtA>time()) {
+			echo "<div id='group'>";
+				echo "<div class='left'>";
+			    	echo '<b>'.date("D, d M Y", strtotime($row['date'])).'</b><br>';
+		    		echo date("g:i A", strtotime($row['time'])).'<br>';
+		    		echo $row['type']."<br><br>";
+		    		echo $row['comments']."<br>";
+		  		echo "</div><div class='right'>";
+		  	  		echo '&pound;'.$row['price'].'<br>';
+		  	  		if ($dtA>time()){
+		  			echo "<input type='submit' class='buttons' value='Cancel'>";
+		  			}
+		  	echo '</div></div>';
+		}
+} 
 }
-
+elseif($option == "all"){
+	foreach ($num as $row) {
+		$dtA = strtotime($row['date'] ." ". $row['time']);
+					echo "<div id='group'>";
+				echo "<div class='left'>";
+			    	echo '<b>'.date("D, d M Y", strtotime($row['date'])).'</b><br>';
+		    		echo date("g:i A", strtotime($row['time'])).'<br>';
+		    		echo $row['type']."<br><br>";
+		    		echo $row['comments']."<br>";
+		  		echo "</div><div class='right'>";
+		  	  		echo '&pound;'.$row['price'].'<br>';
+		  	  		if ($dtA>time()){
+		  			echo "<input type='submit' class='buttons' value='Cancel'>";
+		  			}
+		  	echo '</div></div>';
+		 } 
+}
+}
 ?>
+</div>
+ </form>
+
+
+<div class="appointments">
+
+<?php
+//foreach ($num as $row) {
+//$dtA = strtotime($row['date'] ." ". $row['time']);
+//if ($dtA>time()) {
+//echo "<div id='booking'>";
+//	echo '<tr>';
+//    echo '<td>'.$row['date'].'</td>';
+//    echo '<td>'.$row['time'].'</td>';
+//    echo '<td>'.$row['type'].'</td>';
+//    echo '<td>'.$row['comments'].'</td>';
+//    echo '<td>&pound;'.$row['price'].'</td>';
+//	echo '</tr></div>'; 
+//	}
+?>
+</div>
+    
+<br>
+<a href="calendar.php"><button class="buttons" value="Make New Reservation">Make New Reservation</button></a>
+
 <?php 
 include 'includes/footer.php';
 ?>
-
-
-<script>
-$( "#accordion" ).accordion();
-//$("#accordion li div").click(function(){
-//    $(this).next().slideToggle(300);
-//});
-$(".pinToggles").click(function(event){
-    event.stopPropagation();
-});
-</script>

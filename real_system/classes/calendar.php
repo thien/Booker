@@ -11,7 +11,7 @@ class booking_diary
 //    public $booking_start_time = "09:30";
 //    public $booking_end_time = "19:00";
 //    public $booking_frequency = 30;
-    public $booking_slots_per_day = 20;
+    // public $booking_slots_per_day = 20;
     public $day, $month, $year, $selected_date, $first_day, $back, $back_month, $back_year, $forward, $forward_month, $forward_year, $bookings, $count, $days;
 
     //----------
@@ -87,10 +87,7 @@ class booking_diary
     } // Close function
     function make_table_top()
     {
-        echo "
-        <div class='left'>
-    
-        <table border='0' cellpadding='0' cellspacing='0' id='calendar'>
+        echo " <table border='0' cellpadding='0' cellspacing='0' id='calendar'>
             <tr id='week'>
             <td align='left'><a href='?month=" . date("m", $this->back) . "&amp;year=" . date("Y", $this->back) . "'>&laquo;</a></td>
             <td colspan='5' id='center_date'>" . date("F, Y", $this->selected_date) . "</td>    
@@ -102,6 +99,12 @@ class booking_diary
     } // Close function
     function make_day_boxes()
     {
+        $this->db = new database();
+            $this->db->initiate();
+            $opentime = "SELECT value FROM metadata WHERE id = '4'";
+            $this->db->DoQuery($opentime);
+            $booking_slots_per_day = $this->db->fetch();
+
         $i = 0;
         foreach ($this->days as $row)
         {
@@ -127,7 +130,7 @@ class booking_diary
                     $tag = 2; // It's a Sunday
                 if (mktime(0, 0, 0, $this->month, sprintf("%02s", $row['daynumber']) + 1, $this->year) < strtotime("now"))
                     $tag = 4; // Past Day  
-                if ($day_count >= $this->booking_slots_per_day && $tag == '')
+                if ($day_count >= $booking_slots_per_day[0] && $tag == '')
                     $tag = 3;
                 if ($day_count > 0 && $tag == '')
                     $tag = 1;
@@ -146,7 +149,7 @@ class booking_diary
         switch ($tag)
         {
             case (1): // Part booked day
-                $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" . $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'><div class='box' id='key_partbooked'></div></a>\r\n";
+                $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" . $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . '#selected_date'."'><div class='box' id='key_partbooked'></div></a>\r\n";
                 break;
             case (2): // Sunday
                 $txt = "<div class='box' id='key_sunday'></div>\r\n";
@@ -155,13 +158,13 @@ class booking_diary
                 $txt = "<div class='box' id='key_fullybooked'></div>\r\n";
                 break;
             case (4): // Past day
-                $txt = "<div class='box' id='key_pastdate'></div></a>\r\n";
+                $txt = "<div class='box' id='key_unavailable'></div></a>\r\n";
                 break;
             case (5): // Block booked out day
                 $txt = "<div class='box' id='key_fullybooked'></div>\r\n";
                 break;
             default: // FREE
-                $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" . $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . "'><div class='box' id='key_available'></div>\r\n";
+                $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" . $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . '#selected_date'."'><div class='box' id='key_available'></div>\r\n";
                 break;
         }
         return $txt;
@@ -176,16 +179,16 @@ class booking_diary
                 <td id='key_sunday'>&nbsp;</td>
                 <td id='key_partbooked'>&nbsp;</td>
                 <td id='key_available'>&nbsp;</td>
-                <td id='key_pastdate'>&nbsp;</td>
+                <td id='key_unavailable'>&nbsp;</td>
             </tr>
             <tr>
                 <td>Fully Booked</td>
                 <td>Sunday</td>
                 <td>Part Booked</td>
                 <td>Available</td>
-                <td>Past Date</td>
+                <td>Unavailable</td>
             </tr>                
-        </table></div>";
+        </table>";
         $this->make_booking_slots();
     } // Close function
     function make_booking_slots()
@@ -205,7 +208,7 @@ class booking_diary
     } // Close function  
     function select_day()
     {
-        echo "<form method='post' action=''>";
+        echo "<form id='calendar_form' method='post' action=''>";
         echo "<div id='selected_date'>Please select a day</div>";
     }
     function make_form()
@@ -230,7 +233,9 @@ class booking_diary
         {
             $slots[] = date("H:i:s", $i);
         }
-        echo "\r\n\r\n<form method='post' action=''><div id='selected_date'>Selected Date is: " . date("d F Y", mktime(0, 0, 0, $this->month, $this->day)) . "</div>";
+        echo "\r\n\r\n<form id='calendar_form' method='post' action=''>";
+        echo "<div class='left'>";
+        echo "<div id='selected_date'>Selected Date is: " . date("D, d F Y", mktime(0, 0, 0, $this->month, $this->day)) . "</div>";
         $opt = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
         if ($this->count >= 1)
         {
@@ -270,12 +275,17 @@ class booking_diary
         echo '</select><br>';
         // end select box from $service array
         echo "<table id='booking'><textarea rows='3' cols='30' name='comments' placeholder='Any comments?'>";
-        if (isset($_POST['comments']))
-            echo $_POST['comments'];
-        echo "</textarea><br><button type='submit'>Submit</button></table></form>";
+        echo "</textarea>";
+        include('assets/recaptcha_values.php');
+        include_once('assets/recaptcha.php');
+        echo recaptcha_get_html($publickey, $error); 
+        echo "<button type='submit'>Submit</button></table></form>";
     }
     function after_post($month, $day, $year)
     {
+        include('assets/recaptcha_values.php');
+        include_once('assets/recaptcha.php');
+
         $alert = '';
         $msg   = 0;
         if (isset($_POST['booking_time']) && $_POST['booking_time'] == 'selectvalue')
@@ -288,6 +298,20 @@ class booking_diary
             $msg = 1;
             $alert .= "Please select a service";
         }
+
+        if ($_POST["recaptcha_response_field"]) {
+        $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+        if (!$resp->is_valid) {
+        # set the error code so that we can display it
+        // $error = $resp->error;
+            $msg = 1;
+            $alert .= "This is wrong";
+        // array_push($errors, "The captcha is incorrect.");
+        }
+        }
+
+
+
         if ($msg == 1)
         {
             echo "<div class='error'>" . $alert . "</div>";
@@ -309,12 +333,35 @@ class booking_diary
                 ':confirmed' => 0
             );
             $this->db->DoQuery($query, $query_params);
-            $this->confirm();
+            $this->confirm($booking_date, $booking_time, $booking_service, $_COOKIE['userdata']['username']);
         } // Close else
     } // Close function  
-    function confirm()
+    function confirm($date, $time, $serviceid, $username)
     {
-        echo "<div class='success'>Thank you for your booking.</div>";
+            include('functions/email.php');
+            $this->db = new database();
+            $this->db->initiate();
+
+             $query = "SELECT type FROM service WHERE id = '$serviceid'";
+            $this->db->DoQuery($query);
+            $service = $this->db->fetch();
+
+            $query2 = "SELECT email FROM users WHERE username = '$username'";
+            $this->db->DoQuery($query2);
+            $email = $this->db->fetch();
+
+            $extra = array(
+                ':bookingday' => $date,
+                ':bookingtime' => $time,
+                ':bookingservice' => $service[0]
+            );
+
+            $customer_email = $email['email'];
+            $forename = $_COOKIE['userdata']['forename'];
+            $type = "appointment";
+
+        email($customer_email, $username, $forename, $type, $extra);
+        echo "<meta http-equiv='refresh' content='0; url=confirmation.php?type=appointment'/>";
     } // Close function  
 }
 ?>

@@ -1,4 +1,6 @@
 <?php 
+$title = "Dashboard";
+$menutype = "admin_dashboard";
 include_once("../includes/core.php");
 include($directory . "/functions/encryption.php");
 include($directory . '/includes/header.php');
@@ -38,16 +40,6 @@ $open = "SELECT value FROM metadata WHERE id = '1'";
 $db->DoQuery($open);
 $openhr = $db->fetch();
 ?>
-
-<header>
-	<ul>
-		<li><a href="index.php" class="active">Dashboard</a></li>
-		<li><a href="appointments.php">Appointments</a></li>
-		<li><a href="calendar.php">Calendar</a></li>
-		<li><a href="customers.php">Customers</a></li>
-		<li><a href="settings.php">Settings</a></li>
-	</ul>
-</header>
 
 <div>
 asd

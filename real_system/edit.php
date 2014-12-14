@@ -43,21 +43,19 @@ if (isset($password) & $password !== ""){
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = "UPDATE users SET (password, forename, surname, email, phoneno) VALUES (:password, :forename, :surname, :email, :phoneno) WHERE username = :username";
+  $query = "UPDATE users 
+  SET password = :password, forename = :forename, surname = :surname, email = :email, phoneno = :email WHERE username = :username";
   $query_params = array(
-  ':username' => $_COOKIE['userdata']['username'],
   ':password' => $password,
   ':forename' => $forename,
   ':surname' => $surname,
   ':email' => $email,
-  ':phoneno' => $phoneno
+  ':phoneno' => $phoneno,
+  ':username' => $username
   );
   $db->DoQuery($query, $query_params);
-  header("Location: register/confirmation.php");        
+  header("Location: confirmation.php");        
   } else {
-//	  $output = '';
-//	  foreach($errors as $val) {
-//	    $output .= "<p class='output'>$val</p>";
 	 	foreach($errors as $val) {
 	      echo "<p class='output'>".$val."</p>";
 	  }

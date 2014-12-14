@@ -17,6 +17,7 @@
 $( document ).on(
     "click",
     "a",
+    if(window.location.contains("?month=")){
     function( event ){
  
         // Stop the default behavior of the browser, which
@@ -26,7 +27,7 @@ $( document ).on(
         // Manually change the location of the page to stay in
         // "Standalone" mode and change the URL at the same time.
         location.href = $( event.target ).attr( "href" );
-    }
+    }}
 );
 </script>
 </head>
@@ -58,11 +59,24 @@ if ($menutype == "user_dashboard") { ?>
 
 <header>
   <ul>
-    <li><a href="calendar.php">Book Appointment</a></li>
-    <li><a href="manage_appointments.php" class="active">Manage Appointments</a></li>
+    <li><a href="calendar.php" <?php if ($title == 'Book Appointment'){echo "class='active'";};?>>Book Appointment</a></li>
+    <li><a href="manage_appointments.php" <?php if ($title == 'Manage Appointments'){echo "class='active'";};?>>Manage Appointments</a></li>
   </ul>
 </header>
 
-
-
-<?php };}; ?>
+<?php 
+};
+if ($menutype == "admin_dashboard"){?>
+<header>
+	<ul>
+		<li><a href="index.php" <?php if ($title == 'Dashboard'){echo "class='active'";};?>>Dashboard</a></li>
+		<li><a href="appointments.php" <?php if ($title == 'Appointments'){echo "class='active'";};?>>Appointments</a></li>
+		<li><a href="calendar.php" <?php if ($title == 'Calendar'){echo "class='active'";};?>>Calendar</a></li>
+		<li><a href="services.php" <?php if ($title == 'Services'){echo "class='active'";};?>>Services</a></li>
+		<li><a href="users.php" <?php if ($title == 'Users'){echo "class='active'";};?>>Users</a></li>
+		<li><a href="settings.php" <?php if ($title == 'Settings'){echo "class='active'";};?>>Settings</a></li>
+	</ul>
+</header>
+<?php
+};};
+?>

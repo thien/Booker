@@ -8,10 +8,10 @@ class database {
 	 $dbn              = "thien_projects";
 
 
-//    $user           = "root";
-//  $password         = "root";
-//  $hostname         = "localhost";
-//  $dbn              = "thien_projects";
+  //   $user           = "root";
+  // $password         = "root";
+  // $hostname         = "localhost";
+  // $dbn              = "thien_projects";
   
     try
     {
@@ -37,17 +37,7 @@ public function DoQuery($query, $query_params = array()) {
       die();
     }
 }
-public function DoQueryz($query, $query_params = array()) {
-    try
-    {
-      $this->result = $this->database->prepare($query);
-      $this->result->execute($query_params);
-    }
-    catch(PDOException $e)
-    {
-      die();
-    }
-}
+
 
 //  public function DoQuery($query, $query_params) {
 //    try

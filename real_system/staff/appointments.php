@@ -73,10 +73,7 @@ if (isset($_POST['uncheck_customer_id']))
   		        <input type="text" class="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
   		</form>
 </div>
-<div class="blank">
-
-<h1>Your Upcoming Appointments.</h1>
-jhasdvfashg fiasgfiuasd haush aou aoh aoish a;ois</div>
+<div class="blank"></div>
 <div id="container">
 <?php if(!empty($num)) { ?>
 <form method='post' action='appointments.php'>

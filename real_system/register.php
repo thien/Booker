@@ -46,6 +46,15 @@ array_push($errors, "Please specify a valid email address");
 if (filter_var($email, FILTER_VALIDATE_EMAIL) !== filter_var($email, FILTER_VALIDATE_EMAIL))
 array_push($errors, "The email addresses do not match");
 
+// check if email is available
+$query = ("SELECT email FROM users WHERE email = :email");
+$query_params = array(':email' => $email);
+$db->DoQuery($query, $query_params);
+$rows = $db->fetch();
+if ($rows) {
+   array_push($errors, "This email is already associated with an account. Please choose another email.");
+}
+
 if (strlen($username) == 0)
 array_push($errors, "Please enter a valid username");
 
@@ -66,7 +75,9 @@ if ($_POST["recaptcha_response_field"]) {
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
   $password = encrypt($password);
-  $query = " INSERT INTO users (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
+  
+  email($email, $username, $forename, "confirm_registration");
+  $query = "INSERT INTO users (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
   $query_params = array(
   ':username' => $username,
   ':password' => $password,
@@ -75,11 +86,10 @@ if ($_POST["recaptcha_response_field"]) {
   ':email' => $email,
   ':phoneno' => $phoneno,
   ':activated' => '0',
-  ':activation_code' => md5($salt . $username)
+  ':activation_code' => encrypt($username)
   );
   $db->DoQuery($query, $query_params);
-  email($email, $username, $forename, "confirm_registration");
-  header("Location: confirmation.php");        
+  header("Location: confirmation.php?type=registration");
   }
 
 // isset($username, $password, $forename, $surname, $email, $phoneno)
