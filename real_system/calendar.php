@@ -21,8 +21,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 }   
 // Call calendar function
 $calendar->make_calendar($selected_date, $first_day, $back, $forward, $day, $month, $year);
-// if ($calendar->make_calendar($selected_date, $first_day, $back, $forward, $day, $month, $year) = TRUE) {
-// 	 header('Location: confirmation.php?type=appointment');
-// }
+echo "</div>";
 include('includes/footer.php');
 ?>

@@ -49,8 +49,6 @@ echo "Number of Bookings This Month: " . $monthly_bookings[0] . "<br>";
 echo "Estimated Income This Month: "."&pound;" . $monthly_revenue[0] . "<br>";
 echo "Number of Activated Accounts: " . $activated_accounts[0] . "<br>";
 echo "Number of Bookings for Today: " . $daily_bookings[0] . "<br>";
-echo "<pre>";
-echo $openhr[0];
-echo "</pre>";
+
 ?>
 </div>

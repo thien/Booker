@@ -17,14 +17,13 @@ $db->DoQuery($query, $query_params);
 $num = $db->fetchAll();
 if (isset($_POST['id_delete'])) 
 {
-          foreach ( $_POST['id_delete'] as $id_d) {
             $query = "DELETE FROM booking WHERE id = :id";
             $query_params = array(
-                ':id' => $id_d
+                ':id' => $_POST['id_delete']
             );
             $db->DoQuery($query, $query_params);
             echo("<meta http-equiv='refresh' content='0'>");
-        }
+        
 }
 include 'includes/header.php';
 ?>
@@ -41,7 +40,7 @@ echo '<h1>Upcoming Appointments.</h1>';
 } elseif ($option == "all"){
 echo '<h1>All Appointments</h1>';
 }}?>
-<form method='post' action='manage_appointments.php'>
+<form method='post' action=''>
 <div class="appointments">
 <?php 
 if (isset($option)){
@@ -74,7 +73,7 @@ elseif($option == "upcoming"){
 		  		echo "</div><div class='right'>";
 		  	  		echo '&pound;'.$row['price'].'<br>';
 		  	  		if ($dtA>time()){
-		  			echo "<input type='submit' class='buttons' value='Cancel'>";
+		  			echo "<button type='submit' class='buttons' name='id_delete' value='".$row['id']."'>Cancel</button>";
 		  			}
 		  	echo '</div></div>';
 		}
@@ -92,7 +91,7 @@ elseif($option == "all"){
 		  		echo "</div><div class='right'>";
 		  	  		echo '&pound;'.$row['price'].'<br>';
 		  	  		if ($dtA>time()){
-		  			echo "<input type='submit' class='buttons' value='Cancel'>";
+		  			echo "<button type='submit' class='buttons' name='id_delete' value='".$row['id']."'>Cancel</button>";
 		  			}
 		  	echo '</div></div>';
 		 } 

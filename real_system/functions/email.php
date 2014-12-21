@@ -4,7 +4,7 @@ include_once("includes/core.php");
 include_once("functions/encryption.php");
 function email($email, $username, $forename, $type, $extra = array()) {
 $pin = encrypt($username);
-$headers = "From: robot@tnguyen.ch";
+$headers = "From: tits@snow.com";
 
 if ($type == "confirm_registration") {
 	$subject = 'Time to confirm your email';

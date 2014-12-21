@@ -76,6 +76,10 @@ if (isset($type)){
 		echo "<h1>Okay, Your appointment is confirmed.</h1>";
 
 	echo 'Your appointment details are sent to your email address.';
+	} elseif ($type == "updated") {
+		echo "<h1>Okay, Your information is updated.</h1>";
+
+	echo 'You can now continue with your day. :)';
 	}
 }
 // header('Location: 404.php');

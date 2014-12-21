@@ -2,16 +2,15 @@
 class database {
   public function initiate() {
 
-	 $user             = "thien_db";
-	 $password         = "1a4face37a";
-	 $hostname         = "localhost";
-	 $dbn              = "thien_projects";
+	 // $user             = "thien_db";
+	 // $password         = "1a4face37a";
+	 // $hostname         = "localhost";
+	 // $dbn              = "thien_projects";
 
-
-  //   $user           = "root";
-  // $password         = "root";
-  // $hostname         = "localhost";
-  // $dbn              = "thien_projects";
+  $user             = "root";
+  $password         = "root";
+  $hostname         = "localhost";
+  $dbn              = "thien_projects";
   
     try
     {
@@ -38,25 +37,6 @@ public function DoQuery($query, $query_params = array()) {
     }
 }
 
-
-//  public function DoQuery($query, $query_params) {
-//    try
-//    {
-//      $this->result = $this->database->prepare($query);
-//      if ($query_params != null)
-//      {
-//        $this->result->execute($query_params);
-//      }
-//      else
-//      {
-//        $this->result->execute();
-//      }
-//    }
-//    catch(PDOException $e)
-//    {
-//      die();
-//    }
-//  }
 
   // A function to fetch a single row from the query
   public function fetch() {

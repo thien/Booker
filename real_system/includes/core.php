@@ -16,7 +16,7 @@ ini_set('display_startup_errors',1);
 error_reporting(-1);
 
 //Directory Variable used to handle difficulty in directory linking
-	if ((strpos($_SERVER['SCRIPT_NAME'],'admin') !== false) OR strpos($_SERVER['SCRIPT_NAME'],'staff') !== false) {
+	if ((strpos($_SERVER['SCRIPT_NAME'],'admin') !== false) OR strpos($_SERVER['SCRIPT_NAME'],'staff') !== false OR strpos($_SERVER['SCRIPT_NAME'],'/includes/search.php') !== false) {
 		$directory = "../"; 
 		} else {
 		$directory = ""; 

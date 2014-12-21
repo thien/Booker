@@ -1,17 +1,6 @@
 <?php
 class booking_diary
 {
-    /*
-    Settings you can change:
-    $booking_start_time:                The time of the first slot
-    $booking_end_time:                  The time of the last slot 
-    $booking_frequency:                 The amount of slots per hour, expressed in minutes 
-    $booking_slots_per_day:             The total number of slots avaliable in one day
-    */
-//    public $booking_start_time = "09:30";
-//    public $booking_end_time = "19:00";
-//    public $booking_frequency = 30;
-    // public $booking_slots_per_day = 20;
     public $day, $month, $year, $selected_date, $first_day, $back, $back_month, $back_year, $forward, $forward_month, $forward_year, $bookings, $count, $days;
 
     //----------
@@ -45,7 +34,7 @@ class booking_diary
         $number_of_rows = $this->db->RowCount();
         $this->count    = $this->db->RowCount();
         $fetch_array    = $this->db->fetch();
-        while ($rows = $this->db->fetch(PDO::FETCH_ASSOC))
+        while ($rows = $this->db->fetch())
         {
             $this->bookings[] = array(
                 "name" => $rows['username'],
@@ -93,17 +82,22 @@ class booking_diary
             <td colspan='5' id='center_date'>" . date("F, Y", $this->selected_date) . "</td>    
             <td align='right'><a href='?month=" . date("m", $this->forward) . "&amp;year=" . date("Y", $this->forward) . "'>&raquo;</a></td>
         </tr>
-        <tr>
-            <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th><th>S</th>";
+        <tr>";
+        
+        $days = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun");
+        for($i=0; $i<7; $i++){
+            echo '<th>'.$days[$i].'</th>';
+        }
+
         $this->make_day_boxes($this->days, $this->bookings, $this->month, $this->year);
     } // Close function
     function make_day_boxes()
     {
         $this->db = new database();
-            $this->db->initiate();
-            $opentime = "SELECT value FROM metadata WHERE id = '4'";
-            $this->db->DoQuery($opentime);
-            $booking_slots_per_day = $this->db->fetch();
+        $this->db->initiate();
+        $opentime = "SELECT value FROM metadata WHERE id = '4'";
+        $this->db->DoQuery($opentime);
+        $booking_slots_per_day = $this->db->fetch();
 
         $i = 0;
         foreach ($this->days as $row)
@@ -131,13 +125,13 @@ class booking_diary
                 if (mktime(0, 0, 0, $this->month, sprintf("%02s", $row['daynumber']) + 1, $this->year) < strtotime("now"))
                     $tag = 4; // Past Day  
                 if ($day_count >= $booking_slots_per_day[0] && $tag == '')
-                    $tag = 3;
+                    $tag = 3; // Fully Booked
                 if ($day_count > 0 && $tag == '')
-                    $tag = 1;
+                    $tag = 1; // Part booked day.
                 echo $this->day_switch($tag, $row['daynumber']) . "<span>" . str_replace('|', '&nbsp;', $row['daynumber']) . "</span></td>";
             }
             else
-            {
+            {   // Show NULL day.
                 echo "<td width='21' valign='top' class='days'><div class='box' id='key_null'></div></td>";
             }
             $i++;
@@ -214,9 +208,7 @@ class booking_diary
     function make_form()
     {
         // Create array of the booking times
-        
-        
-         
+
             $this->db = new database();
             $this->db->initiate();
             $opentime = "SELECT value FROM metadata WHERE id = '1'";
@@ -333,16 +325,16 @@ class booking_diary
                 ':confirmed' => 0
             );
             $this->db->DoQuery($query, $query_params);
-            $this->confirm($booking_date, $booking_time, $booking_service, $_COOKIE['userdata']['username']);
+            $this->confirmation($booking_date, $booking_time, $booking_service, $_COOKIE['userdata']['username']);
         } // Close else
     } // Close function  
-    function confirm($date, $time, $serviceid, $username)
+    function confirmation($date, $time, $serviceid, $username)
     {
             include('functions/email.php');
             $this->db = new database();
             $this->db->initiate();
 
-             $query = "SELECT type FROM service WHERE id = '$serviceid'";
+            $query = "SELECT type FROM service WHERE id = '$serviceid'";
             $this->db->DoQuery($query);
             $service = $this->db->fetch();
 

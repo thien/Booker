@@ -25,13 +25,12 @@ include($directory . '/includes/header.php');
 <a href="?usertype=customers">Customers</a>
 <a href="?usertype=staff">Staff</a>
 
-<?php if ($usertype =='customers'){?>
-<h1>Customers</h1>
-
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 <form method='post' action='appointments.php'>
+<?php if ($usertype =='customers'){?>
+<h1>Customers</h1>
 <button>Ban</button>
 	<ul id="accordion">
 	<?php 
@@ -63,7 +62,39 @@ include($directory . '/includes/header.php');
 	?>
 	</ul>
 </form>
-<?php }?>
+<?php } elseif ($usertype == 'staff') { ?>
+
+<h1>Customers</h1>
+<button>Ban</button>
+<ul id="accordion">
+	 <?php 
+	foreach ($num as $row) {
+		// echo '<li>';
+		// echo '<div id="topbox" class="base">';
+		// echo '<input class="pinToggles" type="checkbox" name="id_delete[]" value="'.$row['username'].'">';
+		// echo  '<p>'.$row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</p>';
+	 //  	echo '</div><ul id="details">';
+
+	  	
+	  	echo '<div class="left">';
+			 
+			echo $row['forename'] ." ". $row['surname']; 
+			echo '<tr>';
+			echo '<td>'.$row['username'].'</td>';
+			echo '<td>'.$row['forename'].' '.$row['surname'].'</td>';
+		}
+			?>
+		</div>
+	  	<div class="right">
+	  	</div>
+		</ul>
+		</li>
+	  	<?php
+	}
+	?>
+	</ul>
+</form>
+
 <script>
 
 $( "#accordion" ).accordion({

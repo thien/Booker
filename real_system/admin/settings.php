@@ -1,7 +1,19 @@
 <?php 
-$menutype = "admin_dashboard";
+include_once("../includes/core.php");
+if (isset($_POST['service_value']) && isset($_POST['service_id'])){
+	$value = $_POST['service_value'];
+	$id = $_POST['service_id'];
+	$query = "UPDATE metadata SET value = :value WHERE id = :id";
+	$query_params = array(
+	':value' => $value,
+	':id' => $id
+	);
+	$db->DoQuery($query, $query_params);
+	  header("Location: settings.php?updated=1");
+}
+	$menutype = "admin_dashboard";
   $title = "Settings";  
-  include_once("../includes/core.php");
+  $errors = array();
 
 
 include($directory . '/includes/header.php');
@@ -9,12 +21,16 @@ $query = "SELECT * FROM metadata";
 $db->DoQuery($query);
 $num = $db->fetchAll(PDO::FETCH_NUM);
 //$roww = $db->RowCount($query);
+
 ?>
 <h1>Settings</h1>
-<script type="text/javascript" src="../assets/jquery.js"></script>
-<script src="../assets/modernizr.js"></script> 
 
-<?php 
+<?php
+
+if (isset($_GET['updated']) && $_GET['updated'] == 1){
+	echo "<div class='updated' id='status'>Your information has been updated into the database.</div>";
+}
+
 echo "<table id='mytable' style='width:100%'>";
 echo "<tr>
 		<th>Option</th>
@@ -22,14 +38,17 @@ echo "<tr>
 		<th>Description</th>
 	 </tr>";
 foreach ($num as $row) {
+	echo '<form action="settings.php" method="post">';
 	echo '<tr>';
     echo '<td>'.$row['rule'].'</td>';
-    echo '<td><input type="text" name="service_name" size="10" placeholder="Name" value='.$row['value'].'></td>';
+    echo '<td><input id="forms" name="service_value" placeholder="value" value='.$row['value'].'></td>';
     echo '<td>'.$row['description'].'</td>';
-    echo '<td><button name="'.$row[0].'" class="popup-trigger">Update</button></td>';
+    echo '<td><button value="'.$row['id'].'" name="service_id">Update</button></td>';
 	echo '</tr>';
+	echo '</form>';
 	}
 ?>
+</form>
 <!--<form action="services.php" method="post" autocomplete="off">
 <tr>
 <td><input type="text" name="service_name" placeholder="Name"/></td>

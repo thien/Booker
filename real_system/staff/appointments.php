@@ -1,47 +1,39 @@
 <?php 
 $title = "Checkin";
  include_once("../includes/core.php");
- $query = "SELECT booking.id, booking.date, users.forename, users.surname, booking.time, booking.comments, booking.confirmedbystaff, service.type, service.price 
+ $query = "SELECT booking.id, booking.date, users.forename, users.surname,
+  booking.time, booking.comments, booking.confirmedbystaff, booking.staff_id, service.type, service.price 
  FROM booking 
  INNER JOIN users ON booking.username = users.username
- INNER JOIN service ON booking.service_id = service.id;
+ INNER JOIN service ON booking.service_id = service.id
+ WHERE booking.date = :date
  ORDER BY booking.time ASC";
 $query_params = array(
     ':date' => date("Y-m-d")
 );
 $db->DoQuery($query, $query_params);
 $num = $db->fetchAll();
-//echo "<pre>";
-//echo print_r($num);
-//echo "</pre>";
-//if (isset($_POST['id_delete'])) 
-//{
-//          foreach ( $_POST['id_delete'] as $id_d) {
-//            $query = "UPDATE booking SET confirmedbystaff=1 WHERE id = :id";
-//            $query_params = array(
-//                ':id' => $id_d
-//            );
-//            $db->DoQuery($query, $query_params);
-//            echo("<meta http-equiv='refresh' content='1'>");
-//        }
-//}
+
 if (isset($_POST['checkin_customer_id'])) 
 {
-            $query = "UPDATE booking SET confirmedbystaff=1 WHERE id = :id";
-            $query_params = array(
-                ':id' => $_POST['checkin_customer_id']
-            );
-            $db->DoQuery($query, $query_params);
-            echo("<meta http-equiv='refresh' content='0'>");
+  $query = "UPDATE booking SET confirmedbystaff=1, staff_id=:staff_id WHERE id = :id";
+  $query_params = array(
+      ':staff_id' => $_COOKIE['staff']['id'],
+      ':id' => $_POST['checkin_customer_id']
+  );
+  $db->DoQuery($query, $query_params);
+  echo("<meta http-equiv='refresh' content='0'>");
 }
+
 if (isset($_POST['uncheck_customer_id'])) 
 {
-            $query = "UPDATE booking SET confirmedbystaff=0 WHERE id = :id";
-            $query_params = array(
-                ':id' => $_POST['uncheck_customer_id']
-            );
-            $db->DoQuery($query, $query_params);
-            echo("<meta http-equiv='refresh' content='0'>");
+  $query = "UPDATE booking SET confirmedbystaff=0, staff_id = :staff_id WHERE id = :id";
+  $query_params = array(
+      ':staff_id' => NULL,
+      ':id' => $_POST['uncheck_customer_id']
+  );
+  $db->DoQuery($query, $query_params);
+  echo("<meta http-equiv='refresh' content='0'>");
 }
 ?>
 
@@ -63,87 +55,44 @@ if (isset($_POST['uncheck_customer_id']))
 <div class="group">
   <div class="left">
   <?php echo date("l, jS F");?><br>
-	<?php echo date("g:i A");?><br>
+   <?php echo $_COOKIE['staff']['forename']." ".$_COOKIE['staff']['surname'];?>
     </div>
   <div class="right">
   <h1>Checkins</h1>
   </div>
   </div>
-  <form id="tfnewsearch" method="get" action="http://www.google.com">
-  		        <input type="text" class="tftextinput" name="q" size="21" maxlength="120"><input type="submit" value="search" class="tfbutton">
-  		</form>
+
+
+
+
+
+<form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
+  <input id="username_" name="username" type="text" placeholder="Search"/>
+</form>
+
+
+
+
 </div>
 <div class="blank"></div>
 <div id="container">
-<?php if(!empty($num)) { ?>
-<form method='post' action='appointments.php'>
-<ul id="accordion">
-    
+
+
+
 <?php 
-foreach ($num as $row) {
-$dtA = strtotime($row['date'] ." ". $row['time']);
-
-$timee = date("D-d-m-y", strtotime($row['date']));
-
-$timeg = date("g:i A", strtotime($row['time']));
-
-if ($row['date'] == date("Y-m-d")) {
-	echo '<li>';
-	echo '<div id="topbox" class="base">';
-	
-	if ($row['confirmedbystaff'] == 1) {
-		echo '<div id="indicator" class="checkedin"></div>';
-	} elseif ($row['confirmedbystaff'] == 0) {
-		if ($dtA <= time()-300) {
-			echo '<div id="indicator" class="missing"></div>';
-		} else {
-			echo '<div id="indicator" class="notcheckedin"></div>';
-		}
-	}
-
-	echo  '<p>'.$timeg ." - ". $row['forename']." ".$row['surname'].'</p>';
-//	echo '<input class="pinToggles" type="checkbox" name="id_delete[]" value="'.$row['id'].'">';
-  	echo '</div> <ul id="details">';?>
-  	
-  	
-  	  <div class="left">
-		<?php // echo $row['date']; ?><br>
-		<?php echo $row['forename'] ." ". $row['surname']; ?><br>
-		<?php echo $row['time']; ?><br>
-		<?php echo $row['type']; ?><br>
-	  </div>
-  	  <div class="right">
-  	  	Total Price: <?php echo '&pound;'.$row['price']; ?><br>
-  	  	<?php if ($row['confirmedbystaff'] == 0) {?>
-  	  	<button type="submit" name="checkin_customer_id" value="<?php echo $row['id'];?>">Checkin Customer</button>
-  	  	<?php } else{?>
-  	  	<button button type="submit" name="uncheck_customer_id" value="<?php echo $row['id'];?>">Uncheck</button>
-  	  	<button value="<?php echo $row['id'];?>">Bill</button>
-  	  	<?php }?>
-  	  </div>
-
-
-<?php if (!empty($row['comments'])){ 
-echo '<h2>Customers Comment</h2>';
-echo '<p id="checkin_comments">'.$row['comments'].'</p>'; }?><br>
-  	
-
-
-		</ul></li>
-  	<?php
-}}
-echo "</ul>";
-?>
-
-
-<?php }
+include("../functions/list_appointment_results.php");
+  if (!empty($num)) {
+    list_appointments($num);
+  }
+  elseif (empty($num)) {
+  echo "<h1>There's no appointments today.</h1>";
+  echo "Time to relax!";
+}
 include '../includes/footer.php';
 ?>
-
-
+</div>
 <script>
-
-$( "#accordion" ).accordion({
+$("#accordion").accordion({
     animate: {
         duration: 250
     }
@@ -152,7 +101,22 @@ $(".pinToggles").click(function(event){
     event.stopPropagation();
 });
 </script>
-</ul>
-</form>
-</body>
-</html>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  var originalState = $("#container").html();
+  $('#username_').keyup(function() {
+    var value = $("#username_").val(); 
+    console.log(value);
+    if (value.length > 1) {
+    $.post('/functions/search_appointments.php', { username: forms.username.value },
+      function(result) {
+        $('#container').html(result).show();
+      });
+    } else {
+        $("#container").html(originalState);
+    }
+  });    
+});
+</script>

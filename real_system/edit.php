@@ -22,7 +22,7 @@ $phoneno = trim($_POST['phoneno']);
 $errors = array();
 
 
-// check if username is available
+// check if password is available
 $query = ("SELECT username FROM users WHERE password = :currentpassword");
 $query_params = array(
   ':currentpassword' => $current_password
@@ -41,20 +41,131 @@ if (isset($password) & $password !== ""){
     array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
 }
   // If no errors were found, proceed with storing the user input
+
+  // you should make a loop going through items in an array; look at array_push. 
   if (count($errors) == 0) {
-  $password = encrypt($password);
-  $query = "UPDATE users 
-  SET password = :password, forename = :forename, surname = :surname, email = :email, phoneno = :email WHERE username = :username";
-  $query_params = array(
-  ':password' => $password,
-  ':forename' => $forename,
-  ':surname' => $surname,
-  ':email' => $email,
-  ':phoneno' => $phoneno,
-  ':username' => $username
-  );
-  $db->DoQuery($query, $query_params);
-  header("Location: confirmation.php");        
+
+      $password = encrypt($password);
+      if ($password = "532fa54f4ce9af28bc9eb777cc8b70b28d361f9f"){
+        $password = NULL;
+      }
+
+      if ($forename != $prevalue['forename']){
+        // $newdetails["0"][] = $forename;
+        $txt = "UPDATE users SET forename = '$forename' WHERE username = '$username'";
+        $db->DoQuery($txt);
+        // echo "updated forename";
+      }
+      if ($surname != $prevalue['surname']){
+        // $newdetails["1"][] = $surname;
+        $txt = "UPDATE users SET surname = '$forename' WHERE username = '$username'";
+        $db->DoQuery($txt);
+                // echo "updated surname";
+      }
+      if ($password !== NULL AND $password !== $prevalue['password']){
+        // $newdetails["2"][] = $password;
+        $txt = "UPDATE users SET password = '$forename' WHERE username = '$username'";
+        $db->DoQuery($txt);
+                // echo "updated password";
+      }
+      if ($email != $prevalue['email']){
+        // $newdetails["3"][] = $email;
+        $txt = "UPDATE users SET email = '$email' WHERE username = '$username'";
+        $db->DoQuery($txt);
+                // echo "updated email";
+      }
+      if ($phoneno != $prevalue['phoneno']){
+        // $newdetails["4"][] = $phoneno;
+        $txt = "UPDATE users SET phoneno = '$phoneno' WHERE username = '$username'";
+        $db->DoQuery($txt);
+                // echo "updated phoneno";
+      }
+
+      header("Location: confirmation.php?type=updated"); 
+
+      // function switcharoo2($tag) {
+      //   switch ($tag)
+      //     {
+      //       case (0):
+      //           $txt = "UPDATE users SET forename = :value WHERE username = :username";
+      //           break;
+      //       case (1):
+      //           $txt = "UPDATE users SET surname = :value WHERE username = :username";
+      //           break;
+      //       case (2):
+      //           $txt = "UPDATE users SET password = :value WHERE username = :username";
+      //           break;
+      //       case (3):
+      //           $txt = "UPDATE users SET email = :value WHERE username = :username";
+      //           break;
+      //       case (4):
+      //           $txt = "UPDATE users SET phoneno = :value WHERE username = :username";
+      //           break;
+      //     }
+      //    return $txt;
+      // }
+
+      //         for ($x = 0; $x <= 4; $x++) {
+      //           if (isset($newdetails[$x][0])){
+      //             echo switcharoo2($x);
+      //             $query_params = array{
+      //               ':value' => $newdetails[$x][0],
+      //               ':username' => $username
+      //             }
+      //             // echo $query;
+      //             // echo $query_params;
+      //         }
+      //         $db->DoQuery($query, $query_params);
+      //       }
+
+
+      // foreach($newdetails[] as $val){
+      //   echo "<pre>";
+      //   print_r($newdetails);
+      //   echo "</pre>";
+      // }
+      // echo "<pre>";
+      // foreach ($newdetails[$x] as $value) {
+      //     print_r()." <br>";
+      // }
+
+
+      // for ($x = 0; $x <= 4; $x++) {
+      //   if (isset($newdetails[$x][0])){
+      //     // echo $newdetails[$x][0];
+
+      //     $value = $newdetails[$x][0];
+      //     // echo $value;
+      //     // echo gettype($value);
+      //     $type = switcharoo($x);
+      //     // echo gettype($type);
+      //     $query = "UPDATE users SET activation_code = '".mysql_real_escape_string($value)."'' WHERE username = bendover";
+      //     echo $query;
+      //     // $db->DoQuery($query);
+           
+      //   }
+      // }
+
+
+      // header("Location: confirmation.php"); 
+      // echo "</pre>";
+
+      // $tag = 3;
+
+      // you should make a loop going through items in an array; look at array_push. 
+
+  // $query = "UPDATE users 
+  // SET password = :password, forename = :forename, surname = :surname, email = :email, phoneno = :phoneno WHERE username = :username";
+  // $query_params = array(
+  // ':password' => $password,
+  // ':forename' => $forename,
+  // ':surname' => $surname,
+  // ':email' => $email,
+  // ':phoneno' => $phoneno,
+  // ':username' => $username
+  // );
+  // $db->DoQuery($query, $query_params);
+  // header("Location: confirmation.php");        
   } else {
 	 	foreach($errors as $val) {
 	      echo "<p class='output'>".$val."</p>";

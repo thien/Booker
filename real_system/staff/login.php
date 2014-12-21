@@ -22,11 +22,16 @@ if (isset($_SESSION['logged_in'])) {
 				$num = $db->fetchAll();
 			if ($num) {
 				//user entered correct details
-					$forename = $num['forename'];
-					$surname = $num2['surname'];
+				// echo "<pre>";
+				// print_r($num);
+				// echo "</pre>";
 				setcookie('staff[loggedin]', TRUE, $expiry, '', '', '', TRUE);
-				setcookie('staff[forename]', $forename, $expiry, '', '', '', TRUE);
-				setcookie('staff[surname]', $surname, $expiry, '', '', '', TRUE);
+				setcookie('staff[username]', $num[0]['username'], $expiry, '', '', '', TRUE);
+				setcookie('staff[id]', $num[0]['id'], $expiry, '', '', '', TRUE);
+				setcookie('staff[forename]', $num[0]['forename'], $expiry, '', '', '', TRUE);
+				setcookie('staff[surname]', $num[0]['surname'], $expiry, '', '', '', TRUE);
+
+				// print_r($_COOKIE);
 				header('Location: index.php');
 				exit();
 			} else {
