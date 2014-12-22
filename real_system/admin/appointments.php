@@ -4,8 +4,13 @@ $menutype = "admin_dashboard";
 include_once("../includes/core.php");
 include("../functions/list_appointment_results.php");
 $date = date("Y-m-d");
-$query = "SELECT booking.id, booking.date, users.forename, users.surname, booking.time, booking.comments, booking.confirmedbystaff, booking.staff_id, service.type, service.price 
-FROM booking INNER JOIN users ON booking.username = users.username INNER JOIN service ON booking.service_id = service.id";
+$query = "SELECT booking.id, booking.date, users.forename, 
+users.surname, booking.time, booking.comments, booking.confirmedbystaff, 
+booking.staff_id, service.type, service.price, staff.s_forename, staff.s_surname
+FROM booking
+INNER JOIN users ON booking.username = users.username 
+ INNER JOIN staff ON booking.staff_id = staff.id
+INNER JOIN service ON booking.service_id = service.id";
 $db->DoQuery($query);
 $num = $db->fetchAll();
 
@@ -20,11 +25,7 @@ include '../includes/header.php';
 
 <?php
 
-$parameters = array(
-'show' => "all"
-);
-print_r($parameters);
-list_appointments($num, $parameters);
+list_appointments($num);
 ?>
 
 

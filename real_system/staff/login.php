@@ -28,8 +28,8 @@ if (isset($_SESSION['logged_in'])) {
 				setcookie('staff[loggedin]', TRUE, $expiry, '', '', '', TRUE);
 				setcookie('staff[username]', $num[0]['username'], $expiry, '', '', '', TRUE);
 				setcookie('staff[id]', $num[0]['id'], $expiry, '', '', '', TRUE);
-				setcookie('staff[forename]', $num[0]['forename'], $expiry, '', '', '', TRUE);
-				setcookie('staff[surname]', $num[0]['surname'], $expiry, '', '', '', TRUE);
+				setcookie('staff[forename]', $num[0]['s_forename'], $expiry, '', '', '', TRUE);
+				setcookie('staff[surname]', $num[0]['s_surname'], $expiry, '', '', '', TRUE);
 
 				// print_r($_COOKIE);
 				header('Location: index.php');

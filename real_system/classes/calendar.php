@@ -31,9 +31,9 @@ class booking_diary
             ':period' => $period
         );
         $this->db->DoQuery($query, $query_params);
-        $number_of_rows = $this->db->RowCount();
+        // $number_of_rows = $this->db->RowCount();
         $this->count    = $this->db->RowCount();
-        $fetch_array    = $this->db->fetch();
+        // $fetch_array    = $this->db->fetch();
         while ($rows = $this->db->fetch())
         {
             $this->bookings[] = array(
@@ -99,9 +99,17 @@ class booking_diary
         $this->db->DoQuery($opentime);
         $booking_slots_per_day = $this->db->fetch();
 
+        $first_day_of_month = $this->year . "-" . $this->month . "-" . "01";
+        $closed_days_query = "SELECT date FROM closed_days WHERE YEAR(date) = YEAR('$first_day_of_month') AND MONTH(date) = MONTH('$first_day_of_month')";
+        $this->db->DoQuery($closed_days_query);
+        $closed_days = $this->db->fetchAll();
+ 
+
         $i = 0;
         foreach ($this->days as $row)
         {
+            // $this_day = $this->year ."-". $this->month ."-". $row['daynumber'];
+            // echo $this_day."<br>";
             $tag = '';
             if ($i % 7 == 0)
                 echo "</tr><tr>"; // Use modulus to give us a <tr> after every seven <td> cells
@@ -119,11 +127,20 @@ class booking_diary
                         } // Close if
                     } // Close foreach
                 } // Close if $count
+
                 // Work out which colour day box to show
                 if ($row['dayname'] == 'Sunday')
                     $tag = 2; // It's a Sunday
+
+                $this_day = $this->year ."-". $this->month ."-". $row['daynumber'];
+                foreach ($closed_days as $item) {  // It's a closed day, set from the database.
+                    if (strtotime($item['date']) == strtotime($this_day)){
+                        $tag = 4;
+                    }
+                }
+
                 if (mktime(0, 0, 0, $this->month, sprintf("%02s", $row['daynumber']) + 1, $this->year) < strtotime("now"))
-                    $tag = 4; // Past Day  
+                    $tag = 4; // Past Day / Unavailable 
                 if ($day_count >= $booking_slots_per_day[0] && $tag == '')
                     $tag = 3; // Fully Booked
                 if ($day_count > 0 && $tag == '')
@@ -151,11 +168,8 @@ class booking_diary
             case (3): // Fully booked day
                 $txt = "<div class='box' id='key_fullybooked'></div>\r\n";
                 break;
-            case (4): // Past day
+            case (4): // Past day / Unavailable
                 $txt = "<div class='box' id='key_unavailable'></div></a>\r\n";
-                break;
-            case (5): // Block booked out day
-                $txt = "<div class='box' id='key_fullybooked'></div>\r\n";
                 break;
             default: // FREE
                 $txt = "<a href='calendar.php?month=" . $this->month . "&amp;year=" . $this->year . "&amp;day=" . sprintf("%02s", $daynumber) . '#selected_date'."'><div class='box' id='key_available'></div>\r\n";
@@ -178,7 +192,7 @@ class booking_diary
             <tr>
                 <td>Fully Booked</td>
                 <td>Sunday</td>
-                <td>Part Booked</td>
+                <td>Partially Booked</td>
                 <td>Available</td>
                 <td>Unavailable</td>
             </tr>                
@@ -231,8 +245,7 @@ class booking_diary
         $opt = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
         if ($this->count >= 1)
         {
-            foreach ($this->bookings as $row)
-            {
+            foreach ($this->bookings as $row) {
                 // Check for bookings and remove any previously booked slots                 
                 foreach ($slots as $i => $r)
                 {
@@ -315,14 +328,15 @@ class booking_diary
             $booking_date    = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
             $booking_time    = $_POST['booking_time'];
             $booking_service = $_POST['booking_service'];
-            $query           = "INSERT INTO booking (date, time, username, comments, confirmedbystaff, service_id) VALUES (:booking_date, :booking_time, :username, :comments, :confirmed, :service_id)";
+            $query           = "INSERT INTO booking (date, time, username, comments, confirmedbystaff, service_id, staff_id) VALUES (:booking_date, :booking_time, :username, :comments, :confirmed, :service_id, :staff_id)";
             $query_params    = array(
                 ':booking_date' => $booking_date,
                 ':booking_time' => $booking_time,
                 ':service_id' => $booking_service,
                 ':username' => $_COOKIE['userdata']['username'],
                 ':comments' => $_POST['comments'],
-                ':confirmed' => 0
+                ':confirmed' => 0,
+                ':staff_id' => 1
             );
             $this->db->DoQuery($query, $query_params);
             $this->confirmation($booking_date, $booking_time, $booking_service, $_COOKIE['userdata']['username']);

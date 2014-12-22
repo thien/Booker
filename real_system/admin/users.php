@@ -78,10 +78,10 @@ include($directory . '/includes/header.php');
 	  	
 	  	echo '<div class="left">';
 			 
-			echo $row['forename'] ." ". $row['surname']; 
+			echo $row['s_forename'] ." ". $row['s_surname']; 
 			echo '<tr>';
 			echo '<td>'.$row['username'].'</td>';
-			echo '<td>'.$row['forename'].' '.$row['surname'].'</td>';
+			echo '<td>'.$row['s_forename'].' '.$row['s_surname'].'</td>';
 		}
 			?>
 		</div>

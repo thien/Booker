@@ -1,18 +1,6 @@
 <?php 
 $title = "Checkin";
  include_once("../includes/core.php");
- $query = "SELECT booking.id, booking.date, users.forename, users.surname,
-  booking.time, booking.comments, booking.confirmedbystaff, booking.staff_id, service.type, service.price 
- FROM booking 
- INNER JOIN users ON booking.username = users.username
- INNER JOIN service ON booking.service_id = service.id
- WHERE booking.date = :date
- ORDER BY booking.time ASC";
-$query_params = array(
-    ':date' => date("Y-m-d")
-);
-$db->DoQuery($query, $query_params);
-$num = $db->fetchAll();
 
 if (isset($_POST['checkin_customer_id'])) 
 {
@@ -22,19 +10,32 @@ if (isset($_POST['checkin_customer_id']))
       ':id' => $_POST['checkin_customer_id']
   );
   $db->DoQuery($query, $query_params);
-  echo("<meta http-equiv='refresh' content='0'>");
+    header("Location: appointments.php");
 }
 
 if (isset($_POST['uncheck_customer_id'])) 
 {
-  $query = "UPDATE booking SET confirmedbystaff=0, staff_id = :staff_id WHERE id = :id";
+  $query = "UPDATE booking SET confirmedbystaff=0, staff_id=:staff_id WHERE id = :id";
   $query_params = array(
-      ':staff_id' => NULL,
+      ':staff_id' => 1,
       ':id' => $_POST['uncheck_customer_id']
   );
   $db->DoQuery($query, $query_params);
-  echo("<meta http-equiv='refresh' content='0'>");
+  header("Location: appointments.php");
 }
+
+ $query = "SELECT booking.id, booking.date, users.forename, users.surname,
+  booking.time, booking.comments, booking.confirmedbystaff, booking.staff_id, 
+  service.type, service.price, staff.s_forename, staff.s_surname
+ FROM booking 
+ INNER JOIN users ON booking.username = users.username
+ INNER JOIN staff ON booking.staff_id = staff.id
+ INNER JOIN service ON booking.service_id = service.id
+ WHERE booking.date = CURDATE()
+ ORDER BY booking.time ASC";
+$db->DoQuery($query);
+$num = $db->fetchAll();
+
 ?>
 
 </script>
@@ -80,6 +81,7 @@ if (isset($_POST['uncheck_customer_id']))
 
 
 <?php 
+
 include("../functions/list_appointment_results.php");
   if (!empty($num)) {
     list_appointments($num);
