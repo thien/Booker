@@ -19,9 +19,9 @@ class booking_diary
         $this->forward_month = date("m", $forward);
         $this->forward_year  = date("Y", $forward); // Add one month forward arrow    
         // Make the booking array
-        $this->create_booking($year, $month);
+        $this->start_booking($year, $month);
     }
-    function create_booking($year, $month)
+    function start_booking($year, $month)
     {
         $period = $year.'-'.$month.'%';
         $this->db = new database();
@@ -32,10 +32,9 @@ class booking_diary
         );
         $this->db->DoQuery($query, $query_params);
         // $number_of_rows = $this->db->RowCount();
-        $this->count    = $this->db->RowCount();
+        $this->count = $this->db->RowCount();
         // $fetch_array    = $this->db->fetch();
-        while ($rows = $this->db->fetch())
-        {
+        while ($rows = $this->db->fetch()){
             $this->bookings[] = array(
                 "name" => $rows['username'],
                 "date" => $rows['date'],
@@ -290,39 +289,38 @@ class booking_diary
     {
         include('assets/recaptcha_values.php');
         include_once('assets/recaptcha.php');
-
-        $alert = '';
-        $msg   = 0;
+        $errors = array();
         if (isset($_POST['booking_time']) && $_POST['booking_time'] == 'selectvalue')
         {
-            $msg = 1;
-            $alert .= "Please select a booking time";
+            array_push($errors, "Please select a booking time");
         }
         if (isset($_POST['booking_service']) && $_POST['booking_service'] == 'selectvalue')
         {
-            $msg = 1;
-            $alert .= "Please select a service";
+            array_push($errors, "Please select a service");
+        }
+
+
+
+        if (strlen($_POST["recaptcha_response_field"]) == 0) {
+            array_push($errors, "Please type in the captcha.");
         }
 
         if ($_POST["recaptcha_response_field"]) {
         $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
-        if (!$resp->is_valid) {
-        # set the error code so that we can display it
-        // $error = $resp->error;
-            $msg = 1;
-            $alert .= "This is wrong";
-        // array_push($errors, "The captcha is incorrect.");
-        }
+            if (!$resp->is_valid) {
+                 array_push($errors, "The captcha is incorrect. Please try again.");
+            }
         }
 
 
 
-        if ($msg == 1)
+        if (!empty($errors))
         {
-            echo "<div class='error'>" . $alert . "</div>";
+            foreach ($errors as $error){
+                echo "<div class='error'>" .  $error . "</div>";
+            }
         }
-        elseif ($msg == 0)
-        {
+        else {
             $this->db = new database();
             $this->db->initiate();
             $booking_date    = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));

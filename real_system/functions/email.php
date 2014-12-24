@@ -32,7 +32,6 @@ if ($type == "booking") {
 				You need to activate your account. Click the link below. \n\n
 				";
 }
-
 if ($type == "appointment") {
 		if(isset($extra[":bookingday"]) & isset($extra[":bookingtime"]) & isset($extra[":bookingservice"])) {
 		$bookingdate = $extra[":bookingday"];
@@ -41,6 +40,14 @@ if ($type == "appointment") {
 		$subject = 'Your Appointment';
 		$message = "Hi $forename,
 					You have an appointment at $bookingdate, $bookingtime for a $bookingservice.";
+			}
+}
+if ($type == "pin") {
+	if(isset($extra[":pin"])) {
+		$pin = $extra[":pin"];
+		$subject = 'Your New Pin';
+		$message = "Hi $forename,
+					Your new pin is $pin.";
 			}
 }	
 // Send

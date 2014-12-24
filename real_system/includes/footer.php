@@ -1,6 +1,6 @@
 </div>
-<div id="footer">
+<!-- <div id="footer">
 COPYRIGHT POTATO
-</div>
+</div> -->
 </body>
 </html>

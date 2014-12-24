@@ -8,8 +8,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="../assets/jquery.js"></script>
+<script src="../assets/jqueryui.js"></script>
 <script type="text/javascript">
 // Listen for ALL links at the top level of the document. For
 // testing purposes, we're not going to worry about LOCAL vs.

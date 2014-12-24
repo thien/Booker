@@ -3,13 +3,9 @@ include_once("../includes/core.php");
 if (isset($_POST['service_value']) && isset($_POST['service_id'])){
 	$value = $_POST['service_value'];
 	$id = $_POST['service_id'];
-	$query = "UPDATE metadata SET value = :value WHERE id = :id";
-	$query_params = array(
-	':value' => $value,
-	':id' => $id
-	);
-	$db->DoQuery($query, $query_params);
-	  header("Location: settings.php?updated=1");
+	$query = "UPDATE metadata SET value = '$value' WHERE id = '$id'";
+	$db->DoQuery($query);
+	array_push($update, 'Your information has been updated into the database.');
 }
 	$menutype = "admin_dashboard";
   $title = "Settings";  
@@ -27,9 +23,8 @@ $num = $db->fetchAll(PDO::FETCH_NUM);
 
 <?php
 
-if (isset($_GET['updated']) && $_GET['updated'] == 1){
-	echo "<div class='updated' id='status'>Your information has been updated into the database.</div>";
-}
+    display_errors($errors);
+    display_updates($update);
 
 echo "<table id='mytable' style='width:100%'>";
 echo "<tr>

@@ -26,7 +26,7 @@ error_reporting(-1);
 // echo $_SERVER['HTTP_REFERER'];
 
 // Expiry Time for Cookies.
-  $expiry = time() + (60*60*24);
+  $expiry = time() + (60*10);
 
 include_once($directory . 'assets/recaptcha_values.php');
 
@@ -59,7 +59,41 @@ include_once($directory . 'assets/recaptcha_values.php');
   date_default_timezone_set("GMT");
 
   // Include Error Handler
-  include($directory . "functions/errors.php");
+  $errors = array();
+  $update = array();
+
+
+  function display_errors($errors = array()) {
+    if (!empty($errors)){
+        echo '<div class="error">';
+        foreach ($errors as $msg){
+          echo $msg;
+        }
+        echo "</div>";
+      }
+  }
+    function display_updates($message = array()) {
+    if (!empty($message)){
+        echo "<div class='updated' id='status'>";
+        foreach ($message as $msg){
+          echo $msg;
+        }
+        echo "</div>";
+      }
+  }
+
+  // function disable_enter(){
+  //   echo "<script>
+  //         $('html').bind('keypress', function(e)
+  //         {
+  //            if(e.keyCode == 13)
+  //            {
+  //               return false;
+  //            }
+  //         });
+  //         </script>
+  //         "
+  // }
 
   //Salt
   // $salt = "b18237y419v2by4190vb";	

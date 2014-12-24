@@ -18,8 +18,11 @@ if (isset($_POST)) {
   if (isset($_POST['service_description'])){
     $description = $_POST['service_description'];
   }
-  if (isset($_POST['service_id'])){
-    $id = $_POST['service_id'];
+  if (isset($_POST['service_id_update'])){
+    $id = $_POST['service_id_update'];
+  }
+  if (isset($_POST['service_id_delete'])){
+    $id = $_POST['service_id_delete'];
   }
 
   if (isset($_POST['new'])) {
@@ -30,8 +33,8 @@ if (isset($_POST)) {
     ':description' => $description
     );
     $db->DoQuery($query, $query_params);
-      header("Location: services.php?updated=1");
-  } elseif(isset($id)){
+      array_push($update, 'The query has been added.');
+  } elseif(isset($_POST['service_id_update'])){
     $query = "UPDATE service SET type = :type, description = :description, price = :price WHERE id = :id";
     $query_params = array(
     ':type' => $type,
@@ -40,7 +43,11 @@ if (isset($_POST)) {
     ':id' => $id
     );
     $db->DoQuery($query, $query_params);
-      header("Location: services.php?updated=1");
+            array_push($update, 'The query has been updated.');
+  }  elseif(isset($_POST['service_id_delete'])){
+    $query = "DELETE FROM service WHERE id = '$id'";
+    $db->DoQuery($query);
+      array_push($update, 'The query has been deleted.');
   }
 
 }
@@ -64,6 +71,9 @@ if (isset($_GET['updated']) && $_GET['updated'] == 1){
   echo "<div class='updated' id='status'>Your information has been updated into the database.</div>";
 }
 
+    display_errors($errors);
+    display_updates($update);
+
 echo "<table id='mytable' style='width:100%'>";
 echo "<tr>
     <th>Option</th>
@@ -76,7 +86,8 @@ foreach ($num as $row) {
     echo '<td><input type="text" name="service_type" placeholder="Name" value="'.$row['type'].'"/></td>';
     echo '<td><input type="number" name="service_price" placeholder="value" value='.$row['price'].'></td>';
     echo '<td><textarea id="description" type="text" name="service_description" placeholder="Description"/>'.$row['description'].'</textarea></td>';
-    echo '<td><button value="'.$row[0].'" name="service_id">Update</button></td>';
+    echo '<td><button value="'.$row[0].'" name="service_id_update">Update</button></td>';
+    echo '<td><button value="'.$row[0].'" name="service_id_delete">Remove</button></td>';
   echo '</tr>';
   echo '</form>';
   }
@@ -86,7 +97,7 @@ foreach ($num as $row) {
 <tr>
 <td><input type="text" name="service_type" placeholder="Name"/></td>
 <td><input type="number" name="service_price" size="4" placeholder="Price"/></td>
-<td><input type="text" name="service_description" placeholder="Description"/></td>
+<td><textarea id="description"  type="text" name="service_description" placeholder="Description"/></textarea></td>
 <td><input type="submit" name="new" value="Add"></td>
 </tr>
 </form>

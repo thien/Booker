@@ -1,6 +1,16 @@
 <?php 
 $title = "Checkin";
  include_once("../includes/core.php");
+ if (!isset($_COOKIE['staff'])){
+  header('Location: index.php?timeout=true'); 
+ } else {
+    $staff_expiry = time() + 60;
+    setcookie('staff[loggedin]', $_COOKIE['staff']['loggedin'], $staff_expiry, '', '', '', TRUE);
+    setcookie('staff[username]', $_COOKIE['staff']['username'], $staff_expiry, '', '', '', TRUE);
+    setcookie('staff[id]', $_COOKIE['staff']['id'], $staff_expiry, '', '', '', TRUE);
+    setcookie('staff[forename]', $_COOKIE['staff']['forename'], $staff_expiry, '', '', '', TRUE);
+    setcookie('staff[surname]', $_COOKIE['staff']['surname'], $staff_expiry, '', '', '', TRUE);
+ }
 
 if (isset($_POST['checkin_customer_id'])) 
 {
@@ -45,8 +55,8 @@ $num = $db->fetchAll();
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="<?php echo $directory."assets/style.css";?>"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="../assets/jquery.js"></script>
+<script src="../assets/jqueryui.js"></script>
 </head>
 <body>
 <div id="checkin_topbar">

@@ -19,14 +19,14 @@ if (isset($_POST)) {
     ':date' => $date
     );
     $db->DoQuery($query, $query_params);
-      header("Location: Calendar.php?updated=1");
+    array_push($update, 'The closing day is added into the database.');
   } elseif(isset($id)){
     $query = "DELETE FROM closed_days WHERE id = :id";
     $query_params = array(
     ':id' => $id
     );
     $db->DoQuery($query, $query_params);
-      header("Location: Calendar.php?updated=1");
+    array_push($update, 'The closing day has been removed from the database.');
   }
 
 }
@@ -48,9 +48,8 @@ $num = $db->fetchAll(PDO::FETCH_NUM);
 
 <?php
 
-if (isset($_GET['updated']) && $_GET['updated'] == 1){
-  echo "<div class='updated' id='status'>Your information has been updated into the database.</div>";
-}
+    display_errors($errors);
+    display_updates($update);
 
 echo "<table id='mytable' style='width:100%'>";
 foreach ($num as $row) {

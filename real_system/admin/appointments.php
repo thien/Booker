@@ -13,35 +13,18 @@ INNER JOIN users ON booking.username = users.username
 INNER JOIN service ON booking.service_id = service.id";
 $db->DoQuery($query);
 $num = $db->fetchAll();
-
-
-
 include '../includes/header.php';
 ?>
-
-
 
 <h1>Appointments</h1>
 
 <?php
-
 list_appointments($num);
-?>
-
-
-
-
-
-<?php 
 include '../includes/footer.php';
 ?>
 
-
 <script>
 $( "#accordion" ).accordion();
-//$("#accordion li div").click(function(){
-//    $(this).next().slideToggle(300);
-//});
 $(".pinToggles").click(function(event){
     event.stopPropagation();
 });

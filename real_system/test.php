@@ -3,20 +3,32 @@ require( "classes/database.php");
 $db = new database();
 $db->initiate();
 
-        $closed_days_query = "SELECT * FROM closed_days";
-        $db->DoQuery($closed_days_query);
-        $closed_days = $db->fetchAll(PDO::FETCH_NUM);
+echo "nigga";
 
-        echo "<pre>";
-        print_r($closed_days);
-        echo "</pre>";
+    $new_pin = rand(10000,99999);
+    $pin = 12345;   // encrypt($new_pin);
+    $query = "SELECT * FROM staff WHERE pin = $pin";
+    $db->DoQuery($query);
+    $num = $db->fetch();
+    // echo $pin."<br>";
+    print_r($check_if_available);
+    echo $check_if_available;
 
-                if (in_array("2014-12-25", $closed_days)) {
-                    echo "closed";// It's a closed day.
-                }
-                if (in_array("2015-01-01", $closed_days)) {
-                    echo "closed";// It's a closed day.
-                }
+
+        // $closed_days_query = "SELECT * FROM closed_days";
+        // $db->DoQuery($closed_days_query);
+        // $closed_days = $db->fetchAll(PDO::FETCH_NUM);
+
+        // echo "<pre>";
+        // print_r($closed_days);
+        // echo "</pre>";
+
+        //         if (in_array("2014-12-25", $closed_days)) {
+        //             echo "closed";// It's a closed day.
+        //         }
+        //         if (in_array("2015-01-01", $closed_days)) {
+        //             echo "closed";// It's a closed day.
+        //         }
 
 // $url = "https://1994.game.co.uk/yoshimitsuratchet.php";
 

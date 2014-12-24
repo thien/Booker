@@ -8,16 +8,18 @@
 // setcookie('userdata[forename]', "", $expired);
 // setcookie('userdata[surname]', "", $expired);
 
-// unset cookies
+//unset cookies
 if (isset($_SERVER['HTTP_COOKIE'])) {
     $cookies = explode(';', $_SERVER['HTTP_COOKIE']);
     foreach($cookies as $cookie) {
         $parts = explode('=', $cookie);
         $name = trim($parts[0]);
         setcookie($name, '', time()-1000);
-        setcookie($name, '', time()-1000, '/');
+        setcookie($name, '', time()-1000, '/admin');
+        setcookie($name, '', time()-1000, '/staff');
     }
 }
+
 
 header('Location: login.php');	
 
