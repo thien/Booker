@@ -1,7 +1,107 @@
 <?php 
 $menutype = "admin_dashboard";
 $title = "Users";  
+include_once("../functions/encryption.php");
+include_once("../functions/email.php");
 include_once("../includes/core.php");
+
+function list_staff($staff_details = array()){
+
+
+
+	// echo "<pre>";
+	// print_r($staff_details);
+	// echo "</pre>";
+
+	echo '<form action="" method="post" autocomplete="off">';
+	echo '<div id="details">'; 
+	echo '<div class="left">'; 
+	// echo $row['s_forename'] ." ". $row['s_surname']; 
+	echo '<label>Forename:</label><br>';
+	if (isset($staff_details['s_forename'])){
+		echo '<input type="text" name="forename" placeholder="Forename" value="'.$staff_details['s_forename'].'"/>';
+	} else {
+	echo '<input type="text" name="forename" placeholder="Forename"/>';
+	}
+	echo '<label>Surname:</label><br>';
+	if (isset($staff_details['s_surname'])){
+		echo '<input type="text" name="surname" placeholder="Surname" value="'.$staff_details['s_surname'].'"/>';
+	} else {
+	echo '<input type="text" name="surname" placeholder="Surname"/>';
+	}
+	echo '<label>Email:</label><br>';
+	if (isset($staff_details['s_email'])){
+		echo '<input type="text" name="email" placeholder="email" value='.$staff_details['s_email'].'>';
+	} else {
+	echo '<input type="text" name="email" placeholder="email">';
+	}
+	echo '</div>';
+	echo '<div class="right">';
+	if (isset($staff_details[0])){
+		echo '<button value="'.$staff_details[0].'" name="id_update">Update</button>';
+		if ($staff_details['banned'] == 0){
+			echo '<button value="'.$staff_details[0].'" name="id_ban">Ban</button>';
+		} else {
+			echo '<button value="'.$staff_details[0].'" name="id_unban">Unban</button>';
+		}
+		echo '<button value="'.$staff_details[0].'" name="new_pin_request">Generate New PIN</button>';
+	} else {
+	echo '<button type="submit" value="true" name="register">Register</button>';
+	}
+	echo '</div>';
+	echo '</form>';
+	echo '</div>';
+}
+
+function generate_pin($used_pins = array()){
+	$new_pin = rand(10000,99999);
+	$new_pin_hash = encrypt($new_pin);
+	while (in_array($new_pin_hash, $used_pins)){
+
+		//current pin is in use, trying again with newly generated pin.
+		$new_pin = rand(10000,99999);
+		//encrypt new pin
+		$new_hash = encrypt($new_pin);
+		//assign new pin hash to check in array. if fails loop will iterate
+		$new_pin_hash = $new_hash;
+	}
+	return array(
+		'pin' => $new_pin,
+		'pin_hash' => $new_pin_hash
+	);
+}
+
+if (isset($_POST['register'])){
+	$forename = $_POST['forename'];
+	$surname = $_POST['surname'];
+	$email = $_POST['email'];
+
+	$query = "SELECT pin FROM staff";
+	$db->DoQuery($query);
+	$used_pins = $db->fetch();
+	$newpins = generate_pin($used_pins);
+	// echo "your new pin is ";
+	// print_r($newpins);
+	// echo $newpins['pin'] . "<br>";
+	// echo $newpins['pin_hash'];
+
+
+	$query_params = array(
+		':pin' => $newpins['pin']
+	);
+	email($email, "Staff", $forename, "new_staff", $query_params);
+
+	$query = "INSERT INTO staff (s_forename, s_surname, s_email, pin) VALUES (:forename, :surname, :email, :pin)";
+	$query_params = array(
+		':forename' => $forename,
+		':surname' => $surname,
+		':email' => $email,
+		':pin' => $newpins['pin_hash']
+	);
+	// print_r($query_params);
+	$db->DoQuery($query, $query_params);
+	array_push($update, "$forename has been included into the database. A PIN is sent to his email address at $email.");
+}
 
 if (isset($_POST['id_update'])){
 	$forename = $_POST['forename'];
@@ -18,7 +118,19 @@ if (isset($_POST['id_update'])){
 	array_push($update, "Staff information has been updated.");
 }
 
+if (isset($_POST['id_ban'])){
+	$id = $_POST['id_ban'];
+	$query = "UPDATE staff SET banned = true WHERE id = $id";
+	$db->DoQuery($query);
+	array_push($update, $_POST['forename']." is now banned from the Staff List.");
+}
 
+if (isset($_POST['id_unban'])){
+	$id = $_POST['id_unban'];
+	$query = "UPDATE staff SET banned = false WHERE id = $id";
+	$db->DoQuery($query);
+	array_push($update, $_POST['forename']." is now unbanned from the Staff List.");
+}
 
 if (isset($_POST['new_pin_request'])){
 
@@ -27,48 +139,40 @@ if (isset($_POST['new_pin_request'])){
 	$surname = $_POST['email'];
 	$id = $_POST['new_pin_request'];
 
-	$new_pin = '12345';
+	$new_pin = rand(10000,99999);
+
+	$new_pin_hash = encrypt($new_pin);
+
 	$query = "SELECT pin FROM staff";
 	$db->DoQuery($query);
 	$used_pins = $db->fetch();
-	// echo $pin."<br>";
-	while (in_array($new_pin, $used_pins)){
-		echo $new_pin .' is in use . <br>';
-		$new_pin = rand(10000,99999);	// encrypt($new_pin);
+	while (in_array($new_pin_hash, $used_pins)){
+
+		//current pin is in use, trying again with newly generated pin.
+		$new_pin = rand(10000,99999);
+		//encrypt new pin
+		$new_hash = encrypt($new_pin);
+		//assign new pin hash to check in array. if fails loop will iterate
+		$new_pin_hash = $new_hash;
 	}
 
-	echo $new_pin;
-	// email($email, $username, $forename, "new_pin");
+	//New pin is available
 
-	$query = "UPDATE staff SET pin = :pin WHERE id = :id";
+	include_once("../functions/email.php");
+
+	$query = "SELECT * FROM staff WHERE id = $id";
+	$db->DoQuery($query);
+	$staff_details = $db->fetch();
+
 	$query_params = array(
-		':pin' => $new_pin,
+		':pin' => $new_pin_hash,
 		':id' => $id
 	);
+	email($staff_details['s_email'], "Staff", $staff_details['s_forename'], "new_pin", $query_params);
+
+	$query = "UPDATE staff SET pin = :pin WHERE id = :id";
 	$db->DoQuery($query, $query_params);
-	// if (!empty($check_if_available)){
-	// echo $check_if_available[0] ."is found, doing again.";
 
-	// } else {
-	// 	echo "pin is not found";
-	// }
-
-
-	// while ($check_if_available) {
-	// 	$new_pin = rand(10000,99999);
-	// 	// encrypt($new_pin);
-	// 	$query = "SELECT pin FROM staff WHERE pin = $new_pin";
-	// 	$check_if_available = $db->DoQuery($query);
-	// }
-
-	// $id = $_POST['new_pin'];
-	// $query = "UPDATE staff SET pin = :pin WHERE id = :id";
-	// $query_params = array(
-	// 	':pin' => $forename,
-	// 	':id' => $id
-	// );
-	// // print_r($query_params);
-	// $db->DoQuery($query, $query_params);
 	array_push($update, "A new pin has been set to ".$forename.".");
 }
 
@@ -78,6 +182,7 @@ $usertype = $_GET['usertype'];
 } else {
 $usertype = 'customers';
 }
+
 if (isset($_GET['username'])){
 $username = $_GET['username'];
 }
@@ -115,10 +220,9 @@ display_updates($update);
 
 <?php 
 
-
-		echo "<pre>";
-		print_r($_POST);
-		echo "</pre>";
+	// echo "<pre>";
+	// print_r($_POST);
+	// echo "</pre>";
 
 if ($usertype =='customers'){
 
@@ -150,33 +254,18 @@ if ($usertype =='customers'){
 			echo $row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</a></p>';
 		}
 	}
- } elseif ($usertype == 'staff') {
+ } 
+elseif ($usertype == 'staff') {
 
-echo "<h1>Staff</h1>";
-foreach ($num as $row) {
-	echo '<form action="" method="post" autocomplete="off">';
-	echo '<div id="details">'; 
-	echo '<div class="left">'; 
-	// echo $row['s_forename'] ." ". $row['s_surname']; 
-	echo '<label>Forename:</label><br>';
-	echo '<input type="text" name="forename" placeholder="Forename" value="'.$row['s_forename'].'"/>';
-	echo '<label>Surname:</label><br>';
-	echo '<input type="text" name="surname" placeholder="Surname" value='.$row['s_surname'].'>';
-	echo '<label>Email:</label><br>';
-	echo '<input type="text" name="email" placeholder="email" value='.$row['s_email'].'>';
-	echo '<label>PIN:</label><br>';
-	echo '<input type="text" name="pin" placeholder="PIN" value='.$row['pin'].'>';
+	echo "<h1>Staff</h1>";
+	foreach ($num as $row) {
+		
 
-	echo '</div>';
-	echo '<div class="right">';
-	echo '<button value="'.$row[0].'" name="id_update">Update</button>';
-	echo '<button value="'.$row[0].'" name="id_delete">Remove</button>';
-	echo '<button value="'.$row[0].'" name="new_pin_request">Generate PIN</button>';
-	echo '</div>';
-	echo '</form>';
-	echo '</div>';
-}
 
+		list_staff($row);
+	}
+	echo '<h2>Register New Staff</h2>';
+		list_staff();
 }
 
 ?>

@@ -76,7 +76,10 @@ if ($_POST["recaptcha_response_field"]) {
   if (count($errors) == 0) {
   $password = encrypt($password);
   
-  email($email, $username, $forename, "confirm_registration");
+    $email_parameters = array(
+  ':pin' => encrypt($username)
+  );
+  email($email, $username, $forename, "confirm_registration", $email_parameters);
   $query = "INSERT INTO users (username, password, forename, surname, email, phoneno, activated, activation_code) VALUES (:username, :password, :forename, :surname, :email, :phoneno, :activated, :activation_code)";
   $query_params = array(
   ':username' => $username,

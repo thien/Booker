@@ -1,5 +1,6 @@
 <?php 
 include("../includes/core.php");
+include("../functions/encryption.php");
 if (isset($_COOKIE['staff']['logged_in'])) {
 	//if true, show admin index
 	header('Location: appointments.php');
@@ -10,9 +11,10 @@ if (isset($_COOKIE['staff']['logged_in'])) {
 	//show login
 	if (isset($_POST['pin'])){
 		$pin = $_POST['pin'];
-		if (empty($pin)){
+		if (strlen($pin) < 2){
 			$error = 'You need to type in your PIN!';
 		} else {
+			$pin = encrypt($_POST['pin']);
 			$query = "SELECT * FROM staff WHERE pin = :pin";
 			$query_params = array(':pin' => $pin);
 				$db->DoQuery($query, $query_params);

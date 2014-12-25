@@ -97,7 +97,8 @@ include_once($directory . 'assets/recaptcha_values.php');
 
   //Salt
   // $salt = "b18237y419v2by4190vb";	
-	
+
+
   // Create a new DB class and run the init routine
   include($directory . "classes/database.php");
 
