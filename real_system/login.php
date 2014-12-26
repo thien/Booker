@@ -3,6 +3,9 @@ $title = 'Login';
 $menutype = NULL;
 include_once("includes/core.php");
 include("functions/encryption.php");
+if (isset($_GET['timeout'])){
+	array_push($errors, 'You were logged out automatically for being inactive.');
+}
 if (isset($_SESSION['logged_in'])) {
 	header('Location: index.php');
 } else {
@@ -55,7 +58,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 include('includes/header.php');
 ?>
 
-
+<?php display_errors($errors); ?>
 
 <div id="left">
 	<h1>New here?</h1>
@@ -66,9 +69,6 @@ include('includes/header.php');
 <div id="right">
 	<h1>Have an account?</h1>
 	
-		<?php if (isset($error)) { ?>
-		<div class="error"><?php echo $error; ?></div>
-		<?php }?>
 	<form action="login.php" method="post" autocomplete="off">
 		<input type="text" name="username" placeholder="Username" /><br>
 		<input type="password" name="password" placeholder="Password" /><br>

@@ -1,6 +1,7 @@
 <?php
 $title = "Appointments";
 $menutype = "admin_dashboard";
+$require_admin = true;
 include_once("../includes/core.php");
 include("../functions/list_appointment_results.php");
 $date = date("Y-m-d");

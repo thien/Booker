@@ -34,19 +34,29 @@ $( document ).on(
 <body>
 	<div id="heading">
 		<div id="branding">
+
 		<a href="index.php">Concierge</a>
 		</div>
+		<?php
+		if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false){
+			echo 'A';
+		} elseif (strpos($_SERVER['SCRIPT_NAME'],'staff') !== false){
+			echo 'S';
+		}
+		?>
 		<div id="headingright">
 		<?php
 		// print_r ($_COOKIE);
 		if (isset($_COOKIE['userdata'])) {
 			if ($_COOKIE['userdata']['loggedin'] == 1) {
-
 				echo 'Hello, <a href="profile.php">' . $_COOKIE['userdata']['forename'] . '</a>';
 				echo ' (<a href="logout.php">Logout</a>)';
-				// print_r($_COOKIE) . '<br>';
-				// echo $_COOKIE['userdata']['forename'];
 			};
+		} elseif (isset($_COOKIE['admin']['loggedin'])){
+			 if ($_COOKIE['admin']['loggedin'] == 1) {
+				echo 'Hello, <b>Administrator</b>';
+				echo ' (<a href="logout.php">Logout</a>)';
+			}
 		}
 		?>
 		</div>

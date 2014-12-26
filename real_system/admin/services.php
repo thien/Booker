@@ -3,6 +3,7 @@
 
 $title = "Services";
 $menutype = "admin_dashboard";
+$require_admin = true;
 
 include_once("../includes/core.php");
 
@@ -84,7 +85,7 @@ foreach ($num as $row) {
   echo '<form action="services.php" method="post" autocomplete="off">';
   echo '<tr>';
     echo '<td><input type="text" name="service_type" placeholder="Name" value="'.$row['type'].'"/></td>';
-    echo '<td><input type="number" name="service_price" placeholder="value" value='.$row['price'].'></td>';
+    echo '<td><input id="price" type="number" name="service_price" placeholder="value" value='.$row['price'].'></td>';
     echo '<td><textarea id="description" type="text" name="service_description" placeholder="Description"/>'.$row['description'].'</textarea></td>';
     echo '<td><button value="'.$row[0].'" name="service_id_update">Update</button></td>';
     echo '<td><button value="'.$row[0].'" name="service_id_delete">Remove</button></td>';
@@ -96,7 +97,7 @@ foreach ($num as $row) {
 <form action="services.php" method="post" autocomplete="off">
 <tr>
 <td><input type="text" name="service_type" placeholder="Name"/></td>
-<td><input type="number" name="service_price" size="4" placeholder="Price"/></td>
+<td><input  id="price" type="number" name="service_price" size="4" placeholder="Price"/></td>
 <td><textarea id="description"  type="text" name="service_description" placeholder="Description"/></textarea></td>
 <td><input type="submit" name="new" value="Add"></td>
 </tr>

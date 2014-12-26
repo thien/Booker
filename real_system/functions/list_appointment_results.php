@@ -17,7 +17,7 @@ if(!empty($num)) {
     }
     echo '<p>'.date("g:i A", strtotime($row['time']))." - ". $row['date'] ." - ". $row['forename']." ".$row['surname'].'</p>';
     echo '</div>';
-    echo '<ul id="details">';
+    echo '<ul id="group">';
       echo '<div class="left">';
         echo $row['forename'] ." ". $row['surname'].'<br>';
         echo $row['time'].'<br>';
@@ -25,14 +25,22 @@ if(!empty($num)) {
       echo '</div>';
       echo '<div class="right">';
           echo 'Total Price: &pound;'.$row['price'].'<br>';
+
+
+          if ($row['confirmedbystaff'] == 0){
+            echo '  Checked in by '.$row['s_forename']." ".$row['s_surname'] . "<br>";
+          }
+
+          if (isset($_COOKIE['staff'])){
              if ($row['confirmedbystaff'] == 0) {
                 echo '<button type="submit" name="checkin_customer_id" value="'.$row['id'].'">Checkin Customer</button>';
-           } else {
-              echo '  <button button type="submit" name="uncheck_customer_id" value="'.$row['id'].'">Uncheck</button>';
-              echo '  <button value="'.$row['id'].'">Bill</button><br>';
-              echo '  Checked in by '.$row['s_forename']." ".$row['s_surname'];
-              
+             } else {
+                echo '  <button button type="submit" name="uncheck_customer_id" value="'.$row['id'].'">Uncheck</button>';
+                echo '  <button value="'.$row['id'].'">Bill</button><br>';
+             }
            }
+
+
       echo '</div>';
       if (!empty($row['comments'])){ 
         echo '<h2>Customers Comment</h2>';

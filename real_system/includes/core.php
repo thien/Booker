@@ -4,11 +4,29 @@
     This library connects to the database and starts the session.
   **/
 
+//Automatic Logout Sessions
 if ($require_user == true) {
 	if (!$_COOKIE['userdata']['loggedin'] == 1) {
-		header('Location: login.php');
+		header('Location: login.php?timeout=true');
 	};
 };
+
+
+// Generic Expiry Time for Cookies.
+$expiry = time() + (60*10);
+
+$admin_expiry = time() + 10;
+if ($require_admin == true) {
+  // echo "this page requires admin priv";
+  // print_r($_COOKIE);
+  if (!isset($_COOKIE['admin']['loggedin'])){ //checks if cookie is expired.
+    header('Location: login.php?timeout=true'); 
+   } else {
+    //rewrite cookie with new time.
+      $staff_expiry = time() + 60;
+      setcookie('admin[loggedin]', $_COOKIE['admin']['loggedin'], $staff_expiry, '', '', '', TRUE);
+   }
+}
 
 //Display PHP Errors (Used for Debugging and Development)
 ini_set('display_errors',1);
@@ -21,12 +39,6 @@ error_reporting(-1);
 		} else {
 		$directory = ""; 
 		}
-
-
-// echo $_SERVER['HTTP_REFERER'];
-
-// Expiry Time for Cookies.
-  $expiry = time() + (60*10);
 
 include_once($directory . 'assets/recaptcha_values.php');
 
@@ -74,7 +86,7 @@ include_once($directory . 'assets/recaptcha_values.php');
   }
     function display_updates($message = array()) {
     if (!empty($message)){
-        echo "<div class='updated' id='status'>";
+        echo "<div class='update'>";
         foreach ($message as $msg){
           echo $msg;
         }

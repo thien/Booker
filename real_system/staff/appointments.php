@@ -6,7 +6,6 @@ $title = "Checkin";
  } else {
     $staff_expiry = time() + 60;
     setcookie('staff[loggedin]', $_COOKIE['staff']['loggedin'], $staff_expiry, '', '', '', TRUE);
-    setcookie('staff[username]', $_COOKIE['staff']['username'], $staff_expiry, '', '', '', TRUE);
     setcookie('staff[id]', $_COOKIE['staff']['id'], $staff_expiry, '', '', '', TRUE);
     setcookie('staff[forename]', $_COOKIE['staff']['forename'], $staff_expiry, '', '', '', TRUE);
     setcookie('staff[surname]', $_COOKIE['staff']['surname'], $staff_expiry, '', '', '', TRUE);
@@ -57,6 +56,23 @@ $num = $db->fetchAll();
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <script src="../assets/jquery.js"></script>
 <script src="../assets/jqueryui.js"></script>
+<script>
+$( document ).on(
+    "click",
+    "a",
+    if(window.location.contains("?month=")){
+    function( event ){
+ 
+        // Stop the default behavior of the browser, which
+        // is to change the URL of the page.
+        event.preventDefault();
+ 
+        // Manually change the location of the page to stay in
+        // "Standalone" mode and change the URL at the same time.
+        location.href = $( event.target ).attr( "href" );
+    }}
+);
+</script>
 </head>
 <body>
 <div id="checkin_topbar">
@@ -67,22 +83,15 @@ $num = $db->fetchAll();
   <div class="left">
   <?php echo date("l, jS F");?><br>
    <?php echo $_COOKIE['staff']['forename']." ".$_COOKIE['staff']['surname'];?>
-    </div>
+  </div>
   <div class="right">
   <h1>Checkins</h1>
   </div>
-  </div>
-
-
-
-
+</div>
 
 <form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
   <input id="username_" name="username" type="text" placeholder="Search"/>
 </form>
-
-
-
 
 </div>
 <div class="blank"></div>

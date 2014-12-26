@@ -28,9 +28,12 @@ if (isset($_POST['id_delete']))
 include 'includes/header.php';
 ?>
 
+<select id="navigator" autofocus onchange="location = this.options[this.selectedIndex].value;">
+ <option value="?option=upcoming" <?php if($option == "upcoming") {echo 'selected="selected"';}?>>Upcoming</option>
+ <option value="?option=past" <?php if($option == "past") {echo 'selected="selected"';}?>>Past</option>
+ <option value="?option=all" <?php if($option == "all") {echo 'selected="selected"';}?>>All</option>
+</select>
 
-<a href="?option=past">Past</a><a href="?option=upcoming">Upcoming</a>
-<a href="?option=all">all</a>
 <?php
 if (isset($option)){
 if ($option == "past"){
@@ -69,7 +72,10 @@ elseif($option == "upcoming"){
 			    	echo '<b>'.date("D, d M Y", strtotime($row['date'])).'</b><br>';
 		    		echo date("g:i A", strtotime($row['time'])).'<br>';
 		    		echo $row['type']."<br><br>";
+		    		if (strlen($row['comments']) >= 1){
+		    		echo "<h2>Your Comments</h2>";
 		    		echo $row['comments']."<br>";
+		    		}
 		  		echo "</div><div class='right'>";
 		  	  		echo '&pound;'.$row['price'].'<br>';
 		  	  		if ($dtA>time()){

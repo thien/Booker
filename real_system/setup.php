@@ -3,7 +3,7 @@ require( "classes/database.php");
 $db = new database();
 $db->initiate();
 
-if isset($_POST) {
+if (isset($_POST['username']) & isset($_POST['password']) & isset($_POST['password_again'])) {
   $create_table = array(
   "CREATE TABLE `admin` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -119,22 +119,18 @@ if isset($_POST) {
       (5, 'business_name', 'NailsClub', 'The name of the business.', 'Business Name'),
       (6, 'business_slogan', 'is it a mad ting', 'The slogan of the business.', 'Business Slogan');
   ",
-  "INSERT INTO `admin` (`username`, `password`)
-  VALUES
-    ('asdf', 'asdf');
-  "
+  "INSERT INTO `admin` (`username`, `password`) VALUES ('asdf', 'asdf');"
   );
   foreach ($insert_base_queries as $query) {
       $db->doQuery($query);
   }
 }
 
-
-  echo '<form action="" method="post" autocomplete="off">';
-  echo '<tr>';
-    echo '<td><input type="text" name="username" placeholder="Username"/></td>';
-    echo '<td><input type="password" name="service_price" placeholder="Password"></td>';
-    echo '<td><button value="'.$row[0].'" name="service_id_update">Submit</button></td>';
-  echo '</tr>';
-  echo '</form>';
 ?>
+
+<form action="" method="post" autocomplete="off">
+<input type="text" name="username" placeholder="Username"/>
+<input type="password" name="password" placeholder="Password">
+<input type="password" name="Password_again" placeholder="Password Again">
+<button type="submit">Submit</button>
+</form>

@@ -42,9 +42,9 @@ class booking_diary
                 "comments" => $rows['comments']
             );
         }
-        $this->make_days_array($year, $month);
+        $this->create_days_arr($year, $month);
     } // Close function
-    function make_days_array($year, $month)
+    function create_days_arr($year, $month)
     {
         // Create an array of days in the month                 
         $num_days_month = cal_days_in_month(CAL_GREGORIAN, $month, $year);
@@ -75,7 +75,7 @@ class booking_diary
     } // Close function
     function make_table_top()
     {
-        echo " <table border='0' cellpadding='0' cellspacing='0' id='calendar'>
+        echo "<table border='0' cellpadding='0' cellspacing='0' id='calendar'>
             <tr id='week'>
             <td align='left'><a href='?month=" . date("m", $this->back) . "&amp;year=" . date("Y", $this->back) . "'>&laquo;</a></td>
             <td colspan='5' id='center_date'>" . date("F, Y", $this->selected_date) . "</td>    
@@ -83,7 +83,7 @@ class booking_diary
         </tr>
         <tr>";
         
-        $days = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun");
+        $days = array("Mo","Tu","We","Th","Fr","Sa","Su");
         for($i=0; $i<7; $i++){
             echo '<th>'.$days[$i].'</th>';
         }
@@ -102,13 +102,10 @@ class booking_diary
         $closed_days_query = "SELECT date FROM closed_days WHERE YEAR(date) = YEAR('$first_day_of_month') AND MONTH(date) = MONTH('$first_day_of_month')";
         $this->db->DoQuery($closed_days_query);
         $closed_days = $this->db->fetchAll();
- 
 
         $i = 0;
         foreach ($this->days as $row)
         {
-            // $this_day = $this->year ."-". $this->month ."-". $row['daynumber'];
-            // echo $this_day."<br>";
             $tag = '';
             if ($i % 7 == 0)
                 echo "</tr><tr>"; // Use modulus to give us a <tr> after every seven <td> cells
@@ -179,21 +176,22 @@ class booking_diary
     function make_key()
     {
         // This key is displayed below the calendar to show what the colours represent
-        echo "</tr></table>
-        <table border='0' id='key' cellpadding='2' cellspacing='6'>
+        echo "</tr>
+        </table>
+        <table border='0' id='key'>
             <tr>
-                <td id='key_fullybooked'>&nbsp;</td>
-                <td id='key_sunday'>&nbsp;</td>
-                <td id='key_partbooked'>&nbsp;</td>
-                <td id='key_available'>&nbsp;</td>
-                <td id='key_unavailable'>&nbsp;</td>
+                <td id='key_fullybooked'></td>
+                <td id='key_sunday'></td>
+                <td id='key_partbooked'></td>
+                <td id='key_available'></td>
+                <td id='key_unavailable'></td>
             </tr>
             <tr>
                 <td>Fully Booked</td>
                 <td>Sunday</td>
-                <td>Partially Booked</td>
-                <td>Available</td>
-                <td>Unavailable</td>
+                <td>Free (Partially)</td>
+                <td>Free</td>
+                <td>Not Available</td>
             </tr>                
         </table>";
         $this->make_booking_slots();
@@ -210,15 +208,15 @@ class booking_diary
         }
         else
         {
-            $this->make_form();
+            $this->create_form();
         }
     } // Close function  
     function select_day()
     {
         echo "<form id='calendar_form' method='post' action=''>";
-        echo "<div id='selected_date'>Please select a day</div>";
+        echo "<div class='status' id='selected_date'>Please select a day</div>";
     }
-    function make_form()
+    function create_form()
     {
         // Create array of the booking times
 
@@ -240,7 +238,7 @@ class booking_diary
         }
         echo "\r\n\r\n<form id='calendar_form' method='post' action=''>";
         echo "<div class='left'>";
-        echo "<div id='selected_date'>Selected Date is: " . date("D, d F Y", mktime(0, 0, 0, $this->month, $this->day)) . "</div>";
+        echo "<div class='status' id='selected_date'>Selected Date is: ".date("D, d F Y", mktime(0, 0, 0, $this->month, $this->day)) . "</div>";
         $opt = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
         if ($this->count >= 1)
         {
@@ -298,21 +296,15 @@ class booking_diary
         {
             array_push($errors, "Please select a service");
         }
-
-
-
         if (strlen($_POST["recaptcha_response_field"]) == 0) {
             array_push($errors, "Please type in the captcha.");
         }
-
         if ($_POST["recaptcha_response_field"]) {
         $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
             if (!$resp->is_valid) {
                  array_push($errors, "The captcha is incorrect. Please try again.");
             }
         }
-
-
 
         if (!empty($errors))
         {

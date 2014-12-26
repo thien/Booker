@@ -1,6 +1,8 @@
 <?php 
 $title = 'Home';
-$require_user = true;
+if (!$_COOKIE['userdata']['loggedin'] == 1) {
+	header('Location: login.php');
+};
 include_once('includes/core.php'); 
 include 'includes/header.php';
 ?>

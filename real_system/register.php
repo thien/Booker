@@ -99,10 +99,7 @@ if ($_POST["recaptcha_response_field"]) {
 
 
   //Prepare errors for output
-  $output = '';
-  foreach($errors as $val) {
-    $output .= "<p class='output'>$val</p>";
-  }
+  display_errors($errors);
   
 }
 
@@ -189,23 +186,23 @@ $(function() {
 
  <h1>Register</h1> 
 <form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
-  <div class="group">
-  <div class="left">
+  <div id="group">
+  <div id="left">
     <label>Forename:</label><br>
       <input name="forename" required="required" type="text" placeholder="First" />
     </div>
-  <div class="right">
+  <div id="right">
       <label>Surname:</label><br>
       <input name="surname" required="required" type="text" placeholder="Last" />
 </div>
 </div>
 <hr>
-<div class="group">
-<div class="left">
+<div id="group">
+<div id="left">
   <label>Username:</label><br>
   <input id="username_" name="username" required="required" type="text" placeholder="Username"/>
 </div>
-<div class="right">
+<div id="right">
 
 <div id="username_availability"></div>
 
@@ -213,14 +210,14 @@ $(function() {
 </div>
      <div id="hr_invisible"></div>
    
-<div class="group">
-  <div class="left">
+<div id="group">
+  <div id="left">
     <label>Password:</label><br>
     <input name="password" required="required" type="password" id="password" placeholder="Password"/><br>
     <label>Confirm Password:</label><br>
     <input name="password_confirm" required="required" type="password" placeholder="Password"/>
 </div>
-  <div class="right">
+  <div id="right">
    <label>Password Strength:</label><br>
    <span id="password_bar">
      <span id="password_strength">No Data</span>
@@ -228,8 +225,8 @@ $(function() {
   </div>
 </div>
 <hr>
-<div class="group">
-  <div class="left">
+<div id="group">
+  <div id="left">
     <label>Email:</label><br>
     <input name="email" required="required" type="email" id="email" placeholder="example@domain.com"/><br>
     <label>Confirm Email:</label><br>
@@ -237,7 +234,7 @@ $(function() {
     <label for="phoneno" class="phone" data-icon="n" >Phone Number:</label><br>
     <input name="phoneno" required="required" maxlength="10" type="number" placeholder=""/> 
   </div>
-  <div class="right">
+  <div id="right">
   </div>
 </div>
 <div>

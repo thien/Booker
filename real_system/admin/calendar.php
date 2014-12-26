@@ -1,7 +1,7 @@
 <?php 
 $title = "Calendar";
 $menutype = "admin_dashboard";
-
+$require_admin = true;
 include_once("../includes/core.php");
 
 if (isset($_POST)) {

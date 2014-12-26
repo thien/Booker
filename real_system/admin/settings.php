@@ -1,4 +1,5 @@
 <?php 
+$require_admin = true;
 include_once("../includes/core.php");
 if (isset($_POST['service_value']) && isset($_POST['service_id'])){
 	$value = $_POST['service_value'];

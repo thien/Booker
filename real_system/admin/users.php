@@ -1,21 +1,15 @@
 <?php 
 $menutype = "admin_dashboard";
 $title = "Users";  
+$require_admin = true;
 include_once("../functions/encryption.php");
 include_once("../functions/email.php");
 include_once("../includes/core.php");
 
 function list_staff($staff_details = array()){
-
-
-
-	// echo "<pre>";
-	// print_r($staff_details);
-	// echo "</pre>";
-
 	echo '<form action="" method="post" autocomplete="off">';
-	echo '<div id="details">'; 
-	echo '<div class="left">'; 
+	echo '<div id="group">'; 
+	echo '<div id="left">'; 
 	// echo $row['s_forename'] ." ". $row['s_surname']; 
 	echo '<label>Forename:</label><br>';
 	if (isset($staff_details['s_forename'])){
@@ -36,7 +30,7 @@ function list_staff($staff_details = array()){
 	echo '<input type="text" name="email" placeholder="email">';
 	}
 	echo '</div>';
-	echo '<div class="right">';
+	echo '<div id="right">';
 	if (isset($staff_details[0])){
 		echo '<button value="'.$staff_details[0].'" name="id_update">Update</button>';
 		if ($staff_details['banned'] == 0){
@@ -176,7 +170,6 @@ if (isset($_POST['new_pin_request'])){
 	array_push($update, "A new pin has been set to ".$forename.".");
 }
 
-
 if (isset($_GET['usertype'])){
 $usertype = $_GET['usertype'];
 } else {
@@ -201,7 +194,7 @@ if ($usertype == 'customers'){
 	$num = $db->fetchAll();
 }
 if ($usertype == 'staff'){
-	$query = "SELECT * FROM staff";
+	$query = "SELECT * FROM staff ORDER BY id ASC";
 	$db->DoQuery($query);
 	$num = $db->fetchAll();
 }
@@ -214,8 +207,10 @@ display_errors($errors);
 display_updates($update);
 ?>
 
-<a href="?usertype=customers">Customers</a>
-<a href="?usertype=staff">Staff</a>
+<select id="navigator" autofocus onchange="location = this.options[this.selectedIndex].value;">
+ <option value="?usertype=customers" <?php if($usertype == "customers") {echo 'selected="selected"';}?>>Customers</option>
+ <option value="?usertype=staff" <?php if($usertype == "staff") {echo 'selected="selected"';}?>>Staff</option>
+</select>
 
 
 <?php 
@@ -258,10 +253,8 @@ if ($usertype =='customers'){
 elseif ($usertype == 'staff') {
 
 	echo "<h1>Staff</h1>";
+	 array_shift($num);
 	foreach ($num as $row) {
-		
-
-
 		list_staff($row);
 	}
 	echo '<h2>Register New Staff</h2>';

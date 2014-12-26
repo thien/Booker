@@ -1,6 +1,7 @@
 <?php 
 $title = "Dashboard";
 $menutype = "admin_dashboard";
+$require_admin = true;
 include_once("../includes/core.php");
 include($directory . "/functions/encryption.php");
 include($directory . '/includes/header.php');
