@@ -15,7 +15,7 @@ if ($require_user == true) {
 // Generic Expiry Time for Cookies.
 $expiry = time() + (60*10);
 
-$admin_expiry = time() + 10;
+$admin_expiry = time() + 600;
 if ($require_admin == true) {
   // echo "this page requires admin priv";
   // print_r($_COOKIE);

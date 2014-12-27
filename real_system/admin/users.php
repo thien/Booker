@@ -79,9 +79,14 @@ if (isset($_GET['username'])){
 	}
 }
 if ($usertype == 'customers'){
-	$query = "SELECT * FROM users ORDER BY username ASC";
-	
-	$count_rows = "SELECT count(*) FROM users";
+
+	if(!isset($_GET['char'])){
+	$char="A";
+	}else{
+	$char=$_GET['char'];
+	}
+	$query = "SELECT * FROM users WHERE surname LIKE '".$char."%' ORDER BY username ASC";
+	$count_rows = "SELECT count(*) FROM users WHERE surname LIKE '".$char."%'";
 	$db->DoQuery($count_rows);
 	$count = $db->fetch();
 
@@ -90,7 +95,7 @@ if ($usertype == 'customers'){
 	$per_page =10;//define how many games for a page
 	$pages = ceil($count[0]/$per_page);
 
-	if($_GET['page']==""){
+	if(!isset($_GET['page'])){
 	$page="1";
 	}else{
 	$page=$_GET['page'];
@@ -278,21 +283,37 @@ if ($usertype =='customers'){
 		echo '</form>';
 	
 	} else {
+		//list alphabet
+		echo '<ul id="pagination">';
+		foreach (range('A', 'Z') as $chara) {
+			if ($char == $chara){
+				echo '<li id="active"><a href="users.php?char='.$chara.'">'.$chara."</a></li>\n";
+			} else {
+				echo '<li><a href="users.php?char='.$chara.'">'.$chara."</a></li>\n";
+			}
+		}
+		 echo '</ul>';
+
 
 		echo '<ul id="pagination">';
-
         //Show page links
-        for ($i = 1; $i <= $pages; $i++)
-          {?>
-          <li id="<?php echo $i;?>"><a href="users.php?page=<?php echo $i;?>"><?php echo $i;?></a></li>
-          <?php           
+        for ($i = 1; $i <= $pages; $i++){
+               if ($page == $i){
+			       echo '<li id="active"><a href="users.php?char='.$char.'&page='.$i.'">'.$i.'</a></li>'; 
+			    } else {
+			        echo '<li><a href="users.php?char='.$char.'&page='.$i.'">'.$i.'</a></li>'; 
+			    }    
           }
-      
       echo '</ul>';
 
-		foreach ($num as $row) {
-			echo '<p><a href="users.php?usertype=customers&username='.$row['username'].'">';
-			echo $row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</a></p>';
+     	if (!count($num) < 1){
+			foreach ($num as $row) {
+				echo '<p><a href="users.php?usertype=customers&username='.$row['username'].'">';
+				echo $row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</a></p>';
+			}
+		} else {
+			echo '<h1>There\'s no customers here..</h1>';
+			echo 'Try the other letters?';
 		}
 	}
  } 
