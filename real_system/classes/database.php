@@ -25,6 +25,7 @@ public function DoQuery($query, $query_params = array()) {
     }
     catch(PDOException $e)
     {
+      echo "can't database";
       die();
     }
 }

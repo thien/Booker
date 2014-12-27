@@ -438,7 +438,6 @@ width: 45%;
 		margin-right: auto;
 		margin-left: auto;
 		height: 150px;
-		z-index: 1;
 	}
 	#checkin_topbar .group {
 		padding: 10px;
@@ -572,7 +571,7 @@ color: #ffffff;
 }
 .update{
 background: #ffbf24;
-color: #ffffff;
+color: #000000;
 }
 .status {
 background-color: #3a6da4;

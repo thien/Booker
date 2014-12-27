@@ -51,7 +51,6 @@ function generate_pin($used_pins = array()){
 	$new_pin = rand(10000,99999);
 	$new_pin_hash = encrypt($new_pin);
 	while (in_array($new_pin_hash, $used_pins)){
-
 		//current pin is in use, trying again with newly generated pin.
 		$new_pin = rand(10000,99999);
 		//encrypt new pin
@@ -65,121 +64,13 @@ function generate_pin($used_pins = array()){
 	);
 }
 
-if (isset($_POST['register'])){
-	$forename = $_POST['forename'];
-	$surname = $_POST['surname'];
-	$email = $_POST['email'];
-
-	$query = "SELECT pin FROM staff";
-	$db->DoQuery($query);
-	$used_pins = $db->fetch();
-	$newpins = generate_pin($used_pins);
-	// echo "your new pin is ";
-	// print_r($newpins);
-	// echo $newpins['pin'] . "<br>";
-	// echo $newpins['pin_hash'];
-
-
-	$query_params = array(
-		':pin' => $newpins['pin']
-	);
-	email($email, "Staff", $forename, "new_staff", $query_params);
-
-	$query = "INSERT INTO staff (s_forename, s_surname, s_email, pin) VALUES (:forename, :surname, :email, :pin)";
-	$query_params = array(
-		':forename' => $forename,
-		':surname' => $surname,
-		':email' => $email,
-		':pin' => $newpins['pin_hash']
-	);
-	// print_r($query_params);
-	$db->DoQuery($query, $query_params);
-	array_push($update, "$forename has been included into the database. A PIN is sent to his email address at $email.");
-}
-
-if (isset($_POST['id_update'])){
-	$forename = $_POST['forename'];
-	$surname = $_POST['surname'];
-	$id = $_POST['id_update'];
-	$query = "UPDATE staff SET s_forename = :forename, s_surname = :surname WHERE id = :id";
-	$query_params = array(
-		':forename' => $forename,
-		':surname' => $surname,
-		':id' => $id
-	);
-	// print_r($query_params);
-	$db->DoQuery($query, $query_params);
-	array_push($update, "Staff information has been updated.");
-}
-
-if (isset($_POST['id_ban'])){
-	$id = $_POST['id_ban'];
-	$query = "UPDATE staff SET banned = true WHERE id = $id";
-	$db->DoQuery($query);
-	array_push($update, $_POST['forename']." is now banned from the Staff List.");
-}
-
-if (isset($_POST['id_unban'])){
-	$id = $_POST['id_unban'];
-	$query = "UPDATE staff SET banned = false WHERE id = $id";
-	$db->DoQuery($query);
-	array_push($update, $_POST['forename']." is now unbanned from the Staff List.");
-}
-
-if (isset($_POST['new_pin_request'])){
-
-	$forename = $_POST['forename'];
-	$surname = $_POST['surname'];
-	$surname = $_POST['email'];
-	$id = $_POST['new_pin_request'];
-
-	$new_pin = rand(10000,99999);
-
-	$new_pin_hash = encrypt($new_pin);
-
-	$query = "SELECT pin FROM staff";
-	$db->DoQuery($query);
-	$used_pins = $db->fetch();
-	while (in_array($new_pin_hash, $used_pins)){
-
-		//current pin is in use, trying again with newly generated pin.
-		$new_pin = rand(10000,99999);
-		//encrypt new pin
-		$new_hash = encrypt($new_pin);
-		//assign new pin hash to check in array. if fails loop will iterate
-		$new_pin_hash = $new_hash;
-	}
-
-	//New pin is available
-
-	include_once("../functions/email.php");
-
-	$query = "SELECT * FROM staff WHERE id = $id";
-	$db->DoQuery($query);
-	$staff_details = $db->fetch();
-
-	$query_params = array(
-		':pin' => $new_pin_hash,
-		':id' => $id
-	);
-	email($staff_details['s_email'], "Staff", $staff_details['s_forename'], "new_pin", $query_params);
-
-	$query = "UPDATE staff SET pin = :pin WHERE id = :id";
-	$db->DoQuery($query, $query_params);
-
-	array_push($update, "A new pin has been set to ".$forename.".");
-}
-
 if (isset($_GET['usertype'])){
-$usertype = $_GET['usertype'];
-} else {
-$usertype = 'customers';
+	$usertype = $_GET['usertype'];
+	} else {
+	$usertype = 'customers';
 }
-
 if (isset($_GET['username'])){
-$username = $_GET['username'];
-}
-if (isset($username)){
+	$username = $_GET['username'];
 	$query = "SELECT * FROM users WHERE username = '$username'";
 	$db->DoQuery($query);
 	$q = $db->Fetch();
@@ -187,11 +78,28 @@ if (isset($username)){
 		array_push($errors, "The username ".$username." doesn't exist.");
 	}
 }
-
 if ($usertype == 'customers'){
 	$query = "SELECT * FROM users ORDER BY username ASC";
+	
+	$count_rows = "SELECT count(*) FROM users";
+	$db->DoQuery($count_rows);
+	$count = $db->fetch();
+
+	// echo $count[0];
+	//Add following after it
+	$per_page =10;//define how many games for a page
+	$pages = ceil($count[0]/$per_page);
+
+	if($_GET['page']==""){
+	$page="1";
+	}else{
+	$page=$_GET['page'];
+	}
+	$start = ($page - 1) * $per_page;
+	$query = $query . " LIMIT $start, $per_page";
 	$db->DoQuery($query);
 	$num = $db->fetchAll();
+
 }
 if ($usertype == 'staff'){
 	$query = "SELECT * FROM staff ORDER BY id ASC";
@@ -199,12 +107,138 @@ if ($usertype == 'staff'){
 	$num = $db->fetchAll();
 }
 
+if (isset($_POST)){
 
+	if (isset($_POST['forename'])){
+	$forename = trim($_POST['forename']);
+		if (strlen($forename) < 1){
+	  	array_push($errors, "Please type in a forename.");
+	  	}
+	}
+	if (isset($_POST['surname'])){
+	$surname = trim($_POST['surname']);
+		if (strlen($surname) < 1){
+	  	array_push($errors, "Please type in a surname.");
+	  	}
+	}
+	if (isset($_POST['email'])){
+		$email = trim($_POST['email']);
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+	  	array_push($errors, "Please specify a valid email address.");
+	  	}
+	}
+
+	if (count($errors) == 0) {
+		if (isset($_POST['register'])){
+
+			$query = "SELECT pin FROM staff";
+			$db->DoQuery($query);
+			$used_pins = $db->fetch();
+			if (!empty($used_pins)){
+			$newpins = generate_pin($used_pins);
+			} else {
+			$newpins = generate_pin();
+			}
+			// echo "your new pin is ";
+			// print_r($newpins);
+			// echo $newpins['pin'] . "<br>";
+			// echo $newpins['pin_hash'];
+
+
+			$query_params = array(
+				':pin' => $newpins['pin']
+			);
+			email($email, "Staff", $forename, "new_staff", $query_params);
+
+			$query = "INSERT INTO staff (s_forename, s_surname, s_email, pin) VALUES (:forename, :surname, :email, :pin)";
+			$query_params = array(
+				':forename' => $forename,
+				':surname' => $surname,
+				':email' => $email,
+				':pin' => $newpins['pin_hash']
+			);
+			// print_r($query_params);
+			$db->DoQuery($query, $query_params);
+			array_push($update, "$forename has been included into the database. A PIN is sent to his email address at $email.");
+		}
+
+		if (isset($_POST['id_update'])){
+			$id = $_POST['id_update'];
+			$query = "UPDATE staff SET s_forename = :forename, s_surname = :surname WHERE id = :id";
+			$query_params = array(
+				':forename' => $forename,
+				':surname' => $surname,
+				':id' => $id
+			);
+			// print_r($query_params);
+			$db->DoQuery($query, $query_params);
+			array_push($update, "Staff information has been updated.");
+		}
+
+		if (isset($_POST['id_ban'])){
+
+			if ($usertype == 'customers'){
+			$id = $_POST['id_ban'];
+			$query = "UPDATE users SET banned = true WHERE id = $id";
+			$db->DoQuery($query);
+			array_push($update, $q['forename']." is now banned.");
+			}
+			if ($usertype == 'staff'){
+			$id = $_POST['id_ban'];
+			$query = "UPDATE staff SET banned = true WHERE id = $id";
+			$db->DoQuery($query);
+			array_push($update, $_POST['forename']." is now banned from the Staff List.");
+			}
+		}
+
+		if (isset($_POST['id_unban'])){
+			if ($usertype == 'customers'){
+			$id = $_POST['id_unban'];
+			$query = "UPDATE users SET banned = false WHERE id = $id";
+			$db->DoQuery($query);
+			array_push($update, $q['forename']." is now unbanned.");
+			}
+			if ($usertype == 'staff'){
+			$id = $_POST['id_unban'];
+			$query = "UPDATE staff SET banned = false WHERE id = $id";
+			$db->DoQuery($query);
+			array_push($update, $_POST['forename']." is now unbanned from the Staff List.");
+			}
+		}
+
+		if (isset($_POST['new_pin_request'])){
+
+			$id = $_POST['new_pin_request'];
+
+			$query = "SELECT pin FROM staff";
+			$db->DoQuery($query);
+			$used_pins = $db->fetch();
+			if (!empty($used_pins)){
+			$newpins = generate_pin($used_pins);
+			} else {
+			$newpins = generate_pin();
+			}
+
+			include_once("../functions/email.php");
+
+			$email_params = array(
+				':pin' => $newpins['pin']
+			);
+			$query_params = array(
+				':pin' => $newpins['pin_hash'],
+				':id' => $id
+			);
+			email($staff_details['s_email'], "Staff", $staff_details['s_forename'], "new_pin", $email_params);
+
+			$query = "UPDATE staff SET pin = :pin WHERE id = :id";
+			$db->DoQuery($query, $query_params);
+
+			array_push($update, "A new pin has been set to ".$forename.".");
+		}
+	}
+}
 
 include($directory . '/includes/header.php');
-
-display_errors($errors);
-display_updates($update);
 ?>
 
 <select id="navigator" autofocus onchange="location = this.options[this.selectedIndex].value;">
@@ -214,10 +248,6 @@ display_updates($update);
 
 
 <?php 
-
-	// echo "<pre>";
-	// print_r($_POST);
-	// echo "</pre>";
 
 if ($usertype =='customers'){
 
@@ -238,12 +268,28 @@ if ($usertype =='customers'){
 				echo 'Has booked a total of '.$number_of_bookings[0]." appointments.";
 			echo '</div>';
 			echo '<div class="right">';
-				echo '<button name="ban_id" value="'.$q['id'].'">Ban</button>';
+				if ($q['banned'] == 0){
+					echo '<button value="'.$q['id'].'" name="id_ban">Ban</button>';
+				} else {
+					echo '<button value="'.$q['id'].'" name="id_unban">Unban</button>';
+				}
 			echo '</div>';
 		echo '</div>';
 		echo '</form>';
 	
 	} else {
+
+		echo '<ul id="pagination">';
+
+        //Show page links
+        for ($i = 1; $i <= $pages; $i++)
+          {?>
+          <li id="<?php echo $i;?>"><a href="users.php?page=<?php echo $i;?>"><?php echo $i;?></a></li>
+          <?php           
+          }
+      
+      echo '</ul>';
+
 		foreach ($num as $row) {
 			echo '<p><a href="users.php?usertype=customers&username='.$row['username'].'">';
 			echo $row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</a></p>';

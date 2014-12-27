@@ -77,20 +77,20 @@ include_once($directory . 'assets/recaptcha_values.php');
 
   function display_errors($errors = array()) {
     if (!empty($errors)){
-        echo '<div class="error">';
         foreach ($errors as $msg){
+          echo '<div class="error">';
           echo $msg;
+          echo "</div>";
         }
-        echo "</div>";
       }
   }
     function display_updates($message = array()) {
     if (!empty($message)){
-        echo "<div class='update'>";
         foreach ($message as $msg){
+          echo "<div class='update'>";
           echo $msg;
+          echo "</div>";
         }
-        echo "</div>";
       }
   }
 

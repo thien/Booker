@@ -48,9 +48,6 @@ $num = $db->fetchAll(PDO::FETCH_NUM);
 
 <?php
 
-    display_errors($errors);
-    display_updates($update);
-
 echo "<table id='mytable' style='width:100%'>";
 foreach ($num as $row) {
   echo '<form action="" method="post" autocomplete="off">';

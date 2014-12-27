@@ -33,13 +33,13 @@ if (isset($_POST['uncheck_customer_id']))
   header("Location: appointments.php");
 }
 
- $query = "SELECT booking.id, booking.date, users.forename, users.surname,
-  booking.time, booking.comments, booking.confirmedbystaff, booking.staff_id, 
-  service.type, service.price, staff.s_forename, staff.s_surname
- FROM booking 
+ $query = "SELECT booking.id, booking.date, users.forename, 
+users.surname, booking.time, booking.comments, booking.confirmedbystaff, 
+booking.staff_id, service.type, service.price, staff.s_forename, staff.s_surname
+FROM booking
  INNER JOIN users ON booking.username = users.username
  INNER JOIN staff ON booking.staff_id = staff.id
- INNER JOIN service ON booking.service_id = service.id
+ INNER JOIN service ON booking.service_id = service.id 
  WHERE booking.date = CURDATE()
  ORDER BY booking.time ASC";
 $db->DoQuery($query);

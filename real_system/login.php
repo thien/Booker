@@ -21,44 +21,34 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
          ':password' => $password
       	);
 		$db->DoQuery($query, $query_params);
-		$num = $db->fetchAll();
+		$num = $db->fetch();
 		if ($num) {
-			$query = "SELECT * FROM users WHERE username = :username AND activated = :activated";
-			$query_params = array(
-     	    ':username' => $username,
-      	    ':activated' => '1'
-     	 	);
-			$db->DoQuery($query, $query_params);
-			$num2 = $db->fetch();
-			if ($num2) {
-				$query = "SELECT forename, surname FROM users WHERE username = :username";
-				$query_params = array(
-				':username' => $username
-				);
-				$db->DoQuery($query, $query_params);
-				$num2 = $db->fetch();
-				$forename = $num2[0];
-				$surname = $num2[1];
-			// //user entered correct details
-			setcookie('userdata[loggedin]', TRUE, $expiry, '', '', '', TRUE);
-			setcookie('userdata[username]', $username, $expiry, '', '', '', TRUE);
-			setcookie('userdata[forename]', $forename, $expiry, '', '', '', TRUE);
-			setcookie('userdata[surname]', $surname, $expiry, '', '', '', TRUE);
-			header('Location: index.php');
-			exit();
+			if ($num['activated'] = 1) {
+				if ($num['banned'] = 0) {
+					$forename = $num['forename'];
+					$surname = $num['surname'];
+					// //user entered correct details
+					setcookie('userdata[loggedin]', TRUE, $expiry, '', '', '', TRUE);
+					setcookie('userdata[username]', $username, $expiry, '', '', '', TRUE);
+					setcookie('userdata[forename]', $forename, $expiry, '', '', '', TRUE);
+					setcookie('userdata[surname]', $surname, $expiry, '', '', '', TRUE);
+					header('Location: index.php');
+					exit();
+				} 
+				else {
+				array_push($errors, "You have been banned.");
+				}
 			}
 			else {
-				$error = "You didn't activate your account!";
+				array_push($errors, "You didn't activate your account!");
 			}
 		} else {
 			//user entered incorrect details
-			$error = 'Details were incorrect, try again!';
+			array_push($errors, 'Details were incorrect, try again!');
 		}					
 }
 include('includes/header.php');
 ?>
-
-<?php display_errors($errors); ?>
 
 <div id="left">
 	<h1>New here?</h1>

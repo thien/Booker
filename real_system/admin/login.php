@@ -14,7 +14,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 }
 	//show login
 	if (isset($username, $password)){
-		$query = "SELECT * FROM users WHERE username = :username AND password = :password AND isadmin = 1";
+		$query = "SELECT * FROM admin WHERE username = :username AND password = :password";
 		$query_params = array(
          ':username' => $username,
          ':password' => $password
@@ -26,14 +26,12 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 			setcookie('admin[loggedin]', TRUE, $admin_expiry, '', '', '', TRUE);
 			header('Location: index.php');
 			exit();
-			
 		} else {
 			//user entered incorrect details
-			$error = 'Details were incorrect, try again!';
+			array_push($errors, 'The details are incorrect. Please try again.');
 		}					
 }
 include('../includes/header.php');
-display_errors($errors);
 ?>
 
 		<h1>Login</h1>

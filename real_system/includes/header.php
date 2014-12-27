@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Concierge - <?php echo $title; ?></title>
+<title>Scheduler - <?php echo $title; ?></title>
 
 <link rel="stylesheet" href="<?php echo $directory."assets/style.css";?>"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,7 +35,7 @@ $( document ).on(
 	<div id="heading">
 		<div id="branding">
 
-		<a href="index.php">Concierge</a>
+		<a href="index.php">Scheduler</a>
 		</div>
 		<?php
 		if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false){
@@ -64,6 +64,9 @@ $( document ).on(
 <div id="container">
 
 <?php
+display_errors($errors);
+display_updates($update);
+
 if (isset($menutype)) {
 if ($menutype == "user_dashboard") { ?>
 
