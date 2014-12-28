@@ -1,4 +1,5 @@
 <?php 
+$title = "Login";
 $menutype = NULL;
 include_once("../includes/core.php");
 include("../functions/encryption.php");

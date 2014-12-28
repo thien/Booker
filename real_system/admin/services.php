@@ -1,6 +1,4 @@
 <?php 
-  
-
 $title = "Services";
 $menutype = "admin_dashboard";
 $require_admin = true;
