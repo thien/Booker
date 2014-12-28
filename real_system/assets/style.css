@@ -290,6 +290,8 @@ width: 45%;
 	
 	/* @group Inputs */
 
+
+
 	button, input, .credentials, textarea, #select {
 	border: 1px solid transparent;
 		line-height: 25px;
@@ -306,6 +308,16 @@ width: 45%;
 	select#navigator{
 		margin-top: 0.5em;
 		margin-bottom: 0.5em;
+	}
+	
+	form#date.select{
+		text-align: center;
+	}
+	#date.select select{
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		display: inline-block;
+		width: 27%;
 	}
 	input#price{
 		width: 90px;
@@ -577,3 +589,38 @@ color: #000000;
 background-color: #3a6da4;
 color: #ffffff;
 }
+
+
+/* @group Pagination */
+ul#pagination{
+	list-style: none;
+	text-align: center;
+	padding-top: 1em;
+	padding-right: 0;
+	padding-left: 0;
+}
+#pagination li{
+	display: inline-block;
+	height: 25px;
+	width: 25px;
+	line-height: 25px;
+	text-align: center;
+}
+
+#pagination #active, #pagination li:hover{
+	-moz-border-radius: 30px; /* or 50% */
+	border-radius: 30px; /* or 50% */
+	text-align: center;
+	position: relative;
+} 
+#pagination li:hover{
+	background-color: #fce7b3;
+}
+#pagination li#active{
+    background-color: #f6bf3e;
+}
+#pagination li#active:hover, #pagination li#active a:hover{
+    background-color: #cfccc4;
+	color: #ffffff;
+}
+/* @end */

@@ -1,5 +1,5 @@
 <?php 
-$title = "Checkin";
+$title = "Checkins";
  include_once("../includes/core.php");
  if (!isset($_COOKIE['staff'])){
   header('Location: index.php?timeout=true'); 

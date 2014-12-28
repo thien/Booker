@@ -1,4 +1,5 @@
 <?php
+$title = "Setup";
 require("includes/core.php");
 require("functions/encryption.php");
 

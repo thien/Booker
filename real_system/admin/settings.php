@@ -1,4 +1,6 @@
 <?php 
+$title = "Settings"; 
+$menutype = "admin_dashboard";
 $require_admin = true;
 include_once("../includes/core.php");
 if (isset($_POST['service_value']) && isset($_POST['service_id'])){
@@ -7,9 +9,7 @@ if (isset($_POST['service_value']) && isset($_POST['service_id'])){
 	$query = "UPDATE metadata SET value = '$value' WHERE id = '$id'";
 	$db->DoQuery($query);
 	array_push($update, 'Your information has been updated into the database.');
-}
-	$menutype = "admin_dashboard";
-  $title = "Settings";  
+} 
   $errors = array();
 
 

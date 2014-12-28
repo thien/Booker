@@ -22,9 +22,13 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
       	);
 		$db->DoQuery($query, $query_params);
 		$num = $db->fetch();
+
+		// echo "<pre>";
+		// print_r($num);
+		// echo "</pre>";
 		if ($num) {
-			if ($num['activated'] = 1) {
-				if ($num['banned'] = 0) {
+			if ($num['activated'] == 1) {
+				if ($num['banned'] == 0) {
 					$forename = $num['forename'];
 					$surname = $num['surname'];
 					// //user entered correct details

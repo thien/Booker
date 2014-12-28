@@ -1,4 +1,5 @@
 <?php 
+$title = "Staff Login";
 include("../includes/core.php");
 include("../functions/encryption.php");
 if (isset($_COOKIE['staff']['logged_in'])) {
