@@ -1,12 +1,14 @@
 <?php
-    // $user             = "thien_db";
-    // $password         = "1a4face37a";
-    // $hostname         = "localhost";
-    // $dbn              = "thien_projects";
 
- $user             = "root";
- $password         = "root";
- $hostname         = "localhost";
- $dbn              = "thien_projects";
-//  
+// $hostname         = "localhost";
+// $database_name    = "thien_projects";
+// $username         = "thien_db";
+// $password         = "1a4face37a";
+
+$hostname         = "localhost";
+$database_name    = "thien_projects";
+$username         = "root";
+$password         = "root";
+
+ 
 ?>

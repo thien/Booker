@@ -3,6 +3,8 @@ require( "../classes/database.php");
 $db = new database();
 $db->initiate();
 
+setcookie('staff[id]', $_POST['id'], $staff_expiry, '', '', '', TRUE);
+
 if (isset($_POST['username'])) {
 $value = $_POST['username'];
 };

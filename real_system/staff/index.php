@@ -52,12 +52,6 @@ if (isset($_COOKIE['staff']['logged_in'])) {
 		<body>
 		<div class="login-container">
 		<div class="login">
-		
-
-			<?php 
-			display_errors($errors);
-			 
-			 ?>
 			<h1>Enter Your Pin</h1>
 		<form action="index.php" method="post" autocomplete="off">
 			<input type="tel" min="5" max="5" name="pin" placeholder="pin" />

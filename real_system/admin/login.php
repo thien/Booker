@@ -3,24 +3,23 @@ $title = "Login";
 $menutype = NULL;
 include_once("../includes/core.php");
 include("../functions/encryption.php");
+
 if (isset($_GET['timeout'])){
-		array_push($errors, 'You were logged out automatically for being inactive.');
-	}
+	array_push($errors, 'You were logged out automatically for being inactive.');
+}
+
 if (isset($_SESSION['logged_in'])) {
 	header('Location: index.php');
 } else {
 if (isset($_POST['username']) && (isset($_POST['password']))) {
 		$username = trim($_POST['username']);
 		$password = encrypt(trim($_POST['password']));
-}
-	//show login
-	if (isset($username, $password)){
 		$query = "SELECT * FROM admin WHERE username = :username AND password = :password";
-		$query_params = array(
+		$query_parameters = array(
          ':username' => $username,
          ':password' => $password
       	);
-		$db->DoQuery($query, $query_params);
+		$db->DoQuery($query, $query_parameters);
 		$num = $db->fetchAll();
 		if ($num) {
 			// //user entered correct details
@@ -29,7 +28,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 			exit();
 		} else {
 			//user entered incorrect details
-			array_push($errors, 'The details are incorrect. Please try again.');
+			array_push($errors, 'The username and password combination is not recognised. Please try again.');
 		}					
 }
 include('../includes/header.php');

@@ -2,7 +2,7 @@
 function list_appointments($num = array()) {
 if(!empty($num)) { 
   echo "<form method='post' action='appointments.php'>";
-  echo "<ul id='accordion'>";
+  echo "<ul class='accordion'>";
   foreach ($num as $row) {
     echo '<li>';
     echo '<div id="topbox" class="base">';
@@ -15,25 +15,25 @@ if(!empty($num)) {
         echo '<div id="indicator" class="notcheckedin"></div>';
       }
     }
-    echo '<p>'.date("g:i A", strtotime($row['time']))." - ". $row['date'] ." - ". $row['forename']." ".$row['surname'].'</p>';
+    echo '<p>'.date("g:i A", strtotime($row['time']))." - ". $row['forename']." ".$row['surname'].'</p>';
     echo '</div>';
     echo '<ul id="group">';
-      echo '<div class="left">';
+      echo '<div id="left">';
         echo $row['forename'] ." ". $row['surname'].'<br>';
         echo $row['time'].'<br>';
         echo $row['type'].'<br>';
       echo '</div>';
-      echo '<div class="right">';
+      echo '<div id="right">';
           echo 'Total Price: &pound;'.$row['price'].'<br>';
 
 
-          if ($row['confirmedbystaff'] == 0){
+          if ($row['confirmedbystaff'] == 1){
             echo '  Checked in by '.$row['s_forename']." ".$row['s_surname'] . "<br>";
           }
 
           if (isset($_COOKIE['staff'])){
              if ($row['confirmedbystaff'] == 0) {
-                echo '<button type="submit" name="checkin_customer_id" value="'.$row['id'].'">Checkin Customer</button>';
+                echo '<button type="submit" name="checkin_customer_id" value="'.$row['id'].'">Checkin</button>';
              } else {
                 echo '  <button button type="submit" name="uncheck_customer_id" value="'.$row['id'].'">Uncheck</button>';
                 echo '  <button value="'.$row['id'].'">Bill</button><br>';

@@ -27,18 +27,6 @@ $rows = $db->fetch();
 if ($rows) {
    array_push($errors, "This username is already chosen. Please choose another username.");
 }
-// Validate the input
-// if (strlen($name) == 0)
-//   array_push($errors, "Please enter your name");
-
-// if (!(strcmp($gender, "Male") || strcmp($gender, "Female") || strcmp($gender, "Other"))) 
-//   array_push($errors, "Please specify your gender");
-
-// if (strlen($address) == 0) 
-//   array_push($errors, "Please specify your address");
-
-// if (!$username_available == TRUE)
-//   array_push($errors, "This username is already chosen. Please choose another username.");
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 array_push($errors, "Please specify a valid email address");
@@ -56,7 +44,16 @@ if ($rows) {
 }
 
 if (strlen($username) == 0)
-array_push($errors, "Please enter a valid username");
+array_push($errors, "Please enter a username.");
+
+
+if (!preg_match("/^[a-zA-Z ]*$/",$forename)) {
+  array_push($errors, "Your forename has invalid characters."); 
+}
+
+if (!preg_match("/^[a-zA-Z ]*$/",$surname)) {
+  array_push($errors, "Your surname has invalid characters."); 
+}
 
 if (strlen($password) < 5)
 array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
@@ -64,13 +61,9 @@ array_push($errors, "Please enter a password. Passwords must contain at least 5 
 if ($_POST["recaptcha_response_field"]) {
 	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 	if (!$resp->is_valid) {
-		# set the error code so that we can display it
-		// $error = $resp->error;
 		 array_push($errors, "The captcha is incorrect.");
 	}
 }
-
-
 
   // If no errors were found, proceed with storing the user input
   if (count($errors) == 0) {
@@ -94,13 +87,6 @@ if ($_POST["recaptcha_response_field"]) {
   $db->DoQuery($query, $query_params);
   header("Location: confirmation.php?type=registration");
   }
-
-// isset($username, $password, $forename, $surname, $email, $phoneno)
-
-
-  //Prepare errors for output
-  display_errors($errors);
-  
 }
 
 include('includes/header.php');
@@ -220,7 +206,7 @@ $(function() {
   <div id="right">
    <label>Password Strength:</label><br>
    <span id="password_bar">
-     <span id="password_strength">No Data</span>
+     <span id="password_str">No Data</span>
    </span>
   </div>
 </div>

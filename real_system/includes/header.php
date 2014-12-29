@@ -47,11 +47,14 @@ $( document ).on(
 		<div id="headingright">
 		<?php
 		// print_r ($_COOKIE);
+
 		if (isset($_COOKIE['userdata'])) {
-			if ($_COOKIE['userdata']['loggedin'] == 1) {
-				echo 'Hello, <a href="profile.php">' . $_COOKIE['userdata']['forename'] . '</a>';
-				echo ' (<a href="logout.php">Logout</a>)';
-			};
+			if (!strpos($_SERVER['SCRIPT_NAME'],'staff')){
+				if ($_COOKIE['userdata']['loggedin'] == 1) {
+					echo 'Hello, <a href="profile.php">' . $_COOKIE['userdata']['forename'] . '</a>';
+					echo ' (<a href="logout.php">Logout</a>)';
+				};
+			}
 		} elseif (isset($_COOKIE['admin']['loggedin'])){
 			 if ($_COOKIE['admin']['loggedin'] == 1) {
 				echo 'Hello, <b>Administrator</b>';

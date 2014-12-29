@@ -1,7 +1,5 @@
 <?php
-// The message
-// include_once("includes/core.php");
-// include_once("functions/encryption.php");
+
 function email($email, $username, $forename, $type, $extra = array()) {
 
 $headers = "From: robot@tnguyen.ch";
@@ -20,10 +18,11 @@ if ($type == "confirm_registration") {
 if ($type == "forgotten_password") {
 	if(isset($extra[":code"])) {
 		$code = $extra[":code"];
-	$subject = 'Forgotten Password request?';
-	$message = "Hi $forename, \n\n
-				You have requested to reset your password. Click the link below. \n\n";
-	$message .= "http://projects.tnguyen.ch/comp4/confirmation.php?type=forgot&value=$code";}}
+		$subject = 'Forgotten Password request?';
+		$message = "Hi $forename, \n\nYou have requested to reset your password. Click the link below. \n\n";
+		$message .= "http://projects.tnguyen.ch/comp4/confirmation.php?type=forgot&value=$code";
+	}
+}
 if ($type == "password_reset_confirmed") {
 	if(isset($extra[":newpassword"])) {
 		$newpassword = $extra[":newpassword"];

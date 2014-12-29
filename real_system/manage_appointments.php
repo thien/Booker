@@ -4,7 +4,10 @@ $menutype = "user_dashboard";
 $morethantoday = 1;
 include_once("includes/core.php");
 $date = date("Y-m-d");
-$query = "SELECT booking.id, booking.date, booking.time, booking.comments, service.type, service.price FROM booking INNER JOIN service ON booking.service_id=service.id; WHERE booking.username = :username";
+$query = "SELECT booking.id, booking.date, booking.time, booking.comments,
+ service.type, service.price FROM booking 
+ INNER JOIN service ON booking.service_id=service.id
+ WHERE booking.username = :username";
 $query_params = array(
     ':username' => $_COOKIE['userdata']['username']
 );

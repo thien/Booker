@@ -12,9 +12,6 @@ if (isset($_SESSION['logged_in'])) {
 if (isset($_POST['username']) && (isset($_POST['password']))) {
 		$username = trim($_POST['username']);
 		$password = encrypt(trim($_POST['password']));
-}
-	//show login
-	if (isset($username, $password)){
 		$query = "SELECT * FROM users WHERE username = :username AND password = :password";
 		$query_params = array(
          ':username' => $username,
@@ -22,10 +19,6 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
       	);
 		$db->DoQuery($query, $query_params);
 		$num = $db->fetch();
-
-		// echo "<pre>";
-		// print_r($num);
-		// echo "</pre>";
 		if ($num) {
 			if ($num['activated'] == 1) {
 				if ($num['banned'] == 0) {
@@ -47,8 +40,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 				array_push($errors, "You didn't activate your account!");
 			}
 		} else {
-			//user entered incorrect details
-			array_push($errors, 'Details were incorrect, try again!');
+			array_push($errors, 'The username and password combination is not recognised, try again!');
 		}					
 }
 include('includes/header.php');

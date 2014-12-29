@@ -72,6 +72,7 @@ include_once($directory . 'assets/recaptcha_values.php');
 
   // Include Error Handler
   $errors = array();
+
   $update = array();
 
 
@@ -107,11 +108,7 @@ include_once($directory . 'assets/recaptcha_values.php');
   //         "
   // }
 
-  //Salt
-  // $salt = "b18237y419v2by4190vb";	
-
-
-  // Create a new DB class and run the init routine
+  // Create a new DB class, initiates on page.
   include($directory . "classes/database.php");
 
   $db = new database;

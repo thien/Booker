@@ -4,7 +4,7 @@ $menutype = "admin_dashboard";
 $require_admin = true;
 include_once("../includes/core.php");
 include("../functions/list_appointment_results.php");
-$date = date("Y-m-d");
+
 $query = "SELECT booking.id, booking.date, users.forename, 
 users.surname, booking.time, booking.comments, booking.confirmedbystaff, 
 booking.staff_id, service.type, service.price, staff.s_forename, staff.s_surname
@@ -18,7 +18,7 @@ if (isset($_GET))
   if (isset($_GET['year']) & isset($_GET['month'])& isset($_GET['day']) ){
     if (!empty($_GET['year']) & !empty($_GET['month'])& !empty($_GET['day']) ){
       if (checkdate($_GET['month'], $_GET['day'], $_GET['year']) == TRUE){
-
+        $date = $_GET['day']."/".$_GET['month']."/".$_GET['year'];
         $datequery = " WHERE date = '".$_GET['year']."-".$_GET['month']."-".$_GET['day']."' ";
         $count_rows = $count_rows.$datequery;
         $query = $query.$datequery.$order;
@@ -90,7 +90,11 @@ include '../includes/header.php';
 
 <button type="submit">Query</button>
 </form>
-
+<?php 
+if (isset($date)){
+  echo '<center>Appointments on <h3>'.$date.'</h3></center>';
+}
+?>
 
 <ul id="pagination">
 <?php
@@ -115,7 +119,7 @@ include '../includes/footer.php';
 
 
 <script>
-$( "#accordion" ).accordion();
+$( ".accordion" ).accordion();
 $(".pinToggles").click(function(event){
     event.stopPropagation();
 });

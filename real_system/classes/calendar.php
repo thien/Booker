@@ -1,11 +1,7 @@
 <?php
-class booking_diary
-{
-    public $day, $month, $year, $selected_date, $first_day, $back, $back_month, $back_year, $forward, $forward_month, $forward_year, $bookings, $count, $days;
-
-    //----------
-    function make_calendar($selected_date, $first_day, $back, $forward, $day, $month, $year)
-    {
+class booking_diary {
+public $day, $month, $year, $selected_date, $first_day, $back, $back_month, $back_year, $forward, $forward_month, $forward_year, $bookings, $count, $days;
+    function make_calendar($selected_date, $first_day, $back, $forward, $day, $month, $year) {
         // Add a value to these public variables  
         $this->day           = $day;
         $this->month         = $month;
@@ -21,8 +17,7 @@ class booking_diary
         // Make the booking array
         $this->start_booking($year, $month);
     }
-    function start_booking($year, $month)
-    {
+    function start_booking($year, $month) {
         $period = $year.'-'.$month.'%';
         $this->db = new database();
         $this->db->initiate();
@@ -44,8 +39,7 @@ class booking_diary
         }
         $this->create_days_arr($year, $month);
     } // Close function
-    function create_days_arr($year, $month)
-    {
+    function create_days_arr($year, $month) {
         // Create an array of days in the month                 
         $num_days_month = cal_days_in_month(CAL_GREGORIAN, $month, $year);
         // Make array called $day with the correct number of days
@@ -64,17 +58,14 @@ class booking_diary
         }
         // Add blank elements to end of array if required.
         $pad_end = 7 - (count($this->days) % 7);
-        if ($pad_end < 7)
-        {
-            for ($j = 1; $j <= $pad_end; $j++)
-            {
+        if ($pad_end < 7) {
+            for ($j = 1; $j <= $pad_end; $j++) {
                 array_push($this->days, '|');
             }
         } // Close if
         $this->make_table_top();
     } // Close function
-    function make_table_top()
-    {
+    function make_table_top() {
         echo "<table border='0' cellpadding='0' cellspacing='0' id='calendar'>
             <tr id='week'>
             <td align='left'><a href='?month=" . date("m", $this->back) . "&amp;year=" . date("Y", $this->back) . "'>&laquo;</a></td>
@@ -90,8 +81,7 @@ class booking_diary
 
         $this->make_day_boxes($this->days, $this->bookings, $this->month, $this->year);
     } // Close function
-    function make_day_boxes()
-    {
+    function make_day_boxes() {
         $this->db = new database();
         $this->db->initiate();
         $opentime = "SELECT value FROM metadata WHERE id = '4'";
@@ -104,8 +94,7 @@ class booking_diary
         $closed_days = $this->db->fetchAll();
 
         $i = 0;
-        foreach ($this->days as $row)
-        {
+        foreach ($this->days as $row) {
             $tag = '';
             if ($i % 7 == 0)
                 echo "</tr><tr>"; // Use modulus to give us a <tr> after every seven <td> cells
@@ -151,8 +140,7 @@ class booking_diary
         } // Close foreach
         $this->make_key();
     } // Close function
-    function day_switch($tag, $daynumber)
-    {
+    function day_switch($tag, $daynumber) {
         switch ($tag)
         {
             case (1): // Part booked day
@@ -173,8 +161,7 @@ class booking_diary
         }
         return $txt;
     } // Close function
-    function make_key()
-    {
+    function make_key() {
         // This key is displayed below the calendar to show what the colours represent
         echo "</tr>
         </table>
@@ -196,8 +183,7 @@ class booking_diary
         </table>";
         $this->make_booking_slots();
     } // Close function
-    function make_booking_slots()
-    {
+    function make_booking_slots() {
         /*
         Variable $day has a default value of 0.  If a day has been clicked on, display it.
         If there is no date selected, show a msg.  Otherwise show the booking form.
@@ -211,26 +197,23 @@ class booking_diary
             $this->create_form();
         }
     } // Close function  
-    function select_day()
-    {
+    function select_day() {
         echo "<form id='calendar_form' method='post' action=''>";
         echo "<div class='status' id='selected_date'>Please select a day</div>";
     }
-    function create_form()
-    {
+    function create_form() {
         // Create array of the booking times
-
-            $this->db = new database();
-            $this->db->initiate();
-            $opentime = "SELECT value FROM metadata WHERE id = '1'";
-            $this->db->DoQuery($opentime);
-            $booking_start_time = $this->db->fetch();
-            $closingtime = "SELECT value FROM metadata WHERE id = '2'";
-            $this->db->DoQuery($closingtime);
-            $booking_end_time = $this->db->fetch();
-            $frequency = "SELECT value FROM metadata WHERE id = '3'";
-            $this->db->DoQuery($frequency);
-            $booking_frequency = $this->db->fetch();
+        $this->db = new database();
+        $this->db->initiate();
+        $opentime = "SELECT value FROM metadata WHERE id = '1'";
+        $this->db->DoQuery($opentime);
+        $booking_start_time = $this->db->fetch();
+        $closingtime = "SELECT value FROM metadata WHERE id = '2'";
+        $this->db->DoQuery($closingtime);
+        $booking_end_time = $this->db->fetch();
+        $frequency = "SELECT value FROM metadata WHERE id = '3'";
+        $this->db->DoQuery($frequency);
+        $booking_frequency = $this->db->fetch();
         
         for ($i = strtotime($booking_start_time[0]); $i <= strtotime($booking_end_time[0]); $i = $i + $booking_frequency[0] * 60)
         {
@@ -240,14 +223,12 @@ class booking_diary
         echo "<div class='left'>";
         echo "<div class='status' id='selected_date'>Selected Date is: ".date("D, d F Y", mktime(0, 0, 0, $this->month, $this->day)) . "</div>";
         $opt = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
-        if ($this->count >= 1)
-        {
+        if ($this->count >= 1) {
             foreach ($this->bookings as $row) {
                 // Check for bookings and remove any previously booked slots                 
                 foreach ($slots as $i => $r)
                 {
-                    if ($row['start'] == $r && $row['date'] == $this->year . '-' . $this->month . '-' . $this->day)
-                    {
+                    if ($row['start'] == $r && $row['date'] == $this->year . '-' . $this->month . '-' . $this->day) {
                         unset($slots[$i]);
                     }
                 } // Close foreach
@@ -283,8 +264,7 @@ class booking_diary
         echo recaptcha_get_html($publickey, $error); 
         echo "<button type='submit'>Submit</button></table></form>";
     }
-    function after_post($month, $day, $year)
-    {
+    function after_post($month, $day, $year) {
         include('assets/recaptcha_values.php');
         include_once('assets/recaptcha.php');
         $errors = array();
@@ -332,8 +312,7 @@ class booking_diary
             $this->confirmation($booking_date, $booking_time, $booking_service, $_COOKIE['userdata']['username']);
         } // Close else
     } // Close function  
-    function confirmation($date, $time, $serviceid, $username)
-    {
+    function confirmation($date, $time, $serviceid, $username) {
             include('functions/email.php');
             $this->db = new database();
             $this->db->initiate();

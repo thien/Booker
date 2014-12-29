@@ -36,38 +36,38 @@ if (isset($_POST['username'])) {
               `password` varchar(255) DEFAULT NULL,
               `email` varchar(255) DEFAULT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `booking` (
-            `id` int(100) NOT NULL AUTO_INCREMENT,
-            `date` date NOT NULL,
-            `time` time NOT NULL,
-            `username` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-            `comments` text COLLATE utf8_unicode_ci NOT NULL,
-            `confirmedbystaff` tinyint(1) DEFAULT NULL,
-            `service_id` int(11) DEFAULT NULL,
-            `staff_id` int(11) DEFAULT NULL,
-            PRIMARY KEY (`id`)
-          ) ENGINE=MyISAM AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
+                `id` int(100) NOT NULL AUTO_INCREMENT,
+                `date` date NOT NULL,
+                `time` time NOT NULL,
+                `username` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                `comments` text COLLATE utf8_unicode_ci NOT NULL,
+                `confirmedbystaff` tinyint(1) DEFAULT NULL,
+                `service_id` int(11) DEFAULT NULL,
+                `staff_id` int(11) DEFAULT NULL,
+                PRIMARY KEY (`id`)
+              ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
               "CREATE TABLE `closed_days` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `date` date DEFAULT NULL,
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;",
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `date` date DEFAULT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `metadata` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `option` varchar(255) DEFAULT '',
-            `value` varchar(255) DEFAULT NULL,
-            `description` text,
-            `rule` varchar(255) DEFAULT NULL,
-            PRIMARY KEY (`id`)
-          ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;",
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `option` varchar(255) DEFAULT '',
+              `value` varchar(255) DEFAULT NULL,
+              `description` text,
+              `rule` varchar(255) DEFAULT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;",
               "CREATE TABLE `service` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `type` varchar(25) DEFAULT NULL,
-            `price` int(5) DEFAULT NULL,
-            `description` text,
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;",
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `type` varchar(25) DEFAULT NULL,
+                `price` int(5) DEFAULT NULL,
+                `description` text,
+                PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `staff` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `pin` varchar(128) DEFAULT NULL,
@@ -76,21 +76,21 @@ if (isset($_POST['username'])) {
               `s_email` varchar(100) DEFAULT NULL,
               `banned` tinyint(1) DEFAULT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;",
+            ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;",
               "CREATE TABLE `users` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `username` varchar(55) DEFAULT NULL,
-            `password` varchar(255) DEFAULT NULL,
-            `forename` char(55) DEFAULT NULL,
-            `surname` char(55) DEFAULT NULL,
-            `email` varchar(255) DEFAULT NULL,
-            `phoneno` decimal(11,0) DEFAULT NULL,
-            `activated` tinyint(1) DEFAULT NULL,
-            `isadmin` tinyint(1) DEFAULT NULL,
-            `activation_code` varchar(128) DEFAULT NULL,
-            `forgot_code` varchar(128) DEFAULT NULL,
-            PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;", 
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `username` varchar(55) DEFAULT NULL,
+                `password` varchar(255) DEFAULT NULL,
+                `forename` char(55) DEFAULT NULL,
+                `surname` char(55) DEFAULT NULL,
+                `email` varchar(255) DEFAULT NULL,
+                `phoneno` decimal(11,0) DEFAULT NULL,
+                `activated` tinyint(1) DEFAULT NULL,
+                `banned` tinyint(1) DEFAULT NULL,
+                `activation_code` varchar(128) DEFAULT NULL,
+                `forgot_code` varchar(128) DEFAULT NULL,
+                PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;", 
     );
 
     for ($x = 0; $x <= 6; $x++) {
@@ -142,13 +142,12 @@ if (isset($_POST['username'])) {
       "INSERT INTO `admin` (`username`, `password`, `email`) VALUES ('$username', '$password', '$email');",
       "INSERT INTO `service` (`id`, `type`, `price`, `description`)
 VALUES
-  (1, 'Manicure', 12, 'A luxurious beauty treatment for the fingernails and hands which includes perfectly-polished nails.'),
-  (2, 'Infil', 99, 'A fucking infill.'),
-  (3, 'Pedicure', 14, 'A fucking pedicure.'),
-  (4, 'Full Set', 15, 'A fucking Full Set.'),
-  (5, 'File & Polish', 16, 'A fucking File & Polish'),
-  (6, 'Nail Repair', 17, 'A fucking Nail Repair.'),
-  (7, 'Jon Snow', 18, 'Jon Snow');
+  (1, 'Manicure', 25, 'A luxurious beauty treatment for the fingernails and hands which includes perfectly-polished nails.'),
+  (2, 'Infil', 26, 'A fucking infill.'),
+  (3, 'Pedicure', 29, 'A fucking pedicure.'),
+  (4, 'Full Set', 48, 'Manicure & Pedicure.'),
+  (5, 'File & Polish', 15, 'A fucking File & Polish'),
+  (6, 'Nail Repair', 10, 'A fucking Nail Repair.')
 ",
         "INSERT INTO `staff` (`id`, `pin`, `s_forename`, `s_surname`, `s_email`)
 VALUES

@@ -76,23 +76,18 @@ $( document ).on(
 </head>
 <body>
 <div id="checkin_topbar">
-
-
-
-<div class="group">
-  <div class="left">
-  <?php echo date("l, jS F");?><br>
-   <?php echo $_COOKIE['staff']['forename']." ".$_COOKIE['staff']['surname'];?>
+  <div class="group">
+    <div class="left">
+      <b><?php echo date("l, jS F");?><br></b>
+      <?php echo $_COOKIE['staff']['forename']." ".$_COOKIE['staff']['surname'];?>
+    </div>
+    <div class="right">
+    <h1>Checkins</h1>
+    </div>
   </div>
-  <div class="right">
-  <h1>Checkins</h1>
-  </div>
-</div>
-
-<form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
+  <form method="post" action="<?PHP echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" autocomplete="on" id="forms"> 
   <input id="username_" name="username" type="text" placeholder="Search"/>
-</form>
-
+  </form>
 </div>
 <div class="blank"></div>
 <div id="container">
@@ -113,7 +108,7 @@ include '../includes/footer.php';
 ?>
 </div>
 <script>
-$("#accordion").accordion({
+$(".accordion").accordion({
     animate: {
         duration: 250
     }
@@ -129,9 +124,8 @@ $(document).ready(function() {
   var originalState = $("#container").html();
   $('#username_').keyup(function() {
     var value = $("#username_").val(); 
-    console.log(value);
     if (value.length > 1) {
-    $.post('/functions/search_appointments.php', { username: forms.username.value },
+    $.post('/functions/search_appointments.php', { username: forms.username.value, id: <?php echo $_COOKIE['staff']['id'];?> },
       function(result) {
         $('#container').html(result).show();
       });

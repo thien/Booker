@@ -1,58 +1,37 @@
 <?php
 class database {
-  public function initiate() {
-
-include($_SERVER['DOCUMENT_ROOT'].'/includes/db.php');
-
+public function initiate() {
+  include($_SERVER['DOCUMENT_ROOT'].'/includes/db.php');
     try
     {
-      $this->database = new PDO("mysql:host={$hostname};dbname={$dbn}", $user, $password);
+      $this->database = new PDO("mysql:host={$hostname};dbname={$database_name}", $username, $password);
     }
     catch(PDOException $e)
     { 
-      $error = "I'm unable to connect to the database server.";
-      die("Failed to connect to database: " . $e->getMessage());
+      die($e->getMessage());
     }
-  
     $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   }
 
-public function DoQuery($query, $query_params = array()) {
+public function DoQuery($query, $query_parameters = array()) {
     try
     {
       $this->result = $this->database->prepare($query);
-      $this->result->execute($query_params);
+      $this->result->execute($query_parameters);
     }
     catch(PDOException $e)
     {
-      echo "can't database";
-      die();
+      die($e->getMessage());
     }
 }
-
-
-  // A function to fetch a single row from the query
-  public function fetch() {
+  public function fetch() {   // Shows single row
     return $this->result->fetch();
   }
-  public function fetchAssoc() {
-    return $this->result->fetch(PDO::FETCH_ASSOC);
-  }
-    public function fetchNum() {
-    return $this->result->fetch(PDO::FETCH_NUM);
-  }
-  // A function to fetch multiple rows from the query
-  public function fetchAll() {
+  public function fetchAll() {  // Shows all associated rows (in array)
     return $this->result->fetchAll();
   }
-    // A function to fetch number of rows from the query
-  public function RowCount() {
+  public function RowCount() {   // Count rows
     return $this->result->RowCount();
-  }
-
-  // A function to fetch customers from a query
-  public function fetchCustomers() {
-  return $this->result->fetchAll(PDO::FETCH_ASSOC);
   }
 }
 ?>
