@@ -1,6 +1,15 @@
+<?php
+
+
+$query = "SELECT value FROM metadata WHERE id = 5";
+$db->DoQuery($query);
+$company_name = $db->fetch();
+
+?>
+
 <html>
 <head>
-<title>Scheduler - <?php echo $title; ?></title>
+<title><?php echo $company_name[0];?> - <?php echo $title; ?></title>
 
 <link rel="stylesheet" href="<?php echo $directory."assets/style.css";?>"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,7 +44,7 @@ $( document ).on(
 	<div id="heading">
 		<div id="branding">
 
-		<a href="index.php">Scheduler</a>
+		<a href="index.php"><?php echo $company_name[0];?></a>
 		</div>
 		<?php
 		if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false){

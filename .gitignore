@@ -1,2 +1,6 @@
 
 *.xccheckout
+
+*.xcuserstate
+
+*.xcworkspacedata

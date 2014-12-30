@@ -15,8 +15,6 @@ $db->DoQuery($query, $query_params);
 $rows = $db->fetch();
 
 $pattern = '/^def/';
-// preg_match($pattern, $value, $matches, PREG_OFFSET_CAPTURE, 3);
-// print_r($matches);
 
 if ($value == NULL)
 	echo '';

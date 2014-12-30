@@ -182,25 +182,23 @@ public $day, $month, $year, $selected_date, $first_day, $back, $back_month, $bac
             </tr>                
         </table>";
         $this->make_booking_slots();
-    } // Close function
+    }
     function make_booking_slots() {
-        /*
-        Variable $day has a default value of 0.  If a day has been clicked on, display it.
-        If there is no date selected, show a msg.  Otherwise show the booking form.
-        */
-        if ($this->day == 0)
+        if ($this->day == 0) //default day = 0; done so to show that date is not chosen.
         {
-            $this->select_day();
+            $this->select_day(); //no date selected.
         }
         else
         {
-            $this->create_form();
+            $this->create_form(); //Shows form.
         }
-    } // Close function  
+    }
+
     function select_day() {
         echo "<form id='calendar_form' method='post' action=''>";
         echo "<div class='status' id='selected_date'>Please select a day</div>";
     }
+
     function create_form() {
         // Create array of the booking times
         $this->db = new database();
