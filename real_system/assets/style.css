@@ -594,8 +594,7 @@ table#key {
 
 #key {
     width: 100%;
-    color: #999;
-    background-color: #f2f2f2;
+	background-color: #f2f2f2;
     font-size: 0.8em;
     margin-top: 2em;
     margin-bottom: 2em;
@@ -604,15 +603,17 @@ table#key {
 #key td {
     text-align: center;
     width: 20%;
-    height: 30px;
+    height: 50px;
 }
 
 #key_fullybooked {
     background-color: #d80000;
+	color: #ffffff;
 }
 
 #key_sunday {
     background-color: #594858;
+	color: #ffffff;
 }
 
 #key_partbooked {
@@ -621,14 +622,17 @@ table#key {
 
 #key_available {
     background-color: #bed73b;
+	color: #000000;
 }
 
 #key_unavailable {
     background-color: #3c3d3c;
+	color: #ffffff;
 }
 
 #key_null {
     background-color: #313131;
+	color: #ffffff;
 }
 	
 	/* @end */

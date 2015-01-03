@@ -5,7 +5,7 @@ if (isset($_GET['name'])) {
  include_once("../includes/core.php");
  $query = "SELECT booking.id, booking.date, users.forename, users.surname, booking.time, booking.comments, booking.confirmedbystaff, service.type, service.price 
  FROM booking 
- INNER JOIN users ON booking.username = users.username
+ INNER JOIN users ON booking.user_id = users.id
  INNER JOIN service ON booking.service_id = service.id
  WHERE booking.date = :date AND users.forename like :user OR users.surname like :user
  ORDER BY booking.time ASC";

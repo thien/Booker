@@ -1,8 +1,5 @@
 <?php
-  /**
-    includes/core.php - common code to be included in every page.
-    This library connects to the database and starts the session.
-  **/
+
 
 //Automatic Logout Sessions
 if ($require_user == true) {
@@ -42,27 +39,6 @@ error_reporting(-1);
 
 include_once($directory . 'assets/recaptcha_values.php');
 
-  // A function to enable HTTPS if it isn't on
-  function forceHTTPS()
-  {
-    $httpsURL = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    if(!isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] !== 'on')
-    {
-      header("Location: $httpsURL");
-      die();
-    }
-  }
-
-  // A function to disable HTTPS if it is on
-  function forceHTTP()
-  {
-    $httpURL = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    if(isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'on')
-    {
-      header("Location: $httpURL");
-      die();
-    }
-  }
 
   // Sets PHP to force use UTF8
   mb_internal_encoding("UTF-8");
@@ -110,6 +86,10 @@ include_once($directory . 'assets/recaptcha_values.php');
 
   // Create a new DB class, initiates on page.
   include($directory . "classes/database.php");
+
+  if (file_exists($directory . "setup.php") && (strpos($_SERVER['SCRIPT_NAME'],'setup') == false)) {
+    header("Location: setup.php");
+  }
 
   $db = new database;
   $db->initiate();

@@ -3,11 +3,10 @@ $title = 'Profile';
 include_once("includes/core.php");
 include("functions/encryption.php");
 
-
 $date = date("Y-m-d");
-$query = "SELECT * FROM users WHERE username = :username";
+$query = "SELECT * FROM users WHERE id = :id";
 $query_params = array(
-    ':username' => $_COOKIE['userdata']['username']
+    ':id' => $_COOKIE['userdata']['user_id']
 );
 $db->DoQuery($query, $query_params);
 $q = $db->fetch();

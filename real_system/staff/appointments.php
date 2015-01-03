@@ -37,7 +37,7 @@ if (isset($_POST['uncheck_customer_id']))
 users.surname, booking.time, booking.comments, booking.confirmedbystaff, 
 booking.staff_id, service.type, service.price, staff.s_forename, staff.s_surname
 FROM booking
- INNER JOIN users ON booking.username = users.username
+ INNER JOIN users ON booking.user_id = users.id
  INNER JOIN staff ON booking.staff_id = staff.id
  INNER JOIN service ON booking.service_id = service.id 
  WHERE booking.date = CURDATE()

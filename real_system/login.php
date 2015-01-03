@@ -22,11 +22,12 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 		if ($num) {
 			if ($num['activated'] == 1) {
 				if ($num['banned'] == 0) {
+					$user_id = $num['id'];
 					$forename = $num['forename'];
 					$surname = $num['surname'];
 					// //user entered correct details
 					setcookie('userdata[loggedin]', TRUE, $expiry, '', '', '', TRUE);
-					setcookie('userdata[username]', $username, $expiry, '', '', '', TRUE);
+					setcookie('userdata[user_id]', $user_id, $expiry, '', '', '', TRUE);
 					setcookie('userdata[forename]', $forename, $expiry, '', '', '', TRUE);
 					setcookie('userdata[surname]', $surname, $expiry, '', '', '', TRUE);
 					header('Location: index.php');

@@ -69,13 +69,13 @@ if (isset($_GET['usertype'])){
 	} else {
 	$usertype = 'customers';
 }
-if (isset($_GET['username'])){
-	$username = $_GET['username'];
-	$query = "SELECT * FROM users WHERE username = '$username'";
+if (isset($_GET['user_id'])){
+	$user_id = $_GET['user_id'];
+	$query = "SELECT * FROM users WHERE id = '$user_id'";
 	$db->DoQuery($query);
 	$q = $db->Fetch();
 	if (empty($q)){
-		array_push($errors, "The username ".$username." doesn't exist.");
+		array_push($errors, "The userid ".$user_id." doesn't exist.");
 	}
 }
 if ($usertype == 'customers'){
@@ -257,7 +257,7 @@ include($directory . '/includes/header.php');
 if ($usertype =='customers'){
 
 	if (!empty($q)){
-		$query = "SELECT COUNT(*) FROM booking WHERE username = '$username'";
+		$query = "SELECT COUNT(*) FROM booking WHERE user_id = '$user_id'";
 		$db->DoQuery($query);
 		$number_of_bookings = $db->Fetch();
 
@@ -308,7 +308,7 @@ if ($usertype =='customers'){
 
      	if (!count($num) < 1){
 			foreach ($num as $row) {
-				echo '<p><a href="users.php?usertype=customers&username='.$row['username'].'">';
+				echo '<p><a href="users.php?usertype=customers&user_id='.$row['id'].'">';
 				echo $row['id']." - ".$row['forename']." ".$row['surname']." (".$row['username'].")".'</a></p>';
 			}
 		} else {

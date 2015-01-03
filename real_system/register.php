@@ -43,8 +43,13 @@ if ($rows) {
    array_push($errors, "This email is already associated with an account. Please choose another email.");
 }
 
-if (strlen($username) == 0)
-array_push($errors, "Please enter a username.");
+if (!preg_match("/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/",$phoneno)){
+  array_push($errors, "Please specify a valid phone number.");
+}
+
+if (strlen($username) == 0){
+  array_push($errors, "Please enter a username.");
+}
 
 
 if (!preg_match("/^[a-zA-Z ]*$/",$forename)) {
@@ -55,8 +60,9 @@ if (!preg_match("/^[a-zA-Z ]*$/",$surname)) {
   array_push($errors, "Your surname has invalid characters."); 
 }
 
-if (strlen($password) < 5)
-array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
+if (strlen($password) < 5){
+  array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
+}
 
 if ($_POST["recaptcha_response_field"]) {
 	$resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
@@ -69,7 +75,7 @@ if ($_POST["recaptcha_response_field"]) {
   if (count($errors) == 0) {
   $password = encrypt($password);
   
-    $email_parameters = array(
+  $email_parameters = array(
   ':pin' => encrypt($username)
   );
   email($email, $username, $forename, "confirm_registration", $email_parameters);

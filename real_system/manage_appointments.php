@@ -7,9 +7,9 @@ $date = date("Y-m-d");
 $query = "SELECT booking.id, booking.date, booking.time, booking.comments,
  service.type, service.price FROM booking 
  INNER JOIN service ON booking.service_id=service.id
- WHERE booking.username = :username";
+ WHERE booking.user_id = :user_id";
 $query_params = array(
-    ':username' => $_COOKIE['userdata']['username']
+    ':user_id' => $_COOKIE['userdata']['user_id']
 );
 if (isset($_GET['option'])){
 $option = $_GET['option'];

@@ -31,66 +31,72 @@ if (isset($_POST['username'])) {
     $password = encrypt($password);
     $create_table = array(
               "CREATE TABLE `admin` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `username` varchar(255) DEFAULT NULL,
-              `password` varchar(255) DEFAULT NULL,
-              `email` varchar(255) DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;",
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `booking` (
-                `id` int(100) NOT NULL AUTO_INCREMENT,
-                `date` date NOT NULL,
-                `time` time NOT NULL,
-                `username` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-                `comments` text COLLATE utf8_unicode_ci NOT NULL,
-                `confirmedbystaff` tinyint(1) DEFAULT NULL,
-                `service_id` int(11) DEFAULT NULL,
-                `staff_id` int(11) DEFAULT NULL,
-                PRIMARY KEY (`id`)
-              ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
+  `id` int(100) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+  `confirmedbystaff` tinyint(1) DEFAULT NULL,
+  `service_id` int(11) unsigned DEFAULT NULL,
+  `staff_id` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `booking_ibfk_2` (`staff_id`),
+  KEY `idx_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
               "CREATE TABLE `closed_days` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `date` date DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;",
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `metadata` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `option` varchar(255) DEFAULT '',
-              `value` varchar(255) DEFAULT NULL,
-              `description` text,
-              `rule` varchar(255) DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;",
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `option` varchar(255) DEFAULT '',
+  `value` varchar(255) DEFAULT NULL,
+  `description` text,
+  `rule` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;",
               "CREATE TABLE `service` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                `type` varchar(25) DEFAULT NULL,
-                `price` int(5) DEFAULT NULL,
-                `description` text,
-                PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;",
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(25) DEFAULT NULL,
+  `price` int(5) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;",
               "CREATE TABLE `staff` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `pin` varchar(128) DEFAULT NULL,
-              `s_forename` varchar(25) DEFAULT NULL,
-              `s_surname` varchar(25) DEFAULT NULL,
-              `s_email` varchar(100) DEFAULT NULL,
-              `banned` tinyint(1) DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;",
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pin` varchar(128) DEFAULT NULL,
+  `s_forename` varchar(25) DEFAULT NULL,
+  `s_surname` varchar(25) DEFAULT NULL,
+  `s_email` varchar(100) DEFAULT NULL,
+  `banned` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;",
               "CREATE TABLE `users` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                `username` varchar(55) DEFAULT NULL,
-                `password` varchar(255) DEFAULT NULL,
-                `forename` char(55) DEFAULT NULL,
-                `surname` char(55) DEFAULT NULL,
-                `email` varchar(255) DEFAULT NULL,
-                `phoneno` decimal(11,0) DEFAULT NULL,
-                `activated` tinyint(1) DEFAULT NULL,
-                `banned` tinyint(1) DEFAULT NULL,
-                `activation_code` varchar(128) DEFAULT NULL,
-                `forgot_code` varchar(128) DEFAULT NULL,
-                PRIMARY KEY (`id`)
-              ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;", 
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(55) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `forename` char(55) DEFAULT NULL,
+  `surname` char(55) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phoneno` varchar(11) DEFAULT NULL,
+  `activated` tinyint(1) DEFAULT NULL,
+  `banned` tinyint(1) DEFAULT NULL,
+  `activation_code` varchar(128) DEFAULT NULL,
+  `forgot_code` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;", 
     );
 
     for ($x = 0; $x <= 6; $x++) {
@@ -165,24 +171,21 @@ VALUES
     foreach ($insert_base_queries as $query) {
         $db->doQuery($query);
     }
-
-
-
-
-
       header('Location: setup.php?done');
   }
 }
-array_push($update, "<h1>Warning</h1>Please delete this file (setup.php) when you are finished with this page. This is necessary to improve the security of this program.");
+array_push($update, "<h1>Warning</h1>Please delete this file (setup.php) when you are finished with this page. This is necessary to improve the security of this program. Also, the program will not work until the setup is completed.");
 include_once("includes/header.php");
 ?>
 
 <?php 
 if(isset($_GET['done'])){
     echo "<h1>All Ready to go!</h1>";
+        echo "<h2>Setup is now complete!</h2>";
     echo "Customers will be able to access your booking system at <a href='http://".$_SERVER['SERVER_NAME']."'>http://".$_SERVER['SERVER_NAME']."</a>.<br>";
     echo "Staff will be able to access checkins at <a href='http://".$_SERVER['SERVER_NAME']."/staff'>http://" . $_SERVER['SERVER_NAME'] ."/staff" ."</a>.<br>";
     echo "You, the Administrator, will be able to access settings at <a href='http://".$_SERVER['SERVER_NAME']."/admin'>http://" . $_SERVER['SERVER_NAME'] ."/admin" ."</a>.<br>";
+    echo "It is now safe to delete this (setup.php) file.";
 } else {
 ?>
 <h1>Setup Administrator's Account</h1>
