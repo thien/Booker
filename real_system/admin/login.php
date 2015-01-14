@@ -23,7 +23,7 @@ if (isset($_POST['username']) && (isset($_POST['password']))) {
 		$num = $db->fetchAll();
 		if ($num) {
 			// //user entered correct details
-			setcookie('admin[loggedin]', TRUE, $admin_expiry, '', '', '', TRUE);
+			setcookie('admin[loggedin]', TRUE, $timeout, '', '', '', TRUE);
 			header('Location: index.php');
 			exit();
 		} else {

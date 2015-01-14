@@ -25,9 +25,6 @@ $query_params = array(
 $db->DoQuery($query, $query_params);
 $num = $db->fetchAll();
 
-// echo "<pre>";
-// print_r($num);
-// echo "</pre>";
 include("../functions/list_appointment_results.php");
 list_appointments($num);
 ?>

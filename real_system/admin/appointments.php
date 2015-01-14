@@ -29,7 +29,12 @@ if (isset($_GET))
   } else {
     array_push($errors, "Please fill in all the criteria for the date.");
   }
-}
+} else {
+  $date = date("d/m/Y");
+        $datequery = " WHERE date = '".date("Y/m/d")."' ";
+        $count_rows = $count_rows.$datequery;
+        $query = $query.$datequery.$order;
+} 
 
 $db->DoQuery($count_rows);
 $count = $db->fetch();
@@ -47,8 +52,6 @@ $start = ($page - 1) * $per_page;
 $query = $query . " LIMIT $start, $per_page";
 $db->DoQuery($query);
 $num = $db->fetchAll();
-
-
 
 include '../includes/header.php';
 ?>

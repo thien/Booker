@@ -1,18 +1,20 @@
 <?php
 
-
+$timeout = time() + 600;
 //Automatic Logout Sessions
 if ($require_user == true) {
 	if (!$_COOKIE['userdata']['loggedin'] == 1) {
 		header('Location: login.php?timeout=true');
-	};
+	} else {
+    //rewrite cookie with new time.
+    setcookie('userdata[loggedin]', TRUE, $timeout, '', '', '', TRUE);
+    setcookie('userdata[user_id]', $_COOKIE['userdata']['user_id'], $timeout, '', '', '', TRUE);
+    setcookie('userdata[forename]', $_COOKIE['userdata']['forename'], $timeout, '', '', '', TRUE);
+    setcookie('userdata[surname]', $_COOKIE['userdata']['surname'], $timeout, '', '', '', TRUE);
+  };
 };
 
 
-// Generic Expiry Time for Cookies.
-$expiry = time() + (60*10);
-
-$admin_expiry = time() + 600;
 if ($require_admin == true) {
   // echo "this page requires admin priv";
   // print_r($_COOKIE);
@@ -20,8 +22,7 @@ if ($require_admin == true) {
     header('Location: login.php?timeout=true'); 
    } else {
     //rewrite cookie with new time.
-      $staff_expiry = time() + 60;
-      setcookie('admin[loggedin]', $_COOKIE['admin']['loggedin'], $staff_expiry, '', '', '', TRUE);
+      setcookie('admin[loggedin]', $_COOKIE['admin']['loggedin'], $timeout, '', '', '', TRUE);
    }
 }
 

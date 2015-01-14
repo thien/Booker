@@ -7,7 +7,8 @@ $date = date("Y-m-d");
 $query = "SELECT booking.id, booking.date, booking.time, booking.comments,
  service.type, service.price FROM booking 
  INNER JOIN service ON booking.service_id=service.id
- WHERE booking.user_id = :user_id";
+ WHERE booking.user_id = :user_id
+ ORDER BY date ASC ";
 $query_params = array(
     ':user_id' => $_COOKIE['userdata']['user_id']
 );
@@ -17,16 +18,12 @@ $option = $_GET['option'];
 $option = 'upcoming';
 }
 $db->DoQuery($query, $query_params);
-$num = $db->fetchAll();
-if (isset($_POST['id_delete'])) 
-{
-            $query = "DELETE FROM booking WHERE id = :id";
-            $query_params = array(
-                ':id' => $_POST['id_delete']
-            );
-            $db->DoQuery($query, $query_params);
-            echo("<meta http-equiv='refresh' content='0'>");
-        
+$results = $db->fetchAll();
+if (isset($_POST['id_delete'])) {
+    $query = "DELETE FROM booking WHERE id = :id";
+    $query_params = array(':id' => $_POST['id_delete']);
+    $db->DoQuery($query, $query_params);
+    array_push($update, "Your appointment for is now cancelled.");
 }
 include 'includes/header.php';
 ?>
@@ -51,7 +48,7 @@ echo '<h1>All Appointments</h1>';
 <?php 
 if (isset($option)){
 if ($option == "past"){
-	foreach ($num as $row) {
+	foreach ($results as $row) {
 		$dtA = strtotime($row['date'] ." ". $row['time']);
 		if ($dtA<time()) {
 			echo "<div id='group'>";
@@ -67,7 +64,7 @@ if ($option == "past"){
 	}
 }
 elseif($option == "upcoming"){
-	foreach ($num as $row) {
+	foreach ($results as $row) {
 		$dtA = strtotime($row['date'] ." ". $row['time']);
 		if ($dtA>time()) {
 			echo "<div id='group'>";
@@ -89,7 +86,7 @@ elseif($option == "upcoming"){
 } 
 }
 elseif($option == "all"){
-	foreach ($num as $row) {
+	foreach ($results as $row) {
 		$dtA = strtotime($row['date'] ." ". $row['time']);
 					echo "<div id='group'>";
 				echo "<div class='left'>";
@@ -114,7 +111,7 @@ elseif($option == "all"){
 <div class="appointments">
 
 <?php
-//foreach ($num as $row) {
+//foreach ($results as $row) {
 //$dtA = strtotime($row['date'] ." ". $row['time']);
 //if ($dtA>time()) {
 //echo "<div id='booking'>";

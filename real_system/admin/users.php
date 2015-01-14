@@ -85,7 +85,7 @@ if ($usertype == 'customers'){
 	}else{
 	$char=$_GET['char'];
 	}
-	$query = "SELECT * FROM users WHERE surname LIKE '".$char."%' ORDER BY username ASC";
+	$query = "SELECT * FROM users WHERE surname LIKE '".$char."%' ORDER BY surname ASC";
 	$count_rows = "SELECT count(*) FROM users WHERE surname LIKE '".$char."%'";
 	$db->DoQuery($count_rows);
 	$count = $db->fetch();
@@ -304,7 +304,7 @@ if ($usertype =='customers'){
 			        echo '<li><a href="users.php?char='.$char.'&page='.$i.'">'.$i.'</a></li>'; 
 			    }    
           }
-      echo '</ul>';
+      	echo '</ul>';
 
      	if (!count($num) < 1){
 			foreach ($num as $row) {

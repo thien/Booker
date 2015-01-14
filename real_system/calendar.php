@@ -4,6 +4,7 @@ $menutype = "user_dashboard";
 $require_user = true;
 include_once('includes/core.php'); 
 include('classes/booker.php');
+
 $calendar = new booker($link);
 
 if (isset($_GET['month'])) { 
@@ -32,7 +33,7 @@ $forward = strtotime("+1 month", $selected_date_timestamp);
 include('includes/header.php');
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $calendar->after_post($month, $day, $year);  
+    $calendar->post($month, $day, $year);  
 }  
 
 ?>
@@ -41,14 +42,32 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Call calendar function
 
 
-
-
 $closed_days_query = "SELECT date FROM closed_days WHERE YEAR(date) = YEAR('$selected_date') AND MONTH(date) = MONTH('$selected_date')";
 $db->DoQuery($closed_days_query);
 $closed_days = $db->fetchAll();
-$closed_days_query = "SELECT value FROM metadata WHERE id = 4";
-$db->DoQuery($closed_days_query);
-$fullybooked = $db->fetch();
+    
+$start = "SELECT value FROM metadata WHERE id = 1";
+$db->DoQuery($start);
+$start = $db->fetch();
+    
+    
+    $end = "SELECT value FROM metadata WHERE id = 2";
+    $db->DoQuery($end);
+    $end = $db->fetch();
+    
+    $freq = "SELECT value FROM metadata WHERE id = 3";
+    $db->DoQuery($freq);
+    $frequency = $db->fetch();
+    
+    
+    function minutes($time){
+        $time = explode(':', $time);
+        return (($time[0]*3600) + ($time[1]*60))/60;
+    }
+    
+    $fullybooked =  ((minutes($end[0])+30) - minutes($start[0]))/$frequency[0];
+
+    
 $numberofbookingsonday = "SELECT COUNT(*) FROM booking WHERE YEAR(date) = YEAR('$selected_date') AND MONTH(date) = MONTH('$selected_date') AND DAY(date) = DAY('$selected_date')";
 $db->DoQuery($numberofbookingsonday);
 $day_count = $db->fetch();
@@ -68,7 +87,7 @@ if(date('w', strtotime($selected_date)) == 0 AND $day !== 0) {
    array_push($errors, "We don't open on sundays.");
 }
 
-if ($day_count[0] >= $fullybooked[0]){
+if ($day_count[0] >= $fullybooked){
    array_push($errors, "Today is fully booked.");
 }
 
@@ -83,5 +102,21 @@ $calendar->make_calendar($selected_date_timestamp, $first_day, $back, $forward, 
 		echo "You can click <a href='calendar.php'>here</a> to go back on the calendar.";
 }
 echo "</div>";
+?>
+<script type="text/javascript">
+$('b.keyguide').on("touchstart", function (e) {
+    var link = $(this);
+    if (link.hasClass('hover')) {
+         link.removeClass("hover");
+        $('ul.keylist').hide();
+        $('a.taphover').removeClass("hover");
+    } else {
+        link.addClass("hover");
+        $('ul.keylist').show();
+        $('a.taphover').not(this).removeClass("hover"); 
+    }
+});
+</script>
+<?php
 include('includes/footer.php');
 ?>

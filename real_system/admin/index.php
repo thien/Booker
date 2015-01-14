@@ -43,119 +43,141 @@ $openhr = $db->fetch();
 ?>
 
 <div>
-asd
+
+<h1>Statistics</h1>
 <?php
 echo "Number of Registered Accounts: " . $registered_accounts[0] . "<br>";
-echo "Number of Bookings This Month: " . $monthly_bookings[0] . "<br>";
-echo "Estimated Income This Month: "."&pound;" . $monthly_revenue[0] . "<br>";
+echo "Number of Online Bookings This Month: " . $monthly_bookings[0] . "<br>";
+echo "Estimated Income This Month from Online Bookings: "."&pound;" . $monthly_revenue[0] . "<br>";
 echo "Number of Activated Accounts: " . $activated_accounts[0] . "<br>";
 echo "Number of Bookings for Today: " . $daily_bookings[0] . "<br>";
 ?>
-
-
-
 </div>
-
 
 <script src="/assets/chart.min.js"></script>
 <script src="/assets/chart.doughnut.js"></script>
+<script src="/assets/chart.line.js"></script>
 
-<h3>Service Popularity</h3>
+<div id="left">
+	<h3>Service Popularity</h3>
+	<div id="canvas-holder">
+		<canvas id="service_popularity"/></div>
+</div><div id="right">
+<h3>Bookings Per Month</h3>
 <div id="canvas-holder">
-			<canvas id="service_popularity" width="500" height="500"/>
+	<canvas id="graph"/></div>
 </div>
 
-<h3>Graph</h3>
-<div id="canvas-holder">
-			<canvas id="graph" width="500" height="500"/>
-</div>
+<?php 
 
+// Pie Chart Statistics
 
+ $query = "SELECT COUNT(*) FROM service";
+ $db->DoQuery($query);
+ $totalrows = $db->fetch();
+ $totalrow =  $totalrows[0] - 1;
 
-	<script>
-		var doughnutData = [
-				{
-					value: 300,
-					color:"#F7464A",
-					highlight: "#FF5A5E",
-					label: "Red"
-				},
-				{
-					value: 50,
-					color: "#46BFBD",
-					highlight: "#5AD3D1",
-					label: "Green"
-				},
-				{
-					value: 100,
-					color: "#FDB45C",
-					highlight: "#FFC870",
-					label: "Yellow"
-				},
-				{
-					value: 40,
-					color: "#949FB1",
-					highlight: "#A8B3C5",
-					label: "Grey"
-				},
-				{
-					value: 120,
-					color: "#4D5360",
-					highlight: "#616774",
-					label: "Dark Grey"
-				}
+ $query =  "SELECT id, type FROM service";
+ $db->DoQuery($query);
+ $services = $db->fetchAll();
 
-			];
+for ($x = 0; $x <= ($totalrows[0]-1); $x++){
+	$query = "SELECT COUNT(*) FROM booking WHERE service_id = '".$services[$x]['id']."'";
+	$db->DoQuery($query);
+	$counter = $db->fetch();
+	array_push($services[$x], $counter[0]);
+	array_push($services[$x], mb_substr(bin2hex($services[$x]['type']), 0, 6));
+}
 
-			var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-		var lineChartData = {
-			labels : ["January","February","March","April","May","June","July"],
-			datasets : [
-				{
-					label: "My First dataset",
-					fillColor : "rgba(220,220,220,0.2)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(220,220,220,1)",
-					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-				},
-				{
-					label: "My Second dataset",
-					fillColor : "rgba(151,187,205,0.2)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(151,187,205,1)",
-					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
-				}
-			]
+// Line graph Statistics
 
-		}
+function count_instances($os_values, $month){
+  $count = 0;
+  foreach($os_values as $i)
+    if(strpos($i, $month)!== FALSE)
+      $count++;
+  return $count;
+}
 
-			window.onload = function(){
-				var ctx = document.getElementById("service_popularity").getContext("2d");
-				window.myPie = new Chart(ctx).Pie(doughnutData, {
-					responsive : true,
-					animateRotate : false
-				});
-				var ctx2 = document.getElementById("graph").getContext("2d");
-				window.myLine = new Chart(ctx2).Line(lineChartData, {
-					responsive: true
-				});
-			};
+$months = array();
+$os_values = array();
+$query = "SELECT date FROM booking WHERE date > DATE_SUB(now(), INTERVAL 6 MONTH) ORDER BY date ASC";
+$db->DoQuery($query);
+$total = $db->fetchAll();
 
+foreach ($total as $counts) {
+	$x = 0;
+	$date = date("Y-m",strtotime($counts[$x]));
+	$x++;
+	if (!in_array($date, $months)){
+		array_push($months, $date); //creation of months array
+	}
+}
 
+foreach ($total as $t){
+	array_push($os_values, $t[0]);
+}
+?>
+<script>
+<?php
 
+//Piechart
 
+echo "var piechart = [ ";
+for ($x = 0; $x <= ($totalrow); $x++){
+ 	echo "{ ";
+ 	echo "value: ".$services[$x][2].", ";
+ 	echo 'color:"#'.$services[$x][3].'", ';
+	echo 'highlight: "#'.dechex(hexdec($services[$x][3])+(pow(2,13))).'", ';
+ 	echo 'label: "'.$services[$x][1].'" ';
+ 	if ($x == $totalrow){
+ 	echo "} ";
+ 	} else {
+ 		echo "}, ";
+	 	}
+	 }
+	 echo "]; ";
 
-	</script>
+//Graph
 
+echo "var linechart = { ";
+echo "labels : [";
+for ($x = 0; $x <= (count($months)-1); $x++){
+	if ($x == count($months)-1){
+ 		echo '"'.date("M",strtotime($months[$x])).'"], ';
+ 	} else {
+ 		echo '"'.date("M",strtotime($months[$x])).'",';
+ 	}
+}
+echo "datasets : [ { ";
+echo 'label: "Bookings Per Month",
+	fillColor : "rgba(220,220,220,0.2)",
+	strokeColor : "rgba(220,220,220,1)",
+	pointColor : "rgba(220,220,220,1)",
+	pointStrokeColor : "#fff",
+	pointHighlightFill : "#fff",
+	pointHighlightStroke : "rgba(220,220,220,1)", ';
+	echo "data : [";
+for ($x = 0; $x <= (count($months)-1); $x++){
+	if ($x == count($months)-1){
+ 		echo count_instances($os_values, $months[$x]);
+ 	} else {
+ 		echo count_instances($os_values, $months[$x]).",";
+ 	}
+}
+echo "] } ] }";
+?>
 
-		<style>
-			#canvas-holder{
-				width:30%;
-			}
-		</style>
+window.onload = function(){
+	var ctx = document.getElementById("service_popularity").getContext("2d");
+	window.myPie = new Chart(ctx).Pie(piechart, {
+		responsive : true,
+		animateRotate : false
+	});
+	var ctx2 = document.getElementById("graph").getContext("2d");
+	window.myLine = new Chart(ctx2).Line(linechart, {
+		responsive: true
+	});
+};
+
+</script>

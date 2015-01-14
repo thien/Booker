@@ -1,17 +1,23 @@
 <?php
 
 
-$query = "SELECT value FROM metadata WHERE id = 5";
-$db->DoQuery($query);
-$company_name = $db->fetch();
+  if (file_exists($directory . "setup.php")) {
+   	$company_name = "Booker";
+  } else {
+		$query = "SELECT value FROM metadata WHERE id = 5";
+		$db->DoQuery($query);
+		$name = $db->fetch();
+		$company_name = $name[0];
+	}
 
 ?>
 
 <html>
+<!DOCTYPE HTML>
+      <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title><?php echo $company_name[0];?> - <?php echo $title; ?></title>
-
-<link rel="stylesheet" href="<?php echo $directory."assets/style.css";?>"/>
+<title><?php echo $company_name;?> - <?php echo $title; ?></title>
+<link rel="stylesheet" href="<?php echo $directory."assets/style.css";?>">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,31 +26,31 @@ $company_name = $db->fetch();
 <script src="../assets/jquery.js"></script>
 <script src="../assets/jqueryui.js"></script>
 <script type="text/javascript">
-// Listen for ALL links at the top level of the document. For
-// testing purposes, we're not going to worry about LOCAL vs.
-// EXTERNAL links - we'll just demonstrate the feature.
-$( document ).on(
-    "click",
-    "a",
-    if(window.location.contains("?month=")){
-    function( event ){
- 
-        // Stop the default behavior of the browser, which
-        // is to change the URL of the page.
-        event.preventDefault();
- 
-        // Manually change the location of the page to stay in
-        // "Standalone" mode and change the URL at the same time.
-        location.href = $( event.target ).attr( "href" );
-    }}
-);
+	// Listen for ALL links at the top level of the document. For
+	// testing purposes, we're not going to worry about LOCAL vs.
+	// EXTERNAL links - we'll just demonstrate the feature.
+	$( document ).on(
+	    "click",
+	    "a",
+	    if(window.location.contains("?month=")){
+	    function( event ){
+	 
+	        // Stop the default behavior of the browser, which
+	        // is to change the URL of the page.
+	        event.preventDefault();
+	 
+	        // Manually change the location of the page to stay in
+	        // "Standalone" mode and change the URL at the same time.
+	        location.href = $( event.target ).attr( "href" );
+	    }}
+	);
 </script>
 </head>
 <body>
 	<div id="heading">
 		<div id="branding">
 
-		<a href="index.php"><?php echo $company_name[0];?></a>
+		<a href="index.php"><?php echo $company_name;?></a>
 		</div>
 		<?php
 		if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false){

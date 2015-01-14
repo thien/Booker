@@ -59,7 +59,7 @@ if (isset($_POST['username'])) {
   `date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;",
-              "CREATE TABLE `metadata` (
+  "CREATE TABLE `metadata` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `option` varchar(255) DEFAULT '',
   `value` varchar(255) DEFAULT NULL,
@@ -141,7 +141,6 @@ if (isset($_POST['username'])) {
       (1, 'opening_time', '10:00', 'The time of the first slot', 'Opening Time'),
       (2, 'closing_time', '19:30', 'The time of the last slot', 'Closing Time'),
       (3, 'booking_frequency', '30', 'The amount of slots per hour, expressed in minutes.', 'Booking Frequency'),
-      (4, 'booking_slots_day', '20', 'The total number of slots avaliable in one day.', 'Booking Slots Per Day'),
       (5, 'business_name', 'Nails Club', 'The name of the business.', 'Business Name'),
       (6, 'business_slogan', 'is it a mad ting', 'The slogan of the business.', 'Business Slogan');
       ",
