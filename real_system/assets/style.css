@@ -178,12 +178,10 @@ a:hover {
     left: auto;
 }
 canvas {
-	background-color: #fdfdfd;
+	background-color: #fcfcfc;
 	padding-top: 1em;
 	padding-bottom: 1em;
-}
-#canvas-holder{
-	
+	border: 1px solid #d2d3d2;
 }
 p a{
 	color: #0c60a5;
@@ -227,7 +225,21 @@ label {
     color: #ffffff;
 }
 
-	
+table#statistics{
+	width: 100%;
+	font-size: 0.9em;
+}
+
+#statistics tr:nth-child(even) {background: #f4f4f4
+}
+#statistics tr:nth-child(odd) {background: #FFF}
+table#statistics, #statistics th, #statistics td {
+    border: 1px solid #d3d3d3;
+    border-collapse: collapse;
+}
+#statistics th,#statistics td {
+	padding: 10px;
+}
 	/* @group Accordion */
 	
 .accordion {

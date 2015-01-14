@@ -91,7 +91,6 @@ if ($day_count[0] >= $fullybooked){
    array_push($errors, "Today is fully booked.");
 }
 
-
 if (empty($errors)) {
 $calendar->make_calendar($selected_date_timestamp, $first_day, $back, $forward, $day, $month, $year);
 } else {

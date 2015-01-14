@@ -26,8 +26,10 @@ class booker {
     }
     function post($month, $day, $year) {
         //error lists
+        $errors = array();
         include('assets/recaptcha_values.php');
         include_once('assets/recaptcha.php');
+
         if (isset($_POST['booking_time']) && $_POST['booking_time'] == 'selectvalue') {
             array_push($errors, "Please select a booking time.");
         }
@@ -43,12 +45,11 @@ class booker {
         if ($_POST["recaptcha_response_field"]) {
             $resp = recaptcha_check_answer($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
             if (!$resp->is_valid) {
-                array_push($errors, "The captcha is incorrect. Please try again.");
+               array_push($errors, "The captcha is incorrect. Please try again!");
             }
         }
         if (!empty($errors)) {
-            display_errors($errors);
-            //no errors, continue with saving into the database.
+            display_errors($errors); //no errors, continue with saving into the database.
         } else {
             $this->database(); //declared again as post will go to this function instead of loading the calendar.
             $booking_date    = date("Y-m-d", mktime(0, 0, 0, $month, $day, $year));
@@ -172,14 +173,11 @@ class booker {
 
     function make_booking_slots() {
         if ($this->day == 0) { //default day = 0; done so to show that date is not chosen.
-            $this->select_day(); //no date selected.
+        echo "<form id='calendar_form' method='post' action=''>";
+        echo "<div class='status' id='selected_date'>Please select a day.</div>";
         } else {
             $this->create_form(); //Shows form.
         }
-    }
-    function select_day() {
-        echo "<form id='calendar_form' method='post' action=''>";
-        echo "<div class='status' id='selected_date'>Please select a day.</div>";
     }
     function start_calendar() {
         echo "<table cellpadding='0' id='calendar'>
@@ -222,13 +220,14 @@ class booker {
     }
     function create_form() {
         // Create array of the booking times
-        echo "<div><div id='left'>";
+    
         $this->db->DoQuery("SELECT * FROM service");
         $services = $this->db->fetchAll();
         for ($i = strtotime($this->booking_start_time); $i <= strtotime($this->booking_end_time); $i = $i + $this->booking_frequency * 60) {
             $slots[] = date("H:i:s", $i);
         }
         echo "<form id='calendar_form' method='post' action=''>";
+        echo "<div id='left'>";
         echo "<div class='status' id='selected_date'>Selected Date is: " . date("D, d F Y", mktime(0, 0, 0, $this->month, $this->day, $this->year)) . "</div>";
         $option = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
         if ($this->count >= 1) {
@@ -239,8 +238,7 @@ class booker {
                     }
                 }
             }
-        } // If count bookings                   
-        // Make select box from $slots array
+        }
         foreach ($slots as $booking_time) {
             $finish_time = strtotime($booking_time) + $this->booking_frequency * 60; // Calculate finish time
             $option .= "<option value='" . $booking_time . "'>" . $booking_time . " - " . date("H:i:s", $finish_time) . "</option>";
@@ -258,7 +256,7 @@ class booker {
         include('assets/recaptcha_values.php');
         include_once('assets/recaptcha.php');
         echo recaptcha_get_html($publickey, $error);
-        echo "<button type='submit'>Submit</button></div></div></form>";
+        echo "<button type='submit'>Submit</button></div></form>";
     }
     function create_days_arr($year, $month) { // Creates array of days in the month.       
         $num_days_month = cal_days_in_month(CAL_GREGORIAN, $month, $year); // Make array called $day with the correct number of days

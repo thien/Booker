@@ -44,14 +44,16 @@ $openhr = $db->fetch();
 
 <div>
 
-<h1>Statistics</h1>
+<center><h1>Statistics</h1></center>
+<table id='statistics'>
 <?php
-echo "Number of Registered Accounts: " . $registered_accounts[0] . "<br>";
-echo "Number of Online Bookings This Month: " . $monthly_bookings[0] . "<br>";
-echo "Estimated Income This Month from Online Bookings: "."&pound;" . $monthly_revenue[0] . "<br>";
-echo "Number of Activated Accounts: " . $activated_accounts[0] . "<br>";
-echo "Number of Bookings for Today: " . $daily_bookings[0] . "<br>";
+echo "<tr><td>Number of Registered Accounts: </td><td>" . $registered_accounts[0] . "</td></tr>";
+echo "<tr><td>Number of Online Bookings This Month: </td><td>" . $monthly_bookings[0] . "</td></tr>";
+echo "<tr><td>Estimated Income This Month from Online Bookings: </td><td>"."&pound;" . $monthly_revenue[0] . "</td></tr>";
+echo "<tr><td>Number of Activated Accounts: </td><td>" . $activated_accounts[0] . "</td></tr>";
+echo "<tr><td>Number of Bookings for Today: </td><td>" . $daily_bookings[0] . "</td></tr>";
 ?>
+</table>
 </div>
 
 <script src="/assets/chart.min.js"></script>
@@ -171,8 +173,7 @@ echo "] } ] }";
 window.onload = function(){
 	var ctx = document.getElementById("service_popularity").getContext("2d");
 	window.myPie = new Chart(ctx).Pie(piechart, {
-		responsive : true,
-		animateRotate : false
+		responsive : true
 	});
 	var ctx2 = document.getElementById("graph").getContext("2d");
 	window.myLine = new Chart(ctx2).Line(linechart, {
