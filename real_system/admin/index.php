@@ -71,7 +71,6 @@ echo "<tr><td>Number of Bookings for Today: </td><td>" . $daily_bookings[0] . "<
 </div>
 
 <?php 
-
 // Pie Chart Statistics
 
  $query = "SELECT COUNT(*) FROM service";
@@ -90,7 +89,6 @@ for ($x = 0; $x <= ($totalrows[0]-1); $x++){
 	array_push($services[$x], $counter[0]);
 	array_push($services[$x], mb_substr(bin2hex($services[$x]['type']), 0, 6));
 }
-
 // Line graph Statistics
 
 function count_instances($os_values, $month){
@@ -122,7 +120,6 @@ foreach ($total as $t){
 ?>
 <script>
 <?php
-
 //Piechart
 
 echo "var piechart = [ ";
