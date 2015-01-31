@@ -5,7 +5,7 @@ class booker {
         $this->db = new database();
         $this->db->initiate();
     }
-    function fetch($query) {
+    function QuickFetch($query) {
         $this->db->DoQuery($query);
         $fetch_value = $this->db->fetch();
         return $fetch_value[0];
@@ -19,9 +19,9 @@ class booker {
         $this->first_day          = $first_day;
         $this->back               = $back;
         $this->forward            = $forward;
-        $this->booking_start_time = $this->fetch("SELECT value FROM metadata WHERE id = '1'");
-        $this->booking_end_time   = $this->fetch("SELECT value FROM metadata WHERE id = '2'");
-        $this->booking_frequency  = $this->fetch("SELECT value FROM metadata WHERE id = '3'");
+        $this->booking_start_time = $this->QuickFetch("SELECT value FROM metadata WHERE id = '1'");
+        $this->booking_end_time   = $this->QuickFetch("SELECT value FROM metadata WHERE id = '2'");
+        $this->booking_frequency  = $this->QuickFetch("SELECT value FROM metadata WHERE id = '3'");
         $this->start_booking($year, $month);
     }
     function post($month, $day, $year) {
@@ -104,8 +104,8 @@ class booker {
     }
     function create_days_table() {
         $day_capacity = ((minutes($this->booking_end_time) + 30) - minutes($this->booking_start_time)) / $this->booking_frequency;
-        $first_day_month = $this->year . "-" . $this->month . "-" . "01";
-        $closed_days_query = "SELECT date FROM closed_days WHERE YEAR(date) = YEAR('$first_day_month') AND MONTH(date) = MONTH('$first_day_month')";
+        $fdom = $this->year . "-" . $this->month . "-" . "01"; //day 01 of the month
+        $closed_days_query = "SELECT date FROM closed_days WHERE YEAR(date) = YEAR('$fdom') AND MONTH(date) = MONTH('$fdom')";
         $this->db->DoQuery($closed_days_query);
         $closed_days = $this->db->fetchAll();
         $i = 0;

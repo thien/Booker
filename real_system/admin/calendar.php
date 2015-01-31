@@ -13,13 +13,30 @@ if (isset($_POST)) {
     $id = $_POST['id'];
   }
 
+
   if (isset($_POST['new'])) {
-    $query = "INSERT INTO closed_days (date) VALUES (:date)";
-    $query_params = array(
-    ':date' => $date
-    );
-    $db->DoQuery($query, $query_params);
-    array_push($update, 'The closing day is added into the database.');
+
+
+    if(strtotime($date) < strtotime('today')){
+    array_push($errors, "This date is too old, try again.");
+    } else {
+      $stamp = explode("-", $date);
+      $day = $stamp[2];
+      $month = $stamp[1];
+      $year = $stamp[0];
+      if(checkdate($month, $day, $year) !== true){
+        array_push($errors, $date." is an invalid date, please try again.");
+      }
+    }
+
+    if (empty($errors)){
+      $query = "INSERT INTO closed_days (date) VALUES (:date)";
+      $query_params = array(
+      ':date' => $date
+      );
+      $db->DoQuery($query, $query_params);
+      array_push($update, 'The date '.$date.' is added into the list.');
+    } 
   } elseif(isset($id)){
     $query = "DELETE FROM closed_days WHERE id = :id";
     $query_params = array(
@@ -52,7 +69,7 @@ echo "<table id='mytable' style='width:100%'>";
 foreach ($num as $row) {
   echo '<form action="" method="post" autocomplete="off">';
   echo '<tr>';
-    echo '<td><input type="text" name="closing_date" placeholder="Name" value="'.$row['date'].'"/></td>';
+    echo '<td>'.date("l, jS M, Y", strtotime($row['date'])).'</td>';
     echo '<td><button value="'.$row[0].'" name="id">Remove</button></td>';
   echo '</tr>';
   echo '</form>';

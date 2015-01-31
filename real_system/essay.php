@@ -1,0 +1,346 @@
+<?php
+
+$text = "
+   a                          11               1              0
+   ability                     2               0              0
+   about                       1               0              0
+   acceptable                  1               0              0
+   actions                     2               0              1
+   activity                    1               0              0
+   actors                      1               0              0
+   acts                        1               0              0
+   addresses                   2               0              0
+   after                       1               1              0
+   against                     2               0              0
+   agencies                    2               0              0
+   algorithms                  1               0              0
+   all                         2               0              0
+   also                        2               0              0
+   american                    1               0              0
+   an                          1               0              0
+   analysis                    1               0              0
+   and                        24               0              0
+   any                         2               0              0
+   apart                       1               0              1
+   are                         1               0              0
+   as                          5               1              0
+   assist                      1               0              0
+   assistance                  1               0              1
+   associated                  1               0              0
+   attack                     13               0              2
+   attacks                     2               0              1
+   attempt                     1               0              0
+   banks                       1               0              0
+   based                       1               0              0
+   been                        2               0              0
+   behavior                    1               0              1
+   between                     1               0              0
+   bounds                      1               0              0
+   breach                      1               0              0
+   business                    3               1              0
+   by                          1               0              0
+   c                           1               0              1
+   calling                     1               0              0
+   carried                     1               0              0
+   citizens                    3               0              1
+   claimed                     1               0              0
+   close                       1               0              0
+   closely                     3               0              0
+   code                        1               0              0
+   coercive                    1               0              0
+   collaboration               1               0              0
+   commercial                  1               0              0
+   communicated                1               0              0
+   communications              1               0              1
+   companies                   1               0              0
+   company                     3               1              0
+   compromised                 1               0              0
+   computer                    1               0              0
+   computers                   1               0              0
+   concerned                   1               0              0
+   conclude                    1               0              0
+   conclusion                  1               0              0
+   confidential                2               0              0
+   confirmed                   1               0              0
+   consequences                1               0              0
+   consisted                   1               0              0
+   continue                    1               0              0
+   continues                   1               0              0
+   costs                       1               0              0
+   coupled                     1               0              0
+   critical                    1               0              0
+   cyber                      10               0              0
+   cyber-enabled               1               0              0
+   d                           1               0              0
+   dangers                     1               0              0
+   data                        4               0              1
+   december                    1               1              0
+   deeply                      1               0              0
+   deletion                    3               0              0
+   departments                 2               0              0
+   deployment                  1               0              0
+   destroyed                   1               0              0
+   destructive                 4               0              0
+   determined                  1               0              0
+   developed                   1               0              1
+   directly                    1               0              0
+   discovered                  1               0              0
+   discovering                 1               0              0
+   disrupted                   1               0              0
+   distribute                  1               0              0
+   do                          2               0              0
+   domestic                    1               0              0
+   economic                    1               0              0
+   employees                   2               0              0
+   encryption                  1               0              0
+   enough                      1               0              0
+   entertainment               1               0              0
+   entire                      1               0              0
+   entity                      1               0              0
+   example                     2               0              0
+   express                     1               0              0
+   facilitated                 1               0              0
+   facing                      1               0              0
+   fall                        1               0              0
+   fbi                        16               0              1
+   following                   1               0              0
+   for                         4               2              0
+   forced                      1               0              0
+   foreign                     1               0              0
+   from                        1               0              0
+   further                     2               2              0
+   government                  3               2              0
+   gravest                     1               0              0
+   great                       1               0              0
+   group                       1               0              0
+   groups                      1               0              0
+   guardians                   1               0              0
+   hardcoded                   1               0              0
+   harm                        1               0              0
+   has                         6               0              0
+   have                        2               0              0
+   hopes                       1               0              0
+   hours                       1               0              0
+   identifiable                1               0              0
+   identify                    2               0              0
+   impose                      1               0              0
+   in                         11               1              0
+   incident                    1               0              0
+   increasing                  1               0              0
+   individuals                 1               0              0
+   inflict                     1               0              0
+   information                 5               0              1
+   infrastructure              2               0              0
+   inoperable                  1               0              0
+   intended                    1               0              0
+   interests                   1               1              1
+   internet                    1               0              0
+   intimidation                1               0              0
+   into                        4               0              0
+   intrusion                   2               0              0
+   intrusions                  1               0              0
+   investigation               5               0              1
+   investigators               1               0              0
+   ip                          2               0              0
+   is                          4               0              0
+   issued                      1               0              0
+   it                          2               0              0
+   its                         5               0              0
+   itself                      1               0              0
+   jobs                        1               0              0
+   known                       1               0              0
+   knows                       1               0              0
+   korea                       4               0              2
+   korean                      4               0              0
+   large                       1               0              0
+   last                        1               0              0
+   late                        1               0              0
+   like                        1               0              0
+   lines                       1               0              0
+   linked                      1               0              0
+   links                       1               0              0
+   malicious                   1               0              0
+   malware                     4               0              0
+   march                       1               0              0
+   means                       2               0              0
+   media                       1               0              0
+   methods                     2               0              0
+   movies                      1               0              1
+   multiple                    1               0              0
+   nation                      1               0              0
+   national                    2               0              0
+   nature                      3               0              0
+   need                        1               0              0
+   network                     3               0              0
+   networks                    1               0              1
+   north                       7               1              0
+   november                    1               0              0
+   now                         1               0              0
+   number                      1               0              0
+   observed                    1               0              0
+   of                         25               0              0
+   office                      1               0              0
+   offline                     1               0              0
+   on                          7               0              0
+   one                         1               0              0
+   operations                  1               0              1
+   or                          4               0              0
+   ordinary                    1               0              0
+   other                       4               0              0
+   otherwise                   1               0              0
+   our                         5               0              0
+   out                         1               0              0
+   outlets                     1               0              0
+   outside                     1               0              0
+   overlap                     1               0              0
+   part                        1               0              0
+   partner                     1               0              0
+   partners                    1               0              0
+   peace                       1               0              0
+   personal                    1               0              0
+   personally                  1               0              0
+   pictures                    1               0              0
+   played                      1               0              0
+   pose                        1               0              0
+   precludes                   1               0              0
+   press                       1               0              0
+   previously                  2               0              0
+   private                     2               0              0
+   proprietary                 1               0              0
+   prosperity                  1               0              0
+   protect                     1               0              0
+   protocol                    1               0              0
+   provide                     1               0              0
+   pursue                      1               0              0
+   quantities                  1               0              0
+   quick                       1               0              0
+   ready                       1               0              0
+   reaffirms                   1               0              0
+   rendered                    1               0              0
+   reported                    1               0              0
+   reporting                   1               0              0
+   requested                   1               0              0
+   responsibility              1               0              0
+   responsible                 1               0              0
+   result                      1               0              0
+   revealed                    1               0              0
+   right                       1               0              0
+   role                        1               0              0
+   s                          12               0              5
+   sector                      2               0              0
+   security                    1               0              0
+   seen                        1               0              0
+   sensitive                   1               0              0
+   separately                  1               1              0
+   seriously                   1               0              0
+   sets                        1               0              0
+   several                     1               0              0
+   sharing                     1               0              0
+   significant                 2               0              0
+   significantly               1               0              0
+   similarities                2               0              0
+   since                       1               1              0
+   social                      1               0              0
+   sony                        5               3              0
+   source                      2               0              1
+   sources                     1               0              0
+   south                       1               0              0
+   spe                         9               0              0
+   specific                    1               0              0
+   stands                      1               0              0
+   state                       1               0              0
+   states                      3               0              1
+   status                      1               0              0
+   stole                       1               0              0
+   subsequently                1               0              0
+   such                        1               1              0
+   suppress                    1               0              0
+   systems                     1               0              0
+   take                        1               0              0
+   takes                       1               0              0
+   targeting                   1               0              0
+   technical                   1               0              0
+   that                       10               0              0
+   the                        50               5              0
+   theaters                    1               0              0
+   theft                       1               0              0
+   their                       2               0              0
+   themselves                  1               0              1
+   then                        1               0              0
+   there                       2               0              1
+   these                       2               0              0
+   this                        8               0              0
+   though                      1               1              0
+   thousands                   1               0              0
+   threaten                    1               0              0
+   threats                     4               0              0
+   through                     1               0              0
+   throughout                  1               0              0
+   to                         19               0              0
+   today                       1               0              0
+   together                    1               0              0
+   tools                       1               0              0
+   trace                       1               0              0
+   u                           5               0              0
+   ultimately                  1               0              0
+   undermine                   1               0              0
+   united                      2               0              0
+   update                      2               1              0
+   us                          1               0              0
+   use                         1               0              0
+   used                        4               0              0
+   variety                     1               0              0
+   victim                      2               0              0
+   violence                    1               0              0
+   was                         2               0              0
+   washington                  1               0              0
+   we                          1               1              0
+   well                        2               0              0
+   were                        3               0              0
+   what                        1               0              0
+   when                        1               0              0
+   whether                     1               0              0
+   which                       2               0              0
+   while                       1               1              0
+   who                         3               0              0
+   wide                        1               0              0
+   will                        3               0              0
+   with                        8               0              0
+   within                      1               0              0
+   work                        2               0              0
+   worked                      1               0              0
+   working                     2               1              0
+   would                       1               0              0
+   year                        1               0              0
+";
+
+
+$array = array();
+$new_array = array();
+
+echo "<pre>";
+
+
+foreach (explode("\n", $text) as $line){
+	$words = explode("   ", $line);
+	$new_words = array_filter($words);
+	foreach($words as $word){
+		$word = preg_replace('/\s+/', '', $word);
+	}
+	array_unshift($new_words, array_pop($new_words));
+	foreach ($new_words as $new_word){
+		$new_word = preg_replace('/\s+/', '', $new_word);
+	}
+	array_push($new_array, $new_words);
+}
+
+
+echo "<table>";
+echo "<tr>
+    <th>Word</th><th>Total</th><th>Beginning</th><th>End</th></tr>";
+foreach ($new_array as $var_array){
+	array_unique($var_array);
+		echo "<tr><td>".$var_array[1]."</td><td>".$var_array[2]."</td><td>".$var_array[3]."</td><td>".$var_array[0]."</td></tr>";
+}
+echo "</table>";
+?>

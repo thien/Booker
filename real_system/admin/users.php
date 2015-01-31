@@ -285,11 +285,11 @@ if ($usertype =='customers'){
 	} else {
 		//list alphabet
 		echo '<ul id="pagination">';
-		foreach (range('A', 'Z') as $chara) {
-			if ($char == $chara){
-				echo '<li id="active"><a href="users.php?char='.$chara.'">'.$chara."</a></li>\n";
+		foreach (range('A', 'Z') as $character) {
+			if ($char == $character){
+				echo '<li id="active"><a href="users.php?char='.$character.'">'.$character."</a></li>\n";
 			} else {
-				echo '<li><a href="users.php?char='.$chara.'">'.$chara."</a></li>\n";
+				echo '<li><a href="users.php?char='.$character.'">'.$character."</a></li>\n";
 			}
 		}
 		 echo '</ul>';

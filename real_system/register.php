@@ -160,8 +160,8 @@ $(function() {
             },
             phoneno: {
                 required: "Please provide a phone number.",
-                minlength: "This phone number is invalid.",
-                maxlength: "This phone number is invalid."
+                minlength: "This phone number is too short.",
+                maxlength: "This phone number is too long."
             }
         },
         
@@ -243,7 +243,7 @@ $(function() {
 
 <?php }?>
   <?php if($_POST) {
-  echo $output; 
+  #echo $output; 
 }
    ?>
 <p class="signin button"> 

@@ -36,7 +36,7 @@ if(!empty($num)) {
                 echo '<button type="submit" name="checkin_customer_id" value="'.$row['id'].'">Checkin</button>';
              } else {
                 echo '  <button button type="submit" name="uncheck_customer_id" value="'.$row['id'].'">Uncheck</button>';
-                echo '  <button value="'.$row['id'].'">Bill</button><br>';
+             //   echo '  <button value="'.$row['id'].'">Bill</button><br>';
              }
            }
 

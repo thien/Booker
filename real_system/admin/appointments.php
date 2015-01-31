@@ -11,30 +11,32 @@ booking.staff_id, service.type, service.price, staff.s_forename, staff.s_surname
 FROM booking INNER JOIN users ON booking.user_id = users.id
  INNER JOIN staff ON booking.staff_id = staff.id
  INNER JOIN service ON booking.service_id = service.id";
-$order = "ORDER BY DATE(booking.date) DESC, booking.time DESC";
+$order = " ORDER BY booking.date DESC, booking.time DESC";
 $count_rows = "SELECT count(*) FROM booking";
 
-if (isset($_GET))
-  if (isset($_GET['year']) & isset($_GET['month'])& isset($_GET['day']) ){
-    if (!empty($_GET['year']) & !empty($_GET['month'])& !empty($_GET['day']) ){
-      if (checkdate($_GET['month'], $_GET['day'], $_GET['year']) == TRUE){
-        $date = $_GET['day']."/".$_GET['month']."/".$_GET['year'];
-        $datequery = " WHERE date = '".$_GET['year']."-".$_GET['month']."-".$_GET['day']."' ";
-        $count_rows = $count_rows.$datequery;
-        $query = $query.$datequery.$order;
-      } else {
-      array_push($errors, "The selected date is invalid, please try again.");
-      $query = $query . $order;
-    } 
-  } else {
-    array_push($errors, "Please fill in all the criteria for the date.");
-  }
-} else {
+
   $date = date("d/m/Y");
-        $datequery = " WHERE date = '".date("Y/m/d")."' ";
-        $count_rows = $count_rows.$datequery;
-        $query = $query.$datequery.$order;
+  $datequery = " WHERE date = '".date("Y/m/d")."' ";
+
+if (isset($_GET))
+  if (isset($_GET['year']) & isset($_GET['month']) & isset($_GET['day']) ){
+    $year = $_GET['year'];
+    $month = $_GET['month'];
+    $day = $_GET['day'];
+    if (!empty($year) & !empty($month) & !empty($day) ){
+      if (checkdate($month, $day, $year) !== true){
+        array_push($errors, "The selected date is invalid, please try again.");
+      } else {
+        $date = $day."/".$month."/".$year;
+        $datequery = " WHERE date = '".$year."-".$month."-".$day."' ";
+      } 
+    } else {
+    array_push($errors, "Please fill in all the criteria for the date.");
+   }
 } 
+$count_rows = $count_rows.$datequery;
+$query = $query.$datequery.$order;
+
 
 $db->DoQuery($count_rows);
 $count = $db->fetch();

@@ -7,7 +7,7 @@ function email($email, $user_id, $forename, $type, $extra = array()) {
 			$pin = $extra[":pin"];
 		$subject = 'Time to confirm your email';
 		$message = "Hi $forename, \n\n You need to activate your account. Click the link below.\n\n";
-		$message .= "http://projects.tnguyen.ch/comp4/confirmation.php?type=registration&value=$pin";} 
+		$message .= "http://projects.tnguyen.ch/confirmation.php?type=registration&value=$pin";} 
 		else {
 			echo "No pin is inserted.";
 		}
@@ -17,7 +17,7 @@ function email($email, $user_id, $forename, $type, $extra = array()) {
 			$code = $extra[":code"];
 			$subject = 'Forgotten Password request?';
 			$message = "Hi $forename, \n\n You have requested to reset your password. Click the link below. \n\n";
-			$message .= "http://projects.tnguyen.ch/comp4/confirmation.php?type=forgot&value=$code";
+			$message .= "http://projects.tnguyen.ch/confirmation.php?type=forgot&value=$code";
 		}
 	}
 	if ($type == "password_reset_confirmed") {
@@ -35,11 +35,11 @@ function email($email, $user_id, $forename, $type, $extra = array()) {
 	}
 	if ($type == "appointment") {
 			if(isset($extra[":bookingday"]) & isset($extra[":bookingtime"]) & isset($extra[":bookingservice"])) {
-			$bookingdate = $extra[":bookingday"];
-			$bookingtime = $extra[":bookingtime"];
-			$bookingservice = $extra[":bookingservice"];
+			$booking_date = $extra[":bookingday"];
+			$booking_time = $extra[":bookingtime"];
+			$booking_service = $extra[":bookingservice"];
 			$subject = 'Your Appointment';
-			$message = "Hi $forename,\n\n You have an appointment at $bookingdate, $bookingtime for a $bookingservice.";
+			$message = "Hi $forename,\n\n You have an appointment at $booking_date, $booking_time for a $booking_service.";
 				}
 	}
 	if ($type == "new_pin") {

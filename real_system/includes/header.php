@@ -6,8 +6,12 @@
   } else {
 		$query = "SELECT value FROM metadata WHERE id = 5";
 		$db->DoQuery($query);
-		$name = $db->fetch();
-		$company_name = $name[0];
+		$value = $db->fetch();
+		$company_name = $value[0];
+		$query = "SELECT value FROM metadata WHERE id = 6";
+		$db->DoQuery($query);
+		$value = $db->fetch();
+		$slogan = $value[0];
 	}
 
 ?>
@@ -51,6 +55,7 @@
 		<div id="branding">
 
 		<a href="index.php"><?php echo $company_name;?></a>
+		<div id="slogan"><?php if (isset($slogan)){echo $slogan;}?></div>
 		</div>
 		<?php
 		if (strpos($_SERVER['SCRIPT_NAME'],'admin') !== false){

@@ -39,6 +39,16 @@ if ($rows[0] !== $_COOKIE['userdata']['user_id']) {
   if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
     array_push($errors, "Please specify a valid email address.");
   }
+  
+  $query = ("SELECT email FROM users WHERE email = :email");
+  $query_params = array(':email' => $email);
+  $db->DoQuery($query, $query_params);
+  $rows = $db->fetch();
+  if ($rows) {
+	if (!$rows['email'] = $email){
+	array_push($errors, "This email is already associated with an account. Please choose another email.");	
+    }
+  }
 
     if (!preg_match("/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/",$phoneno)){
     array_push($errors, "Please specify a valid phone number.");

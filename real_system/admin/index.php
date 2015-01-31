@@ -15,30 +15,30 @@ $monthly_bookings = $db->fetch();
 
 //Calculating Number of Bookings Daily
 $today = date("Y-m-d");
-$a = "SELECT COUNT(*) FROM booking WHERE date ='$today'";
-$db->DoQuery($a);
+$query = "SELECT COUNT(*) FROM booking WHERE date ='$today'";
+$db->DoQuery($query);
 $daily_bookings = $db->fetch();
 
 //Calculating Revenue from monthly bookings
 $startmonth = date("Y-m") . "-01";
 $endmonth = date("Y-m") . "-31";
-$l = "SELECT sum(service.price) FROM booking INNER JOIN service ON booking.service_id=service.id WHERE date >='$startmonth' AND date <='$endmonth'";
-$db->DoQuery($l);
+$query = "SELECT sum(service.price) FROM booking INNER JOIN service ON booking.service_id=service.id WHERE date >='$startmonth' AND date <='$endmonth'";
+$db->DoQuery($query);
 $monthly_revenue = $db->fetch();
 
 // Calculating Number of Accounts
-$q = "SELECT COUNT(*) FROM users";
-$db->DoQuery($q);
+$query = "SELECT COUNT(*) FROM users";
+$db->DoQuery($query);
 $registered_accounts = $db->fetch();
 
 // Calculating Number of Activated Accounts
-$q = "SELECT COUNT(*) FROM users WHERE activated = '1'";
-$db->DoQuery($q);
+$query = "SELECT COUNT(*) FROM users WHERE activated = '1'";
+$db->DoQuery($query);
 $activated_accounts = $db->fetch();
 
 // Calculating Opening Day
-$open = "SELECT value FROM metadata WHERE id = '1'";
-$db->DoQuery($open);
+$query = "SELECT value FROM metadata WHERE id = '1'";
+$db->DoQuery($query);
 $openhr = $db->fetch();
 ?>
 
@@ -147,7 +147,7 @@ for ($x = 0; $x <= (count($months)-1); $x++){
  	} else {
  		echo '"'.date("M",strtotime($months[$x])).'",';
  	}
-}
+}						
 echo "datasets : [ { ";
 echo 'label: "Bookings Per Month",
 	fillColor : "rgba(220,220,220,0.2)",

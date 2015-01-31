@@ -83,6 +83,10 @@ if (checkdate($month,$day,$year) == FALSE && $day !== 0){
   array_push($errors, "This date is invalid.");
 }
 
+if (strtotime($selected_date) > strtotime('+6 months') OR strtotime($selected_date) < strtotime('-6 months')){
+  array_push($errors, "This date is currently beyond our booking threshold for now.");
+}
+
 if(date('w', strtotime($selected_date)) == 0 AND $day !== 0) {
    array_push($errors, "We don't open on sundays.");
 }
