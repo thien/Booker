@@ -51,12 +51,7 @@ function generate_pin($used_pins = array()){
 	$new_pin = rand(10000,99999);
 	$new_pin_hash = encrypt($new_pin);
 	while (in_array($new_pin_hash, $used_pins)){
-		//current pin is in use, trying again with newly generated pin.
-		$new_pin = rand(10000,99999);
-		//encrypt new pin
-		$new_hash = encrypt($new_pin);
-		//assign new pin hash to check in array. if fails loop will iterate
-		$new_pin_hash = $new_hash;
+		generate_pin($used_pins);
 	}
 	return array(
 		'pin' => $new_pin,
@@ -115,13 +110,13 @@ if ($usertype == 'staff'){
 if (isset($_POST)){
 
 	if (isset($_POST['forename'])){
-	$forename = trim($_POST['forename']);
+		$forename = trim($_POST['forename']);
 		if (strlen($forename) < 1){
 	  	array_push($errors, "Please type in a forename.");
 	  	}
 	}
 	if (isset($_POST['surname'])){
-	$surname = trim($_POST['surname']);
+		$surname = trim($_POST['surname']);
 		if (strlen($surname) < 1){
 	  	array_push($errors, "Please type in a surname.");
 	  	}
@@ -136,19 +131,18 @@ if (isset($_POST)){
 	if (count($errors) == 0) {
 		if (isset($_POST['register'])){
 
+			$usedpins = array();
 			$query = "SELECT pin FROM staff";
 			$db->DoQuery($query);
-			$used_pins = $db->fetch();
-			if (!empty($used_pins)){
-			$newpins = generate_pin($used_pins);
+			$used_pins = $db->fetchAll();
+			foreach ($used_pins as $usedpin){
+				array_push($usedpins, $usedpin['pin']);
+			}
+			if (!empty($usedpins)){
+			$newpins = generate_pin($usedpins);
 			} else {
 			$newpins = generate_pin();
 			}
-			// echo "your new pin is ";
-			// print_r($newpins);
-			// echo $newpins['pin'] . "<br>";
-			// echo $newpins['pin_hash'];
-
 
 			$query_params = array(
 				':pin' => $newpins['pin']
@@ -169,10 +163,11 @@ if (isset($_POST)){
 
 		if (isset($_POST['id_update'])){
 			$id = $_POST['id_update'];
-			$query = "UPDATE staff SET s_forename = :forename, s_surname = :surname WHERE id = :id";
+			$query = "UPDATE staff SET s_forename = :forename, s_surname = :surname, s_email = :email WHERE id = :id";
 			$query_params = array(
 				':forename' => $forename,
 				':surname' => $surname,
+				':email' => $email,
 				':id' => $id
 			);
 			// print_r($query_params);
@@ -215,15 +210,20 @@ if (isset($_POST)){
 
 			$id = $_POST['new_pin_request'];
 
+
+			$usedpins = array();
 			$query = "SELECT pin FROM staff";
 			$db->DoQuery($query);
-			$used_pins = $db->fetch();
+			$used_pins = $db->fetchAll();
+			foreach ($used_pins as $usedpin){
+				array_push($usedpins, $usedpin['pin']);
+			}
+			
 			if (!empty($used_pins)){
-			$newpins = generate_pin($used_pins);
+			$newpins = generate_pin($usedpins);
 			} else {
 			$newpins = generate_pin();
 			}
-
 			include_once("../functions/email.php");
 
 			$email_params = array(
@@ -233,7 +233,7 @@ if (isset($_POST)){
 				':pin' => $newpins['pin_hash'],
 				':id' => $id
 			);
-			email($staff_details['s_email'], "Staff", $staff_details['s_forename'], "new_pin", $email_params);
+			email($email, "Staff", $forename, "new_pin", $email_params);
 
 			$query = "UPDATE staff SET pin = :pin WHERE id = :id";
 			$db->DoQuery($query, $query_params);

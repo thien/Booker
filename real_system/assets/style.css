@@ -107,9 +107,10 @@ header ul a:active, ul a.active {
 #slogan{
 	font-size: 12px;
 	font-style: normal;
-	width: 150px;
+	width: 160px;
 	font-weight: normal;
 	white-space: normal;
+
 }
 #headingright {
     text-align: right;

@@ -1,14 +1,13 @@
 <?php
-
 function email($email, $user_id, $forename, $type, $extra = array()) {
 	$headers = "From: robot@tnguyen.ch";
 	if ($type == "confirm_registration") {
 		if(isset($extra[":pin"])) {
 			$pin = $extra[":pin"];
-		$subject = 'Time to confirm your email';
-		$message = "Hi $forename, \n\n You need to activate your account. Click the link below.\n\n";
-		$message .= "http://projects.tnguyen.ch/confirmation.php?type=registration&value=$pin";} 
-		else {
+			$subject = 'Time to confirm your email';
+			$message = "Hi $forename, \n\n You need to activate your account. Click the link below.\n\n";
+			$message .= "http://projects.tnguyen.ch/confirmation.php?type=registration&value=$pin";
+		} else {
 			echo "No pin is inserted.";
 		}
 	}
@@ -30,25 +29,23 @@ function email($email, $user_id, $forename, $type, $extra = array()) {
 	}
 	if ($type == "booking") {
 		$subject = 'Time to confirm your booking';
-		$message = "Hi $forename, \n\n You need to activate your account. Click the link below. \n\n
-					";
+		$message = "Hi $forename, \n\n You need to activate your account. Click the link below. \n\n";
 	}
 	if ($type == "appointment") {
-			if(isset($extra[":bookingday"]) & isset($extra[":bookingtime"]) & isset($extra[":bookingservice"])) {
+		if(isset($extra[":bookingday"]) & isset($extra[":bookingtime"]) & isset($extra[":bookingservice"])) {
 			$booking_date = $extra[":bookingday"];
 			$booking_time = $extra[":bookingtime"];
 			$booking_service = $extra[":bookingservice"];
 			$subject = 'Your Appointment';
 			$message = "Hi $forename,\n\n You have an appointment at $booking_date, $booking_time for a $booking_service.";
-				}
+		}
 	}
 	if ($type == "new_pin") {
 		if(isset($extra[":pin"])) {
 			$pin = $extra[":pin"];
 			$subject = 'Your New Pin';
-			$message = "Hi $forename,
-						Your new pin is $pin.";
-				}
+			$message = "Hi $forename, \n\n Your new pin is $pin.";
+		}
 	}
 	if ($type == "new_staff") {
 		if(isset($extra[":pin"])) {
