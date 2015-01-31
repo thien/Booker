@@ -18,7 +18,7 @@ if ($require_user == true) {
 if ($require_admin == true) {
   // echo "this page requires admin priv";
   // print_r($_COOKIE);
-  if (!isset($_COOKIE['admin']['loggedin'])){ //checks if cookie is expired.
+  if (!($_COOKIE['admin']['loggedin']) == 1){ //checks if cookie is expired.
     header('Location: login.php?timeout=true'); 
    } else {
     //rewrite cookie with new time.
