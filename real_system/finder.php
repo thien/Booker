@@ -6,6 +6,27 @@ $showfoundfolders = FALSE; // you can use this to debug.
 
 
 // -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+// -------------------------------------
+
 
 echo "<pre>";
 echo "<h1>COMP4 Variable and Function Finder</h1>";
@@ -41,7 +62,14 @@ foreach ($folders as $folder){
 if ($showfoundfolders == TRUE){
 	echo $line;
 }
-echo "<br>";
+// echo "<br>";
+
+
+// // foreach ($phps as $php){
+// // echo str_replace("/Users/ghost/booker/real_system/", "", $php) . "<br>";
+// // }
+
+// echo "<br>";
 
 foreach ($phps as $php){ //goes through all php files in array.
 	if (strpos($php,basename($_SERVER['SCRIPT_NAME'])) == FALSE){
@@ -85,5 +113,20 @@ foreach ($final_list_of_functions as $var_array){
 		echo "<tr><td>".$var_array[0]."</td><td>".$var_array[1]."</td></tr>";
 }
 echo "</table>";
+echo $line;
 
+array_push($phps, "/Users/ghost/booker/real_system/assets/style.css");
+array_push($phps, "/Users/ghost/booker/real_system/assets/password_meter.js");
+
+echo "<h1>Source Code</h1>";
+foreach ($phps as $php){ //goes through all php files in array.
+		echo "<h3><i>".str_replace("/Users/ghost/booker/real_system/", "", $php) . "</i></h3>";
+			highlight_string(file_get_contents($php)); 
+}
 ?>
+<style>
+  code {font-size: 9px}
+  h1 {font-size: 16pt; font-family: "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;}
+  h3  {font-size: 12px; color:#175778; font-family: "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;}
+
+</style>

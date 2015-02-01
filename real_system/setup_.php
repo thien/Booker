@@ -148,11 +148,11 @@ if (isset($_POST['username'])) {
       "INSERT INTO `service` (`id`, `type`, `price`, `description`)
 VALUES
   (1, 'Manicure', 25, 'A luxurious beauty treatment for the fingernails and hands which includes perfectly-polished nails.'),
-  (2, 'Infil', 26, 'A fucking infill.'),
-  (3, 'Pedicure', 29, 'A fucking pedicure.'),
+  (2, 'Infil', 26, 'A infill.'),
+  (3, 'Pedicure', 29, 'A pedicure.'),
   (4, 'Full Set', 48, 'Manicure & Pedicure.'),
-  (5, 'File & Polish', 15, 'A fucking File & Polish'),
-  (6, 'Nail Repair', 10, 'A fucking Nail Repair.')
+  (5, 'File & Polish', 15, 'A File & Polish'),
+  (6, 'Nail Repair', 10, 'A Nail Repair.')
 ",
         "INSERT INTO `staff` (`id`, `pin`, `s_forename`, `s_surname`, `s_email`)
 VALUES

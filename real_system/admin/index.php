@@ -91,16 +91,16 @@ for ($x = 0; $x <= ($totalrows[0]-1); $x++){
 }
 // Line graph Statistics
 
-function count_instances($os_values, $month){
+function count_instances($values, $month){
   $count = 0;
-  foreach($os_values as $i)
+  foreach($values as $i)
     if(strpos($i, $month)!== FALSE)
       $count++;
   return $count;
 }
 
 $months = array();
-$os_values = array();
+$values = array();
 $query = "SELECT date FROM booking WHERE date > DATE_SUB(now(), INTERVAL 6 MONTH) ORDER BY date ASC";
 $db->DoQuery($query);
 $total = $db->fetchAll();
@@ -115,7 +115,7 @@ foreach ($total as $counts) {
 }
 
 foreach ($total as $t){
-	array_push($os_values, $t[0]);
+	array_push($values, $t[0]);
 }
 ?>
 <script>
@@ -159,9 +159,9 @@ echo 'label: "Bookings Per Month",
 	echo "data : [";
 for ($x = 0; $x <= (count($months)-1); $x++){
 	if ($x == count($months)-1){
- 		echo count_instances($os_values, $months[$x]);
+ 		echo count_instances($values, $months[$x]);
  	} else {
- 		echo count_instances($os_values, $months[$x]).",";
+ 		echo count_instances($values, $months[$x]).",";
  	}
 }
 echo "] } ] }";
