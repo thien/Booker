@@ -16,7 +16,7 @@ class booker {
         $this->month              = $month;
         $this->year               = $year;
         $this->selected_date      = $selected_date;
-        $this->first_day          = $first_day;
+       // $this->first_day          = $first_day;
         $this->back               = $back;
         $this->forward            = $forward;
         $this->booking_start_time = $this->QuickFetch("SELECT value FROM metadata WHERE id = '1'");

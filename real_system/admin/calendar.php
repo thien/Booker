@@ -54,10 +54,6 @@ include($directory . '/includes/header.php');
 $query = "SELECT * FROM closed_days";
 $db->DoQuery($query);
 $num = $db->fetchAll(PDO::FETCH_NUM);
-//$roww = $db->RowCount($query);
-
-
-
 ?>
 <h1>Calendar</h1>
 

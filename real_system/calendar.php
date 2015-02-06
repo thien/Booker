@@ -5,7 +5,7 @@ $require_user = true;
 include_once('includes/core.php'); 
 include('classes/booker.php');
 
-$calendar = new booker($link);
+$calendar = new booker();
 
 if (isset($_GET['month'])) { 
   $month = $_GET['month']; 

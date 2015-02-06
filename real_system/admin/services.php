@@ -70,7 +70,6 @@ include($directory . '/includes/header.php');
 $query = "SELECT * FROM service";
 $db->DoQuery($query);
 $num = $db->fetchAll(PDO::FETCH_NUM);
-//$roww = $db->RowCount($query);
 
 
 

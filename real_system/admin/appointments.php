@@ -42,7 +42,7 @@ $db->DoQuery($count_rows);
 $count = $db->fetch();
 
 //Add following after it
-$per_page =10;//define how many games for a page
+$per_page =10;//define how many results per page.
 $pages = ceil($count[0]/$per_page);
 
 if(!isset($_GET['page'])){

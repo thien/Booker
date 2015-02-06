@@ -1,5 +1,6 @@
 <?php
 $title = 'Confirmation';
+$require_user = true;
 include_once('includes/core.php'); 
 include_once('functions/encryption.php');
 include('functions/email.php');

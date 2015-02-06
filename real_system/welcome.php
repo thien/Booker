@@ -3,7 +3,7 @@ $title = 'Welcome';
 if (!$_COOKIE['userdata']['loggedin'] == 1) {
 	header('Location: login.php');
 } else {
-	header("refresh: 200; url=index.php");
+	header("refresh: 100; url=index.php");
 };
 include_once('includes/core.php'); 
 echo '<link rel="stylesheet" href="'.$directory."assets/style.css".'"><br><br><br><br>';

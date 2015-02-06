@@ -54,7 +54,6 @@ include($directory . '/includes/header.php');
 $query = "SELECT * FROM metadata";
 $db->DoQuery($query);
 $num = $db->fetchAll();
-//$roww = $db->RowCount($query);
 
 ?>
 <h1>Settings</h1>

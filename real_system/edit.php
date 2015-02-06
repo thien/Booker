@@ -1,5 +1,6 @@
 <?php 
 $title = 'Edit';
+$require_user = true;
 include_once("includes/core.php");
 include("functions/encryption.php");
 

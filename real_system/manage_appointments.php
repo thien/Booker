@@ -1,7 +1,7 @@
 <?php 
 $title = 'Manage Appointments';
 $menutype = "user_dashboard";
-$morethantoday = 1;
+$require_user = true;
 include_once("includes/core.php");
 $date = date("Y-m-d");
 $query = "SELECT booking.id, booking.date, booking.time, booking.comments,
