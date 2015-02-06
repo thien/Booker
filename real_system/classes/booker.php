@@ -224,7 +224,7 @@ class booker {
         $this->db->DoQuery("SELECT * FROM service");
         $services = $this->db->fetchAll();
         for ($i = strtotime($this->booking_start_time); $i <= strtotime($this->booking_end_time); $i = $i + $this->booking_frequency * 60) {
-            $slots[] = date("H:i:s", $i);
+            $booking_times[] = date("H:i:s", $i);
         }
         echo "<form id='calendar_form' method='post' action=''>";
         echo "<div id='left'>";
@@ -232,14 +232,14 @@ class booker {
         $option = "<select id='select' name='booking_time'><option value='selectvalue'>Please select a booking time</option>";
         if ($this->count >= 1) {
             foreach ($this->prior_bookings as $row) { // Check for bookings and remove any previously booked slots                 
-                foreach ($slots as $i => $r) {
+                foreach ($booking_times as $i => $r) {
                     if ($row['start'] == $r && $row['date'] == $this->year . '-' . $this->month . '-' . $this->day) {
-                        unset($slots[$i]);
+                        unset($booking_times[$i]);
                     }
                 }
             }
         }
-        foreach ($slots as $booking_time) {
+        foreach ($booking_times as $booking_time) {
             $finish_time = strtotime($booking_time) + $this->booking_frequency * 60; // Calculate finish time
             $option .= "<option value='" . $booking_time . "'>" . $booking_time . " - " . date("H:i:s", $finish_time) . "</option>";
         }
