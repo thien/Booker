@@ -124,8 +124,9 @@ class booker {
                         }
                     }
                 }
+                $this_day = $this->year."-".$this->month."-".$row['daynumber'];
                 foreach ($closed_days as $item) { // It's a closed day, set from the database.
-                    if (strtotime($item['date']) == strtotime( $this->year."-".$this->month."-".$row['daynumber'])) {
+                    if (strtotime($item['date']) == strtotime($this_day)) {
                         $box = 2;
                     }
                 }
@@ -155,19 +156,19 @@ class booker {
         $link        = "<a href='calendar.php?month=" . $this->month . "&year=" . $this->year . "&day=" . sprintf("%02s", $daynumber) . '#selected_date' . "'>";
         switch ($box) {
             case (1): // Partially booked
-                $string = $link . "<div class='box' id='key_partbooked'>" . $date_number . "</div></a>";
+                $text = $link . "<div class='box' id='key_partbooked'>" . $date_number . "</div></a>";
                 break;
             case (3): // Fully booked
-                $string = "<div class='box' id='key_fullybooked'>" . $date_number . "</div>";
+                $text = "<div class='box' id='key_fullybooked'>" . $date_number . "</div>";
                 break;
             case (2): // Past / Unavailable
-                $string = "<div class='box' id='key_unavailable'>" . $date_number . "</div>";
+                $text = "<div class='box' id='key_unavailable'>" . $date_number . "</div>";
                 break;
             default: // Empty
-                $string = $link . "<div class='box' id='key_available'>" . $date_number . "</div></a>";
+                $text = $link . "<div class='box' id='key_available'>" . $date_number . "</div></a>";
                 break;
         }
-        return $string;
+        return $text;
     }
 
     function make_booking_slots() {
