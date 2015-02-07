@@ -247,7 +247,8 @@ class booker {
         echo "<select id='select' name='booking_service'>";
         echo "<option value='selectvalue'>Please select a Service</option>";
         foreach ($services as $row) {
-            echo '<option value="' . $row[0] . '">' .  $row[1] . " - &pound;" . $row[2] . '</option>';
+            $text = $row[1] . " - &pound;" . $row[2];
+            echo '<option value="' . $row[0] . '">' . $text . '</option>';
         }
         echo '</select>';
         echo "<textarea rows='3' cols='30' maxlength='140' name='comments' placeholder='Any comments? (140 Character Limit!)'></textarea>";
