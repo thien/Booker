@@ -124,9 +124,8 @@ class booker {
                         }
                     }
                 }
-                $this_day = $this->year."-".$this->month."-".$row['daynumber'];
                 foreach ($closed_days as $item) { // It's a closed day, set from the database.
-                    if (strtotime($item['date']) == strtotime($this_day)) {
+                    if (strtotime($item['date']) == strtotime( $this->year."-".$this->month."-".$row['daynumber'])) {
                         $box = 2;
                     }
                 }
@@ -156,19 +155,19 @@ class booker {
         $link        = "<a href='calendar.php?month=" . $this->month . "&year=" . $this->year . "&day=" . sprintf("%02s", $daynumber) . '#selected_date' . "'>";
         switch ($box) {
             case (1): // Partially booked
-                $text = $link . "<div class='box' id='key_partbooked'>" . $date_number . "</div></a>";
+                $string = $link . "<div class='box' id='key_partbooked'>" . $date_number . "</div></a>";
                 break;
             case (3): // Fully booked
-                $text = "<div class='box' id='key_fullybooked'>" . $date_number . "</div>";
+                $string = "<div class='box' id='key_fullybooked'>" . $date_number . "</div>";
                 break;
             case (2): // Past / Unavailable
-                $text = "<div class='box' id='key_unavailable'>" . $date_number . "</div>";
+                $string = "<div class='box' id='key_unavailable'>" . $date_number . "</div>";
                 break;
             default: // Empty
-                $text = $link . "<div class='box' id='key_available'>" . $date_number . "</div></a>";
+                $string = $link . "<div class='box' id='key_available'>" . $date_number . "</div></a>";
                 break;
         }
-        return $text;
+        return $string;
     }
 
     function make_booking_slots() {
@@ -247,8 +246,7 @@ class booker {
         echo "<select id='select' name='booking_service'>";
         echo "<option value='selectvalue'>Please select a Service</option>";
         foreach ($services as $row) {
-            $text = $row[1] . " - &pound;" . $row[2];
-            echo '<option value="' . $row[0] . '">' . $text . '</option>';
+            echo '<option value="' . $row[0] . '">' .  $row[1] . " - &pound;" . $row[2] . '</option>';
         }
         echo '</select>';
         echo "<textarea rows='3' cols='30' maxlength='140' name='comments' placeholder='Any comments? (140 Character Limit!)'></textarea>";
