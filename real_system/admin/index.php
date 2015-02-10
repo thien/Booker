@@ -82,7 +82,7 @@ echo "<tr><td>Number of Bookings for Today: </td><td>" . $daily_bookings[0] . "<
  $db->DoQuery($query);
  $services = $db->fetchAll();
 
-for ($x = 0; $x <= ($totalrows[0]-1); $x++){
+for ($x = 0; $x <= ($totalrow); $x++){
 	$query = "SELECT COUNT(*) FROM booking WHERE service_id = '".$services[$x]['id']."'";
 	$db->DoQuery($query);
 	$counter = $db->fetch();

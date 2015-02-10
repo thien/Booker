@@ -69,32 +69,32 @@ if (isset($password) & $password !== ""){
 
       if ($forename != $prevalue['forename']){
         // $newdetails["0"][] = $forename;
-        $txt = "UPDATE users SET forename = '$forename' WHERE id = '$user_id'";
-        $db->DoQuery($txt);
+        $query = "UPDATE users SET forename = '$forename' WHERE id = '$user_id'";
+        $db->DoQuery($query);
         // echo "updated forename";
       }
       if ($surname != $prevalue['surname']){
         // $newdetails["1"][] = $surname;
-        $txt = "UPDATE users SET surname = '$forename' WHERE id = '$user_id'";
-        $db->DoQuery($txt);
+        $query = "UPDATE users SET surname = '$forename' WHERE id = '$user_id'";
+        $db->DoQuery($query);
                 // echo "updated surname";
       }
       if ($password !== NULL AND $password !== $prevalue['password']){
         // $newdetails["2"][] = $password;
-        $txt = "UPDATE users SET password = '$forename' WHERE id = '$user_id'";
-        $db->DoQuery($txt);
+        $query = "UPDATE users SET password = '$forename' WHERE id = '$user_id'";
+        $db->DoQuery($query);
                 // echo "updated password";
       }
       if ($email != $prevalue['email']){
         // $newdetails["3"][] = $email;
-        $txt = "UPDATE users SET email = '$email' WHERE id = '$user_id'";
-        $db->DoQuery($txt);
+        $query = "UPDATE users SET email = '$email' WHERE id = '$user_id'";
+        $db->DoQuery($query);
                 // echo "updated email";
       }
       if ($phoneno != $prevalue['phoneno']){
         // $newdetails["4"][] = $phoneno;
-        $txt = "UPDATE users SET phoneno = '$phoneno' WHERE id = '$user_id'";
-        $db->DoQuery($txt);
+        $query = "UPDATE users SET phoneno = '$phoneno' WHERE id = '$user_id'";
+        $db->DoQuery($query);
                 // echo "updated phoneno";
       }
 
