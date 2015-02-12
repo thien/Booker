@@ -1,0 +1,164 @@
+## Adding Tables into Database
+
+create_tables = array(query1, query2, .... queryN)
+
+for x=0, x<=6, x++
+	if x = 0
+		table_name = a
+	end if
+	if x = 1
+		table_name = b
+	end if
+	if x = 2
+		table_name = c
+	end if
+	if x = 3
+		table_name = d
+	end if
+	if x = 4
+		table_name = e
+	end if
+	if x = 5
+		table_name = f
+	end if
+	if x = 6
+		table_name = g
+	end if
+	check_if_exists = SHOW TABLES LIKE 'x'
+	doQuery(check_if_exists)
+	fetch <- fetch_results_from_query
+	if !fetch
+		doquery(table[x])
+	end
+end for
+
+insert_base_queries = (querya1, querya2, .... queryaN)
+
+foreach insert_base_queries as query 
+	doQuery(query)
+end for
+
+
+## Logins
+
+username <- get username
+password <- get password
+
+if username and password not empty
+	username <- trim username
+	password <- encrypt(trim password)
+	query <- select * from users where username = username and password = password
+	DoQuery(query)
+	result = fetch()
+	if result
+		if result[activated] = 1
+			if result[banned] = 0
+				log in
+			else 
+			print error
+			end
+		else 
+		print error
+		end
+	else
+	print error
+	end
+else 
+print error
+end
+
+##forgot
+if !empty(email)
+	query = select * from users where email = email
+	DoQuery(query)
+	details = fetchall()
+	if !empty(details)
+		code = encrypt(random number)
+		query = update users set forgot_code = code
+		DoQuery(query)
+		email(details[user], code)
+	end if
+	direct user to confirmation page
+end
+
+##Database
+class database
+	public function initiate
+		include page_with_db_variables.php
+		try
+			this->database = new database(hostname,db_name, username, password)
+		catch
+			die, print error
+	end function
+	public function doquery (query, arguments = array())
+		try 
+			this->result = this->database->prepare query
+			this-> result = execeute(arugments)
+		catch
+			die, print error
+		end
+	public function fetch
+		return this->result->fetch()
+	end
+	public function fetchall
+		return this->result->fetchall()
+	end
+	public function rowcount()
+		return this->result->rowcount()
+	end
+end
+
+##Email
+function email(email, userid, forename, type, extra = array)
+	headers = from: robot@tnguyen.ch
+	if type = confirm_registration
+		if isset(extra[pin])
+			pin = extra[pin]
+			subject = subject
+			message = message . pin
+		else 
+			echo no pin is inserted.
+	end
+	if type = forgotten_password
+		if isset(extra[pin])
+			pin = extra[pin]
+			subject = subject
+			message = message . pin
+		else 
+			echo no pin is inserted.
+	end
+	...
+	mail(email, subject, message, headers)
+end
+
+
+##Registration Inputs
+
+if password length > 7
+if password matches (/([a-z].*[A-Z])|([A-Z].*[a-z])/)
+	strength = strength + 1
+if password matches (/([a-zA-Z])/) && password matches(/([0-9])/))
+	strength = strength + 1
+if password matches (/([a-zA-Z])/) && password matches(/([0-9])/)
+	strength = strength + 1
+if password matches (/(.*[!,%,&,@,#,$,^,*,?,_,~].*[!,%,&,@,#,$,^,*,?,_,~])/)
+	strength = strength + 1
+
+##Encryption
+
+function encrypt(value)
+	salt = }B8>){9#3*4L3t98d9QF3)&#9j?tKf
+	salt = md5(salt)
+	value = hash(salt, md5(value))
+	return value
+end
+
+##Paginator
+query = select from x order by date(desc)
+query = query . where date = 'the_date'
+rows = number of rows (get from query)
+per_page = 10
+pages = ceil(rows/per_page)
+
+
+##Booker
