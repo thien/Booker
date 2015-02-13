@@ -154,11 +154,44 @@ function encrypt(value)
 end
 
 ##Paginator
+
 query = select from x order by date(desc)
 query = query . where date = 'the_date'
 rows = number of rows (get from query)
 per_page = 10
 pages = ceil(rows/per_page)
+if !empty(page)
+	page = 1
+else 
+	page = get page
+start = (page - 1)/page
+query = query + " limit start, per page"
+DoQuery(query)
+num = FetchAll()
 
+// displaying results
+
+while i = 0 and i < pages
+	if page = i
+		echo i
+	else
+		echo i
+	end if
+	i = i + 1
+end while
+
+##PIN Generator
+
+function generate_pin(used_pins as array)
+	new_pin = random_number(10000,99999)
+	new_pin_hash = encrypt(new_pin)
+	while new_pin_hash is in used_pins array
+		generate_pin(used_pins as array)
+	end while
+	return array
+		pin = new_pin
+		pin_hash = new_pin_hash
+end
 
 ##Booker
+
