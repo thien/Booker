@@ -26,6 +26,10 @@ $query = "SELECT sum(service.price) FROM booking INNER JOIN service ON booking.s
 $db->DoQuery($query);
 $monthly_revenue = $db->fetch();
 
+if (empty($monthly_revenue[0])){
+	$monthly_revenue[0] = 0;
+}
+
 // Calculating Number of Accounts
 $query = "SELECT COUNT(*) FROM users";
 $db->DoQuery($query);

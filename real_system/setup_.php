@@ -13,8 +13,14 @@ if (isset($_POST['username'])) {
   if (!filter_var($email, FILTER_VALIDATE_EMAIL))
   array_push($errors, "Please specify a valid email address");
 
-  if (strlen($username) == 0)
-  array_push($errors, "Please enter a valid username");
+  if (strlen($username) == 0){
+    array_push($errors, "Please enter a username.");
+  } else {
+    if (ctype_alnum($username) !== true){
+      array_push($errors, "Please enter a valid username.");
+    }
+  }
+
 
   if (strlen($password) < 5)
   array_push($errors, "Please enter a password. Passwords must contain at least 5 characters.");
@@ -37,23 +43,7 @@ if (isset($_POST['username'])) {
   `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;",
-              "CREATE TABLE `booking` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
-  `date` date NOT NULL,
-  `time` time NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
-  `comments` text COLLATE utf8_unicode_ci NOT NULL,
-  `confirmedbystaff` tinyint(1) DEFAULT NULL,
-  `service_id` int(11) unsigned DEFAULT NULL,
-  `staff_id` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `service_id` (`service_id`),
-  KEY `booking_ibfk_2` (`staff_id`),
-  KEY `idx_user_id` (`user_id`) USING BTREE,
-  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
-  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
+              
               "CREATE TABLE `closed_days` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date DEFAULT NULL,
@@ -97,6 +87,25 @@ if (isset($_POST['username'])) {
   `forgot_code` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;", 
+
+
+"CREATE TABLE `booking` (
+  `id` int(100) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `time` time NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `comments` text COLLATE utf8_unicode_ci NOT NULL,
+  `confirmedbystaff` tinyint(1) DEFAULT NULL,
+  `service_id` int(11) unsigned DEFAULT NULL,
+  `staff_id` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `booking_ibfk_2` (`staff_id`),
+  KEY `idx_user_id` (`user_id`) USING BTREE,
+  CONSTRAINT `booking_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`),
+  CONSTRAINT `booking_ibfk_2` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;",
     );
 
     for ($x = 0; $x <= 6; $x++) {
@@ -105,23 +114,23 @@ if (isset($_POST['username'])) {
             $table_name = "admin";
             break;
         case 1:
-            $table_name = "booking";
-            break;
-        case 2:
             $table_name = "closed_days";
             break;
-        case 3:
+        case 2:
             $table_name = "metadata";
             break;
-        case 4:
+        case 3:
             $table_name = "service";
             break;
-        case 5:
+        case 4:
             $table_name = "staff";
             break;
-        case 6:
+        case 5:
             $table_name = "users";
-            break;     
+            break;   
+        case 6:
+            $table_name = "booking";
+            break;  
       }
       $check_if_exists = "SHOW TABLES LIKE '$table_name'";
       $db->doQuery($check_if_exists);

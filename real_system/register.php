@@ -49,8 +49,11 @@ if (!preg_match("/^(\+44\s?7\d{3}|\(?07\d{3}\)?)\s?\d{3}\s?\d{3}$/",$phoneno)){
 
 if (strlen($username) == 0){
   array_push($errors, "Please enter a username.");
+} else {
+  if (ctype_alnum($username) !== true){
+    array_push($errors, "Please enter a valid username.");
+  }
 }
-
 
 if (!preg_match("/^[a-zA-Z ]*$/",$forename)) {
   array_push($errors, "Your forename has invalid characters."); 
@@ -102,6 +105,7 @@ include('includes/header.php');
 <script type="text/javascript" src="assets/password_meter.js"></script>
 <script type="text/javascript">
 
+
 $(document).ready(function() {
 $('#username_availability').load('functions/check_username.php').show();
 $('#username_').keyup(function() {
@@ -115,6 +119,9 @@ $('#username_').keyup(function() {
 
 // When the browser is ready...
 $(function() {
+jQuery.validator.addMethod("lettersonly", function(value, element) {
+  return this.optional(element) || /^[a-zA-Z0-9]+$/i.test(value);
+}, "Letters only please"); 
   
     // Setup form validation on the #register-form element
     $("#forms").validate({
@@ -132,7 +139,11 @@ $(function() {
                 required: true,
                 email: true
             },
-            username: "required",
+            username: {
+                required: true,
+                lettersonly: "/([A-Za-z0-9])\w+/"
+
+            },
             password: {
                 required: true,
                 minlength: 6
@@ -153,7 +164,10 @@ $(function() {
             forename: "Please enter your forename.",
             surname: "Please enter your surname.",
             email: "Please enter a valid email address.",
-            username: "Please enter a valid username.",
+            username: {
+              required: "Please enter a username.",
+              lettersonly: "Usernames can only have letters or numbers."
+            },
             password: {
                 required: "Please provide a password.",
                 minlength: "Your password must be at least six characters long."

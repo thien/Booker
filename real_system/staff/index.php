@@ -48,6 +48,7 @@ if (isset($_COOKIE['staff']['logged_in'])) {
 			Login
 			</title>
 		<link rel="stylesheet" href="../assets/login.css"/>
+		<link rel="apple-touch-icon" href="/icon.png"/>  
 		</head>
 		<body>
 		<div class="login-container">

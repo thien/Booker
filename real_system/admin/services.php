@@ -57,9 +57,17 @@ if (isset($_POST)) {
       array_push($update, 'The service has been updated.');
     }
   }  elseif(isset($_POST['service_id_delete'])){
-    $query = "DELETE FROM service WHERE id = '$id'";
+
+    $query = "SELECT service_id FROM booking WHERE service_id = '$id'";
     $db->DoQuery($query);
+    $num = $db->fetchAll();
+    if (!empty($num)){
+      array_push($errors, 'This service is used by a customer. It is no longer able to be deleted.');
+    } else {
+      $query = "DELETE FROM service WHERE id = '$id'";
+      $db->DoQuery($query);
       array_push($update, 'The service has been deleted.');
+    }
   }
 
 }

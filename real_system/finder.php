@@ -3,7 +3,10 @@
 
 $directory = '/Users/ghost/booker/real_system';
 $showfoundfolders = FALSE; // you can use this to debug.
-
+$showsource = 		FALSE;
+$showfunctions = 	FALSE;
+$showerrors = 		TRUE;
+$showvariables = 	FALSE;
 
 // -------------------------------------
 // -------------------------------------
@@ -36,6 +39,7 @@ $line = "<br><br>--------------------------------------------------------<br><br
 $phps = array();
 $final_list_of_variables = array();
 $final_list_of_functions = array();
+$final_list_of_errors = array();
 $folders = glob($directory . '/*' , GLOB_ONLYDIR);
 array_push($folders, '/Users/ghost/booker/real_system');
 
@@ -85,9 +89,20 @@ foreach ($phps as $php){ //goes through all php files in array.
 		preg_match_all('/function[\s\n]+(\S+)[\s\n]*\(/', $file, $functs_in_file); //gets all functions in php file.
 		foreach ($functs_in_file[0] as $function){
 			if (!in_array($function, $final_list_of_functions)){
-				$smallindex2 = array(str_replace('function', '', $function), str_replace($directory, '', $php));
-				array_push($final_list_of_functions, $smallindex2);
+				$smallindex = array(str_replace('function', '', $function), str_replace($directory, '', $php));
+				array_push($final_list_of_functions, $smallindex);
 			} 
+		}
+
+		preg_match_all('/((array_push\(\$errors, ")([^\.!?]*[\.!?\s]*[^\.!?]*[\.!?\s]*)("\);{1}))/', $file, $errors_in_file);
+		foreach ($errors_in_file[0] as $error){
+			if (!in_array($error, $final_list_of_errors)){
+				$error_string = $error;
+				//$error_string = str_replace('array_push($errors, ', '', $error);
+				// $error_string = substr($error_string, 0, strpos( $error_string, ');'));
+				$smallindex = array($error_string, str_replace($directory, '', $php));
+				array_push($final_list_of_errors, $smallindex);
+			}
 		}
 	}
 }
@@ -96,6 +111,7 @@ $final_list_of_variables = array_map("unserialize", array_unique(array_map("seri
 $final_list_of_functions = array_map("unserialize", array_unique(array_map("serialize", $final_list_of_functions)));
 
 //DISPLAY RESULTS
+if ($showvariables !== FALSE){
 echo "<table>";
 echo "<tr>
     <th>Variables</th><th>Location</th></tr>";
@@ -105,6 +121,9 @@ foreach ($final_list_of_variables as $var_array){
 }
 echo "</table>";
 echo $line;
+}
+
+if ($showfunctions !== FALSE){
 echo "<table>";
 echo "<tr>
     <th>Functions</th><th>Location</th></tr>";
@@ -114,14 +133,30 @@ foreach ($final_list_of_functions as $var_array){
 }
 echo "</table>";
 echo $line;
+}
+
+if ($showerrors !== FALSE){
+	echo "<table>";
+	echo "<tr>
+	    <th>Errors</th><th>Location</th></tr>";
+	foreach ($final_list_of_errors as $var_array){
+		array_unique($var_array);
+			echo "<tr><td>".$var_array[0]."</td><td>".$var_array[1]."</td></tr>";
+	}
+	echo "</table>";
+	echo $line;
+}
+
+if ($showsource !== FALSE){
 
 array_push($phps, "/Users/ghost/booker/real_system/assets/style.css");
 array_push($phps, "/Users/ghost/booker/real_system/assets/password_meter.js");
 
-echo "<h1>Source Code</h1>";
-foreach ($phps as $php){ //goes through all php files in array.
-		echo "<h3><i>".str_replace("/Users/ghost/booker/real_system/", "", $php) . "</i></h3>";
-			highlight_string(file_get_contents($php)); 
+	echo "<h1>Source Code</h1>";
+	foreach ($phps as $php){ //goes through all php files in array.
+			echo "<h3><i>".str_replace("/Users/ghost/booker/real_system/", "", $php) . "</i></h3>";
+				highlight_string(file_get_contents($php)); 
+	}
 }
 ?>
 <style>

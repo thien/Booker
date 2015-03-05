@@ -14,7 +14,6 @@ $query_params = array(
 $db->DoQuery($query, $query_params);
 $rows = $db->fetch();
 
-$pattern = '/^def/';
 
 if ($value == NULL)
 	echo '';
@@ -24,7 +23,7 @@ else {
 	if ($rows >= 1)
 	echo "This username isn't available.";
 else if ($rows == 0)
-	if (preg_match($pattern, $value, $matches, PREG_OFFSET_CAPTURE, 3) !== NULL) {
+	if (ctype_alnum($value)) {
 		$username_available == TRUE;
 		echo "This username is available!";
 	}
@@ -32,6 +31,3 @@ else if ($rows == 0)
 		echo "This username is invalid.";
 }
 ?>
-<!-- 
-
-https://www.youtube.com/watch?v=8wUu7pWBygY -->

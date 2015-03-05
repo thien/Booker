@@ -75,13 +75,13 @@ if (isset($password) & $password !== ""){
       }
       if ($surname != $prevalue['surname']){
         // $newdetails["1"][] = $surname;
-        $query = "UPDATE users SET surname = '$forename' WHERE id = '$user_id'";
+        $query = "UPDATE users SET surname = '$surname' WHERE id = '$user_id'";
         $db->DoQuery($query);
                 // echo "updated surname";
       }
       if ($password !== NULL AND $password !== $prevalue['password']){
         // $newdetails["2"][] = $password;
-        $query = "UPDATE users SET password = '$forename' WHERE id = '$user_id'";
+        $query = "UPDATE users SET password = '$password' WHERE id = '$user_id'";
         $db->DoQuery($query);
                 // echo "updated password";
       }

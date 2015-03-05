@@ -10,6 +10,10 @@ class booker {
         $fetch_value = $this->db->fetch();
         return $fetch_value[0];
     }
+    function minutes($time) {
+        $time = explode(':', $time);
+        return (($time[0] * 3600) + ($time[1] * 60)) / 60;
+    }
     function make_calendar($selected_date, $first_day, $back, $forward, $day, $month, $year) {
         $this->database();
         $this->day                = $day;
@@ -98,9 +102,25 @@ class booker {
         }
         $this->create_days_arr($year, $month);
     }
-    function minutes($time) {
-        $time = explode(':', $time);
-        return (($time[0] * 3600) + ($time[1] * 60)) / 60;
+    function create_days_arr($year, $month) { // Creates array of days in the month.       
+        $num_days_month = cal_days_in_month(CAL_GREGORIAN, $month, $year); // Make array called $day with the correct number of days
+        for ($i = 1; $i <= $num_days_month; $i++) {
+            $d            = mktime(0, 0, 0, $month, $i, $year);
+            $this->days[] = array(
+                "daynumber" => $i,
+                "dayname" => date("l", $d)
+            );
+        }
+        for ($j = 1; $j <= $this->first_day; $j++) { // Add blank elements to start of array if the first day of the month is not a Monday.
+            array_unshift($this->days, '0');
+        }
+        $padding_end = 7 - (count($this->days) % 7); // Add blank elements to end of array if required.
+        if ($padding_end < 7) {
+            for ($j = 1; $j <= $padding_end; $j++) {
+                array_push($this->days, NULL);
+            }
+        }
+        $this->start_calendar();
     }
     function create_days_table() {
         $day_capacity = ((minutes($this->booking_end_time) + 30) - minutes($this->booking_start_time)) / $this->booking_frequency;
@@ -155,16 +175,16 @@ class booker {
         $date_number = "<p>" . str_replace(NULL, ' ', $daynumber) . "</p>";
         $link        = "<a href='calendar.php?month=" . $this->month . "&year=" . $this->year . "&day=" . sprintf("%02s", $daynumber) . '#selected_date' . "'>";
         switch ($box) {
-            case (1): // Partially booked
+            case (1):
                 $text = $link . "<div class='box' id='key_partbooked'>" . $date_number . "</div></a>";
                 break;
-            case (3): // Fully booked
+            case (3):
                 $text = "<div class='box' id='key_fullybooked'>" . $date_number . "</div>";
                 break;
-            case (2): // Past / Unavailable
+            case (2):
                 $text = "<div class='box' id='key_unavailable'>" . $date_number . "</div>";
                 break;
-            default: // Empty
+            default:
                 $text = $link . "<div class='box' id='key_available'>" . $date_number . "</div></a>";
                 break;
         }
@@ -176,7 +196,7 @@ class booker {
         echo "<form id='calendar_form' method='post' action=''>";
         echo "<div class='status' id='selected_date'>Please select a day.</div>";
         } else {
-            $this->create_form(); //Shows form.
+            $this->create_form();
         }
     }
     function start_calendar() {
@@ -219,8 +239,6 @@ class booker {
         }
     }
     function create_form() {
-        // Create array of the booking times
-    
         $this->db->DoQuery("SELECT * FROM service");
         $services = $this->db->fetchAll();
         for ($i = strtotime($this->booking_start_time); $i <= strtotime($this->booking_end_time); $i = $i + $this->booking_frequency * 60) {
@@ -258,25 +276,6 @@ class booker {
         echo recaptcha_get_html($publickey, $error);
         echo "<button type='submit'>Submit</button></div></form>";
     }
-    function create_days_arr($year, $month) { // Creates array of days in the month.       
-        $num_days_month = cal_days_in_month(CAL_GREGORIAN, $month, $year); // Make array called $day with the correct number of days
-        for ($i = 1; $i <= $num_days_month; $i++) {
-            $d            = mktime(0, 0, 0, $month, $i, $year);
-            $this->days[] = array(
-                "daynumber" => $i,
-                "dayname" => date("l", $d)
-            );
-        }
-        for ($j = 1; $j <= $this->first_day; $j++) { // Add blank elements to start of array if the first day of the month is not a Monday.
-            array_unshift($this->days, '0');
-        }
-        $padding_end = 7 - (count($this->days) % 7); // Add blank elements to end of array if required.
-        if ($padding_end < 7) {
-            for ($j = 1; $j <= $padding_end; $j++) {
-                array_push($this->days, NULL);
-            }
-        }
-        $this->start_calendar();
-    }
+    
 }
 ?>

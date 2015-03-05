@@ -1,6 +1,6 @@
 <?php
 $title = 'Confirmation';
-$require_user = true;
+$require_user = false;
 include_once('includes/core.php'); 
 include_once('functions/encryption.php');
 include('functions/email.php');
@@ -8,6 +8,8 @@ include('includes/header.php');
 
 if (isset($_GET['value'])){
 $value = $_GET['value'];
+} else {
+$value = null;
 }
 if (isset($_GET['type'])){
 $type = $_GET['type'];
@@ -15,8 +17,8 @@ $type = $_GET['type'];
 
 if (isset($type)){
 	if ($type == "registration"){
-		if(isset($value)){
-			$query = ("SELECT activation_code FROM users WHERE activation_code = :value");
+		if($value !== null){
+			$query = "SELECT activation_code FROM users WHERE activation_code = :value";
 			$query_params = array(':value' => $value);
 			$db->DoQuery($query, $query_params);
 			$rows = $db->fetch();
@@ -79,7 +81,7 @@ if (isset($type)){
 	echo 'Your appointment details are sent to your email address.';
 	} elseif ($type == "updated") {
 		echo "<h1>Okay, Your information is updated.</h1>";
-
+		echo "Your changes will take effect the next time you log in. <br>";
 	echo 'You can now continue with your day. :)';
 	}
 }
