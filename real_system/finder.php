@@ -3,9 +3,9 @@
 
 $directory = '/Users/ghost/booker/real_system';
 $showfoundfolders = FALSE; // you can use this to debug.
-$showsource = 		FALSE;
+$showsource = 		TRUE;
 $showfunctions = 	FALSE;
-$showerrors = 		TRUE;
+$showerrors = 		FALSE;
 $showvariables = 	FALSE;
 
 // -------------------------------------
