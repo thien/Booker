@@ -136,13 +136,8 @@ if (isset($_POST['username'])) {
       $db->doQuery($check_if_exists);
       $fetch = $db->fetch();
       if (!$fetch) {
-          // echo $table_name . " does not exist. <br>";
           $db->doQuery($create_table[$x]);
-          // echo $table_name . " has been built for you. <br>";
       } 
-      // else {
-      //     echo $table_name . " exists<br>";
-      // }
     }
 
   $insert_base_queries = array(
@@ -166,13 +161,6 @@ VALUES
         "INSERT INTO `staff` (`id`, `pin`, `s_forename`, `s_surname`, `s_email`)
 VALUES
   (1, NULL, NULL, NULL, NULL);
-",
-"INSERT INTO `users` (`id`, `username`, `password`, `forename`, `surname`, `email`, `phoneno`, `activated`, `activation_code`, `forgot_code`)
-VALUES
-  (3, 'jonsno', '9175daead505a6fbc31c8b7eaa927a850926624d', 'Jon', 'Snow', 'thien.nguyen@me.com', 0, 1, NULL, NULL);
-", "INSERT INTO `staff` (`id`, `pin`, `s_forename`, `s_surname`, `s_email`)
-VALUES
-  (2, 'ff2d9937016d4d405364ce137b12f18be54e3e6d', 'Joseph', 'Poo', 'poo@me.com');
 "
     );
 

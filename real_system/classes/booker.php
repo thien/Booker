@@ -169,7 +169,6 @@ class booker {
             $i++;
         }
         echo "</tr></table>";
-        $this->make_booking_slots();
     }
     function day_switch($box, $daynumber) {
         $date_number = "<p>" . str_replace(NULL, ' ', $daynumber) . "</p>";
@@ -190,13 +189,12 @@ class booker {
         }
         return $text;
     }
-
     function make_booking_slots() {
         if ($this->day == 0) { //default day = 0; done so to show that date is not chosen.
         echo "<form id='calendar_form' method='post' action=''>";
         echo "<div class='status' id='selected_date'>Please select a day.</div>";
         } else {
-            $this->create_form();
+           $this->create_form();
         }
     }
     function start_calendar() {
@@ -234,8 +232,10 @@ class booker {
         }
         if (empty($this->prior_bookings)) {
             $this->create_days_table($this->days, $this->month, $this->year);
+            $this->make_booking_slots();
         } else {
             $this->create_days_table($this->days, $this->prior_bookings, $this->month, $this->year);
+            $this->make_booking_slots();
         }
     }
     function create_form() {
