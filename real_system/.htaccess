@@ -1,6 +1,0 @@
-php_value highlight.keyword #2a79d2
-php_value highlight.bg #ff00ff
-php_value highlight.comment #348E00
-php_value highlight.default #000000
-php_value highlight.html #444444
-php_value highlight.string #FB7200

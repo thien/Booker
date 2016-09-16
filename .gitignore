@@ -4,3 +4,4 @@
 *.xcuserstate
 
 *.xcworkspacedata
+.DS_Store
